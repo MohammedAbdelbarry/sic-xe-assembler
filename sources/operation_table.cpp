@@ -3,11 +3,14 @@
 //
 
 #include "operation_table.h"
+operation_table *operation_table::instance = nullptr;
 
 operation_table::operation_table() {
     initOpTable();
 }
-operation_table& operation_table::getInstance() {
+operation_table* operation_table::getInstance() {
+    if(instance == nullptr)
+        instance = new operation_table;
     return instance;
 }
 void operation_table::initOpTable() {

@@ -12,7 +12,5 @@ public:
     unsigned char opCode;
     Label label;
     std::vector<InstructionFormat> supportedFormats;
-    Operand operand;
-    OperandType operandType;
 };
 #endif //PROJECT_INSTRUCTION_INFO_H

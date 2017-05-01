@@ -10,15 +10,6 @@ enum Label {
     OPTIONAL,
     MUST
 };
-enum Operand {
-    NONE,
-    OPTIONAL,
-    MUST
-};
-enum OperandType {
-    REGISTER,
-    ADDRESS
-};
 enum InstructionFormat {
     ONE,
     TWO,

@@ -13,10 +13,10 @@
 class operation_table {
 public:
     std::map<std::string, instruction_info> opTable;
-    operation_table& getInstance();
+    static operation_table *getInstance();
 
 private:
-    operation_table instance;
+    static operation_table *instance;
     operation_table();
     void initOpTable();
 
