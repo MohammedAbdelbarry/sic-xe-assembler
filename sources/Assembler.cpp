@@ -4,16 +4,18 @@
 
 #include "Assembler.h"
 
+static Assembler *assembler = 0;
+
 Assembler::~Assembler() {
 
-    delete assembler;
+//    delete assembler;
 }
 
 Assembler *Assembler::getInstance() {
 
-    if (!assembler)
+    if (assembler == 0)
     {
-        assembler = new Assembler;
+        assembler = new Assembler();
     }
     return assembler;
 }
