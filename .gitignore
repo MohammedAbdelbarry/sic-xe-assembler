@@ -27,5 +27,7 @@
 *.exe
 *.out
 *.app
+
 /cmake-build-debug
 /.idea
+/SIC-Example.txt
