@@ -191,3 +191,11 @@ void operation_table::initOpTable() {
     info.supportedFormats.push_back(InstructionFormat::TWO);
     opTable[opName] = info;
 }
+
+bool operation_table::contains(std::string operation) {
+    return operation_table::opTable.find(operation) != operation_table::opTable.end();
+}
+
+instruction_info operation_table::getInfo(std::string operation) {
+    return operation_table::opTable[operation];
+}
