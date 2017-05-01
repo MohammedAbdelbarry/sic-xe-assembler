@@ -11,7 +11,5 @@ class directive_info {
 
 public:
     Label label;
-    Operand operand;
-    OperandType operandType;
 };
 #endif //SIC_XE_ASSEMBLER_DIRECTIVE_INFO_H
