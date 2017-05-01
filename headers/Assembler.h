@@ -19,9 +19,10 @@ public:
 private:
     Assembler();
     static Assembler *instance;
+    int locctr;
     std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                              std::vector<Line> &lines);
-    void executePass2(std::string intermediateFileName);
+    void executePass2(std::string intermediateFileName, std::vector<Line> &lines);
 };
 
 #endif //SIC_XE_ASSEMBLER_ASSEMBLER_H
