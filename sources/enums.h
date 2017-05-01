@@ -19,5 +19,10 @@ enum OperandType {
     REGISTER,
     ADDRESS
 };
-
+enum InstructionFormat {
+    ONE,
+    TWO,
+    THREE,
+    FOUR
+};
 #endif //PROJECT_ENUMS_H
