@@ -11,7 +11,6 @@
 class Assembler {
 
 public:
-    ~Assembler();
     static Assembler *getInstance();
     void execute(std::string fileName, std::map<std::string, std::string> options);
 
