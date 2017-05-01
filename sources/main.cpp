@@ -1,9 +1,8 @@
 #include <string>
 #include <iostream>
-#include "Assembler.h"
+#include "../headers/Assembler.h"
 
 int main() {
 
     Assembler *assembler = Assembler::getInstance();
-
 }

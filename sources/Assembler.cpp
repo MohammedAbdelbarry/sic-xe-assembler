@@ -2,18 +2,18 @@
 // Created by Mohamed A.Tolba on 5/1/2017.
 //
 
-#include "Assembler.h"
+#include "../headers/Assembler.h"
 
 
-Assembler *Assembler::assembler = nullptr;
+Assembler *Assembler::instance = nullptr;
 
 Assembler *Assembler::getInstance() {
 
-    if (assembler == nullptr)
+    if (instance == nullptr)
     {
-        assembler = new Assembler();
+        instance = new Assembler();
     }
-    return assembler;
+    return instance;
 }
 
 void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {

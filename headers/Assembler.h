@@ -16,7 +16,7 @@ public:
 
 private:
     Assembler();
-    static Assembler *assembler;
+    static Assembler *instance;
     std::string executePass1(std::string fileName, std::map<std::string, std::string> options);
     void executePass2(std::string intermediateFileName);
 
