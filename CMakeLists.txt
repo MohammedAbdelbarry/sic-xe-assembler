@@ -3,6 +3,6 @@ project(sic_xe_assembler)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES sources/main.cpp sources/directive_info.h)
+set(SOURCE_FILES sources/main.cpp sources/directive_info.h sources/assembler.cpp sources/assembler.h)
 
 add_executable(sic_xe_assembler ${SOURCE_FILES})
