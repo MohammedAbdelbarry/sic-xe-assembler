@@ -3,16 +3,19 @@
 //
 
 #include "../headers/OperationTable.h"
+
 OperationTable *OperationTable::instance = nullptr;
 
 OperationTable::OperationTable() {
     initOpTable();
 }
+
 OperationTable* OperationTable::getInstance() {
     if(instance == nullptr)
         instance = new OperationTable;
     return instance;
 }
+
 void OperationTable::initOpTable() {
     std::string opName;
     InstructionInfo info;
