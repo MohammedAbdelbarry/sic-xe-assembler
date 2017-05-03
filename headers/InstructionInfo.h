@@ -6,7 +6,7 @@
 #ifndef PROJECT_INSTRUCTION_INFO_H
 #define PROJECT_INSTRUCTION_INFO_H
 
-class instruction_info {
+class InstructionInfo {
 
 public:
     unsigned char opCode;

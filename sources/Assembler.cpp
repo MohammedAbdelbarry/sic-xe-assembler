@@ -38,6 +38,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
         Line line("lol", "lol", "lol"); //TODO: get line by splitting.
         //TODO: check if line is not a comment.
     }
+
     return intermediateFile;
 }
 

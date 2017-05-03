@@ -8,18 +8,18 @@
 
 #include <string>
 #include <map>
-#include "instruction_info.h"
+#include "InstructionInfo.h"
 
-class operation_table {
+class OperationTable {
 public:
-    static operation_table *getInstance();
+    static OperationTable *getInstance();
     bool contains(std::string operation);
-    instruction_info getInfo(std::string operation);
+    InstructionInfo getInfo(std::string operation);
 
 private:
-    static operation_table *instance;
-    std::map<std::string, instruction_info> opTable;
-    operation_table();
+    static OperationTable *instance;
+    std::map<std::string, InstructionInfo> opTable;
+    OperationTable();
     void initOpTable();
 };
 

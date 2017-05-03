@@ -7,7 +7,7 @@
 
 #include "enums.h"
 
-class directive_info {
+class DirectiveInfo {
 
 public:
     Label label;
