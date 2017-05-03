@@ -36,7 +36,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
     std::string lineString;
     std::ifstream file(fileName);
     while (std::getline(file, lineString)) {
-        std::for_each(lineString.begin(), lineString.end(), toupper);
+        std::transform(lineString.begin(), lineString.end(), lineString.begin(), toupper);
         int index = 0;
         std::string label;
         std::string operation;
@@ -77,7 +77,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
             iter++;
             index++;
         }
-        Line line(label, operation, operand);
+        Line line = Line(label, operation, operand);
         bool isValid = false;
         for(InstructionFormat format : OperationTable::getInstance()->getInfo(operation).supportedFormats)
         {
