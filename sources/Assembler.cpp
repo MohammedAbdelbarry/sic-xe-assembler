@@ -6,7 +6,7 @@
 #include <fstream>
 #include "../headers/Assembler.h"
 #include "../headers/Line.h"
-#include "../headers/operation_table.h"
+#include "../headers/OperationTable.h"
 #include "../headers/validator.h"
 
 
@@ -39,6 +39,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
     while (std::getline(file, lineString)) {
 
     }
+
     return intermediateFile;
 }
 

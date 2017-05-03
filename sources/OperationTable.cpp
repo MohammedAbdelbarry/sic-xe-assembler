@@ -2,20 +2,20 @@
 // Created by Mohammed Abdelbarry on 01-May-17.
 //
 
-#include "../headers/operation_table.h"
-operation_table *operation_table::instance = nullptr;
+#include "../headers/OperationTable.h"
+OperationTable *OperationTable::instance = nullptr;
 
-operation_table::operation_table() {
+OperationTable::OperationTable() {
     initOpTable();
 }
-operation_table* operation_table::getInstance() {
+OperationTable* OperationTable::getInstance() {
     if(instance == nullptr)
-        instance = new operation_table;
+        instance = new OperationTable;
     return instance;
 }
-void operation_table::initOpTable() {
+void OperationTable::initOpTable() {
     std::string opName;
-    instruction_info info;
+    InstructionInfo info;
 
     opName = "ADD";
     info.opCode = 0x18;
@@ -192,10 +192,10 @@ void operation_table::initOpTable() {
     opTable[opName] = info;
 }
 
-bool operation_table::contains(std::string operation) {
-    return operation_table::opTable.find(operation) != operation_table::opTable.end();
+bool OperationTable::contains(std::string operation) {
+    return OperationTable::opTable.find(operation) != OperationTable::opTable.end();
 }
 
-instruction_info operation_table::getInfo(std::string operation) {
-    return operation_table::opTable[operation];
+InstructionInfo OperationTable::getInfo(std::string operation) {
+    return OperationTable::opTable[operation];
 }

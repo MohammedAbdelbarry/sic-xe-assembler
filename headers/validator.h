@@ -9,7 +9,7 @@
 #include "Line.h"
 
 namespace validator {
-    bool isValidLine(Line line);
+    bool isValidLine(Line line, InstructionFormat format);
 };
 
 
