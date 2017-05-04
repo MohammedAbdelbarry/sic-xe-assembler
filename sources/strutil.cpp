@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <regex>
+#include <iomanip>
 #include "../headers/strutil.h"
 
 std::vector<std::string> strutil::split(std::string str, std::regex regex) {
@@ -16,4 +17,8 @@ std::vector<std::string> strutil::split(std::string str, std::regex regex) {
         ret.push_back(cur);
     }
     return ret;
+}
+
+void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
+    stringStream << std::hex << std::setfill('0') << std::setw(numChars) << std::right << std::uppercase << decimalNumber;
 }

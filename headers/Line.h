@@ -13,6 +13,7 @@ public:
     std::string label;
     std::string operation;
     std::string operand;
+    int locCtr;
 };
 
 
