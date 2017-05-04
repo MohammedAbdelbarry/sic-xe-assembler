@@ -14,10 +14,10 @@ const int BIN_BASE = 2;
 const int INTEGER_SIZE_IN_BITS = 32;
 
 std::string util::Hexadecimal::toBin(std::string number) {
-    std::stringstream stream;
-    stream << std::hex << number;
+    std::stringstream stringStream;
+    stringStream << std::hex << number;
     unsigned int num;
-    stream >> num;
+    stringStream >> num;
     std::bitset<INTEGER_SIZE_IN_BITS> bSet(num);
     return bSet.to_string();
 }
@@ -27,27 +27,28 @@ int util::Hexadecimal::toDec(std::string number) {
 }
 
 std::string util::Decimal::toBin(int number) {
-    std::string num = util::Decimal::toHex(number);
-    return util::Hexadecimal::toBin(num);
+    std::string hexadecimalNumber = util::Decimal::toHex(number);
+    return util::Hexadecimal::toBin(hexadecimalNumber);
 }
 
 std::string util::Decimal::toHex(int number) {
-    std::stringstream stream;
-    stream << std::hex << number;
-    std::string result = stream.str();
-    std::transform(result.begin(), result.end(), result.begin(), toupper);
-    return result;
+    std::stringstream stringStream;
+    stringStream << std::hex << number;
+    std::string hexadecimalNumber = stringStream.str();
+    std::transform(hexadecimalNumber.begin(), hexadecimalNumber.end(),
+                   hexadecimalNumber.begin(), toupper);
+    return hexadecimalNumber;
 }
 
 std::string util::Decimal::toString(int number) {
-    std::ostringstream stream;
-    stream << number;
-    return stream.str();
+    std::ostringstream stringStream;
+    stringStream << number;
+    return stringStream.str();
 }
 
 std::string util::Binary::toHex(std::string number) {
-    int num = util::Binary::toDec(number);
-    return util::Decimal::toHex(num);
+    int hexadecimalNumber = util::Binary::toDec(number);
+    return util::Decimal::toHex(hexadecimalNumber);
 }
 
 int util::Binary::toDec(std::string number) {
