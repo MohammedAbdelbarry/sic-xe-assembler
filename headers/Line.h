@@ -5,6 +5,7 @@
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
 
+class Error;
 
 class Line {
 
@@ -14,7 +15,7 @@ public:
     std::string operation;
     std::string operand;
     int locCtr;
+    Error *error;
 };
-
 
 #endif //SIC_XE_ASSEMBLER_LINE_H
