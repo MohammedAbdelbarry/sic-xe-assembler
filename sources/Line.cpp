@@ -15,7 +15,6 @@ Line::Line(std::string label, std::string operation, std::string operand) {
     this->label = label;
     this->operand = operand;
     this->operation = operation;
-    this->error = nullptr;
 }
 
 

@@ -38,5 +38,26 @@ void validator::isValidLine(Line line) {
 }
 
 void validator::validateFormat(Line line) {
-
+    switch (line.lineFormat) {
+        case ONE:
+            if (line.operand != "")
+                throw ErrorMessage::INVALID_FORMAT;
+            break;
+        case TWO:
+            //Register-to-register operations... Not implemented
+            //since their are no supported register-to-register operations in SIC.
+            break;
+        case THREE:
+            if (line.operand == "")
+                throw ErrorMessage::INVALID_FORMAT;
+            break;
+        case FOUR:
+            //This will never happen though since the "+OP" operations
+            // won't pass the regex check at anytime since it's not supported in SIC.
+            if (line.operation[0] != '+' || line.operand == "")
+                throw ErrorMessage::INVALID_FORMAT;
+            break;
+        default:
+            break;
+    }
 }

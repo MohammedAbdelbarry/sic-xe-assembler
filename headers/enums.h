@@ -21,7 +21,8 @@ enum InstructionFormat {
 enum ErrorMessage {
     INVALID_LABEL,
     UNSUPPORTED_OPERATION,
-    UNDEFINED_OPERAND
+    UNDEFINED_OPERAND,
+    INVALID_FORMAT
 };
 
 enum MnemonicType {
