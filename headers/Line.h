@@ -14,6 +14,7 @@ public:
     std::string label;
     std::string operation;
     std::string operand;
+    LineType lineType;
     int locCtr;
     Error *error;
     bool isIndexed;
