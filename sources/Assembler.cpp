@@ -87,11 +87,22 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
 
             }
         } else {
-            if(symbolTable.contains(line.operand)) {
-                int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
-                int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
-                strutil::addHex(lineObjectCode, opCode, 2);
-                strutil::addHex(lineObjectCode, address, 4);
+            int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
+            strutil::addHex(lineObjectCode, opCode, 2);
+            switch(line.lineFormat) {
+                case ONE:
+                    strutil::addHex(lineObjectCode, 0, 4);
+                    break;
+                case TWO:
+                    break;
+                case THREE:
+                    if(symbolTable.contains(line.operand)) {
+                        int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
+                        strutil::addHex(lineObjectCode, address, 4);
+                    }
+                    break;
+                case FOUR:
+                    break;
             }
         }
     }
