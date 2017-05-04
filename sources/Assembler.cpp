@@ -45,13 +45,18 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     while (std::getline(file, lineString)) {
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
         Line line(lineVector[0], lineVector[1], lineVector[2]);
+        //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         try {
             validator::isValidLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
+                line.locCtr = locCtr;
                 DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
                 line.mnemonicType = MnemonicType::DIRECTIVE;
-                symbolTable.push(line.operation, locCtr);
+                if (symbolTable.contains(line.operand))
+                    line.error = new Error(ErrorMessage::INVALID_LABEL);
+                else
+                    symbolTable.push(line.operand, locCtr);
             } else { //Instruction line.
 
                 line.mnemonicType = MnemonicType::INSTRUCTION;
@@ -60,6 +65,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     line.lineFormat = instructionFormat;
                     try {
                         validator::validateFormat(line);
+                        line.locCtr = locCtr;
                         locCtr += instructionFormat;
                         delete line.error;
                         line.error = nullptr;
@@ -69,10 +75,9 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     }
                 }
             }
-            //TODO: Add line to intermediate file if it's valid.
+            //TODO: Add line to intermediate file if it's valid (line.error has some value).
         } catch (ErrorMessage errorMessage) {
             line.error = new Error(errorMessage);
-            //TODO: temporary until we figure out the exception thingy.
         }
         lines.push_back(line);
     }
