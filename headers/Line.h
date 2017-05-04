@@ -5,8 +5,6 @@
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
 
-#include "enums.h"
-
 class Error;
 
 class Line {
@@ -16,6 +14,7 @@ public:
     std::string label;
     std::string operation;
     std::string operand;
+    LineType lineType;
     int locCtr;
     Error *error;
     bool isIndexed;

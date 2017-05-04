@@ -10,15 +10,22 @@ enum Label {
     OPTIONAL,
     MUST
 };
+
 enum InstructionFormat {
     ONE,
     TWO,
     THREE,
     FOUR
 };
+
 enum ErrorMessage {
     INVALID_LABEL,
     UNSUPPORTED_OPERATION,
     UNDEFINED_OPERAND
+};
+
+enum LineType {
+    INSTRUCTION,
+    DIRECTIVE
 };
 #endif //PROJECT_ENUMS_H

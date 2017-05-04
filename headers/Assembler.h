@@ -14,7 +14,7 @@ public:
 private:
     Assembler();
     static Assembler *instance;
-    int locctr;
+    int locCtr;
 };
 
 #endif //SIC_XE_ASSEMBLER_ASSEMBLER_H
