@@ -2,6 +2,8 @@
 // Created by salem.harby on 05/01/2017.
 //
 
+#include <string>
+#include <map>
 #include "../headers/SymbolTable.h"
 
 void SymbolTable::push(std::string label, int address) {

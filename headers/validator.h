@@ -6,10 +6,6 @@
 #define SIC_XE_ASSEMBLER_VALIDATOR_H
 
 
-#include "Line.h"
-#include "../headers/enums.h"
-
-
 namespace validator {
     bool isValidLine(Line line, InstructionFormat format);
 };

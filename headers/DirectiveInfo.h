@@ -5,9 +5,9 @@
 #ifndef SIC_XE_ASSEMBLER_DIRECTIVE_INFO_H
 #define SIC_XE_ASSEMBLER_DIRECTIVE_INFO_H
 
+#include <functional>
 #include "enums.h"
 #include "Line.h"
-#include <functional>
 
 class DirectiveInfo {
 

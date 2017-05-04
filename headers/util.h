@@ -5,7 +5,6 @@
 #ifndef SIC_XE_ASSEMBLER_UTIL_H
 #define SIC_XE_ASSEMBLER_UTIL_H
 
-#include <string>
 
 namespace util {
 

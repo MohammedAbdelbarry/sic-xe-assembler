@@ -4,6 +4,8 @@
 
 #include <functional>
 #include <iostream>
+#include <map>
+#include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 
 DirectiveTable *DirectiveTable::instance = nullptr;

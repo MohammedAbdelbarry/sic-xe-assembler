@@ -2,6 +2,9 @@
 // Created by Mohammed Abdelbarry on 01-May-17.
 //
 
+#include <string>
+#include <map>
+#include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
 
 OperationTable *OperationTable::instance = nullptr;

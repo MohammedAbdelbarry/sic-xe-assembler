@@ -5,7 +5,7 @@
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
 
-#include <string>
+
 class Line {
 
 public:

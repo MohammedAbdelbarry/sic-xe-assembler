@@ -6,9 +6,6 @@
 #define SIC_XE_ASSEMBLER_SYMBOLTABLE_H
 
 
-#include <string>
-#include <map>
-
 class SymbolTable {
 public:
     void push(std::string label, int address);

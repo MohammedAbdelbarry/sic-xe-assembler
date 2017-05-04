@@ -6,10 +6,6 @@
 #define SIC_XE_ASSEMBLER_OPERATION_TABLE_H
 
 
-#include <string>
-#include <map>
-#include "InstructionInfo.h"
-
 class OperationTable {
 public:
     static OperationTable *getInstance();

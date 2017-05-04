@@ -1,10 +1,12 @@
 //
 // Created by Mohammed Abdelbarry on 01-May-17.
 //
-#include <vector>
-#include "enums.h"
 #ifndef PROJECT_INSTRUCTION_INFO_H
 #define PROJECT_INSTRUCTION_INFO_H
+
+
+#include <vector>
+#include "enums.h"
 
 class InstructionInfo {
 

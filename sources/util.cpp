@@ -2,11 +2,10 @@
 // Created by Mohamed A.Tolba on 5/4/2017.
 //
 
-#include "../headers/util.h"
 #include <sstream>
 #include <bitset>
-#include <cstdlib>
 #include <algorithm>
+#include "../headers/util.h"
 
 
 const int HEX_BASE = 16;

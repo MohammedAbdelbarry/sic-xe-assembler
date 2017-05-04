@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
-#include "../headers/Assembler.h"
+#include <map>
+#include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 #include "../headers/util.h"
 
@@ -27,4 +28,5 @@ int main() {
     std::cout << util::Binary::toDec("00000000001111110000") << std::endl;
     //1008
 
+    std::cout << std::stoi("10", 0, 16);
 }

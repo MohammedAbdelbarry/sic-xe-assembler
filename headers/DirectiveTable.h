@@ -6,11 +6,6 @@
 #define SIC_XE_ASSEMBLER_DIRECTIVETABLE_H
 
 
-#include <string>
-#include <map>
-#include "DirectiveInfo.h"
-#include <functional>
-
 class DirectiveTable {
 public:
     static DirectiveTable *getInstance();
