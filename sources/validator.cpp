@@ -27,7 +27,12 @@ bool isValidOperand(std::string operand) {
     return strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
 }
 
-bool validator::isValidLine(Line line) {
-    return isValidLabel(line.label) && isValidOperation(line.operation)
-           && isValidOperand(line.operand);
+void validator::isValidLine(Line line) {
+    if (!isValidLabel(line.label)) {
+        throw ErrorMessage::INVALID_LABEL;
+    } else if (!isValidOperation(line.operation)) {
+        throw ErrorMessage::UNSUPPORTED_OPERATION;
+    } else if (!isValidOperand(line.operand)) {
+        throw ErrorMessage::UNDEFINED_OPERAND;
+    }
 }

@@ -36,7 +36,7 @@ Assembler::Assembler() {
 
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
-                         int &locctr, SymbolTable &symbolTable, int &firstExecutableAddress) {
+                         int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
 
     std::string intermediateFile;
     std::string lineString;
@@ -45,17 +45,19 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     while (std::getline(file, lineString)) {
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
         Line line(lineVector[0], lineVector[1], lineVector[2]);
-        if (validator::isValidLine(line)) {
+
+        try {
+            validator::isValidLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
-                DirectiveTable::getInstance()->getInfo(line.operation).execute(locctr, line);
-                symbolTable.push(line.operation, locctr);
+                DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+                symbolTable.push(line.operation, locCtr);
             } else { //Instruction line.
                 //TODO: Check if format is valid and increment locCtr accordingly.
             }
             //TODO: Add line to intermediate file if it's valid.
-        } else {
-            line.error = new Error(ErrorMessage::INVALID_LABEL);
+        } catch (ErrorMessage errorMessage) {
+            line.error = new Error(errorMessage);
             //TODO: temporary until we figure out the exception thingy.
         }
         lines.push_back(line);
