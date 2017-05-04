@@ -53,9 +53,14 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     strutil::addHex(objCodeStream, programStart, 6);
     strutil::addHex(objCodeStream, length, 6);
     objCodeStream << "\n";
-    for(int i = 0 ; i < lines.size() ; i++) {
+    for (int i = 0 ; i < lines.size() ; i++) {
         Line line = lines[i];
-        ostringstream
+        std::ostringstream lineObjectCode;
+        if (true) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
+            
+        } else {
+
+        }
     }
 }
 
