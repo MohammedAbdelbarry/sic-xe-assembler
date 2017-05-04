@@ -3,6 +3,8 @@
 #include "../headers/Line.h"
 #include "../headers/validator.h"
 #include "../headers/strutil.h"
+#include "../headers/InstructionInfo.h"
+#include "../headers/DirectiveInfo.h"
 #include "../headers/OperationTable.h"
 #include "../headers/DirectiveTable.h"
 

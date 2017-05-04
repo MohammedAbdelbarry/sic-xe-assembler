@@ -4,15 +4,14 @@
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 #include "../headers/util.h"
+#include "../headers/Assembler.h"
 
 
 int main() {
     int locCtr = 1;
     DirectiveTable::getInstance()->getInfo("WORD").execute.operator()(locCtr, Line("a", "b", "c"));
     std::cout << locCtr;
-
-
-
+    //--------------------------------
     std::cout << util::Hexadecimal::toBin("A1") << std::endl;
     //00000000000000000000000010100001
     std::cout << util::Hexadecimal::toDec("A1") << std::endl;
