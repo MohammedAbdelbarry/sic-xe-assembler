@@ -13,9 +13,10 @@
 #include "../headers/strutil.h"
 #include "../headers/Assembler.h"
 #include "../headers/SymbolTable.h"
-#include "../headers/OperationTable.h"
 #include "../headers/InstructionInfo.h"
+#include "../headers/OperationTable.h"
 #include "../headers/validator.h"
+#include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 
 Assembler *Assembler::instance = nullptr;
