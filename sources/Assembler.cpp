@@ -45,14 +45,15 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     while (std::getline(file, lineString)) {
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
         Line line(lineVector[0], lineVector[1], lineVector[2]);
-
         try {
             validator::isValidLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
                 DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+                line.mnemonicType = MnemonicType::DIRECTIVE;
                 symbolTable.push(line.operation, locCtr);
             } else { //Instruction line.
+                line.mnemonicType = MnemonicType::INSTRUCTION;
                 //TODO: Check if format is valid and increment locCtr accordingly.
             }
             //TODO: Add line to intermediate file if it's valid.

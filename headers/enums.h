@@ -24,7 +24,7 @@ enum ErrorMessage {
     UNDEFINED_OPERAND
 };
 
-enum LineType {
+enum MnemonicType {
     INSTRUCTION,
     DIRECTIVE
 };

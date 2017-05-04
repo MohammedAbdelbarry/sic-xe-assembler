@@ -10,11 +10,12 @@ class Error;
 class Line {
 
 public:
+    Line();
     Line(std::string label, std::string operation, std::string operand);
     std::string label;
     std::string operation;
     std::string operand;
-    LineType lineType;
+    MnemonicType mnemonicType;
     int locCtr;
     Error *error;
     bool isIndexed;
