@@ -16,6 +16,7 @@ public:
     std::string operand;
     int locCtr;
     Error *error;
+    bool isIndexed;
 };
 
 #endif //SIC_XE_ASSEMBLER_LINE_H

@@ -10,6 +10,9 @@
 #include "../headers/Line.h"
 #include "../headers/strutil.h"
 #include "../headers/Assembler.h"
+#include "../headers/SymbolTable.h"
+#include "../headers/OperationTable.h"
+#include "../headers/InstructionInfo.h"
 
 Assembler *Assembler::instance = nullptr;
 
@@ -27,7 +30,8 @@ Assembler::Assembler() {
 }
 
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
-                         std::vector<Line> &lines, std::string &programName, int &programStart, int &locctr) {
+                         std::vector<Line> &lines, std::string &programName, int &programStart,
+                         int &locctr, SymbolTable &symbolTable, int &firstExecutableAddress) {
     std::string intermediateFile;
     std::string lineString;
     std::ifstream file(fileName);
@@ -42,7 +46,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     return intermediateFile;
 }
 
-void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName, int programStart, int locctr) {
+void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
+                  int programStart, int locctr, SymbolTable symbolTable, int firstExecutableAddress) {
     //TODO implement this method
     int length = locctr - programStart;
     std::ostringstream objCodeStream;
@@ -55,18 +60,33 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     for (int i = 0 ; i < lines.size() ; i++) {
         Line line = lines[i];
         std::ostringstream lineObjectCode;
-        if (true) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
-            
-        } else {
+        //RAND IS USED TO SUPPRESS UNREACHABLE CODE WARNING
+        if (rand() * true / 15) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
+            if (line.operation == "WORD") {
 
+            } else if (line.operation == "BYTE") {
+
+            }
+        } else {
+            if(symbolTable.contains(line.operand)) {
+                int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
+                int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
+                strutil::addHex(lineObjectCode, opCode, 2);
+                strutil::addHex(lineObjectCode, address, 4);
+            }
         }
     }
+    objCodeStream << "E";
+    strutil::addHex(objCodeStream, firstExecutableAddress, 6);
 }
 
 void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {
     int programStart = 0;
+    int firstExecutableAddress = 0;
     std::string programName = "";
     std::vector<Line> lines;
-    std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart, locctr);
-    executePass2(intermediateFile, lines, programName, programStart, locctr);
+    SymbolTable symbolTable;
+    std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart,
+                                                locctr, symbolTable, firstExecutableAddress);
+    executePass2(intermediateFile, lines, programName, programStart, locctr, symbolTable, firstExecutableAddress);
 }
