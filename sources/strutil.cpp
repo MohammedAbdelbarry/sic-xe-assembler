@@ -17,3 +17,7 @@ std::vector<std::string> strutil::split(std::string str, std::regex regex) {
     }
     return ret;
 }
+
+bool strutil::matches(std::string str, std::regex regex) {
+    return std::regex_match(str, regex);
+}

@@ -8,6 +8,7 @@
 
 namespace strutil {
     std::vector<std::string> split(std::string str, std::regex regex);
+    bool matches(std::string str, std::regex regex);
 };
 
 

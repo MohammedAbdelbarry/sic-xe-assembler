@@ -31,7 +31,6 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::ifstream file(fileName);
     std::regex regex("\\s+");
     while (std::getline(file, lineString)) {
-        //TODO: make regex a global field.
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
         Line line(lineVector[0], lineVector[1], lineVector[2]);
         //TODO: CHECK FOR DIRECTIVES AND POPULATE SYMBOL TABLE.
