@@ -7,7 +7,7 @@
 
 
 namespace validator {
-    bool isValidLine(Line line, InstructionFormat format);
+    bool isValidLine(Line line);
 };
 
 

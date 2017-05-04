@@ -19,6 +19,10 @@ std::vector<std::string> strutil::split(std::string str, std::regex regex) {
     return ret;
 }
 
+bool strutil::matches(std::string str, std::regex regex) {
+    return std::regex_match(str, regex);
+}
+
 void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
     stringStream << std::hex << std::setfill('0') << std::setw(numChars) << std::right << std::uppercase << decimalNumber;
 }
