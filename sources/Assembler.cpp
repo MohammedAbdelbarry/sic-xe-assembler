@@ -95,7 +95,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
             objCodeStream << "T";
             strutil::addHex(objCodeStream, line.locCtr, 6);
         }
-        if (!OperationTable::getInstance()->contains(line.operation)) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
+        if (!OperationTable::getInstance()->contains(line.operation)) {
             if (line.operation == "WORD") {
 
             } else if (line.operation == "BYTE") {
@@ -122,6 +122,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     break;
             }
         }
+        prevLocCtr = line.locCtr;
         curRecord += lineObjectCode.str();
     }
     objCodeStream << "E";
