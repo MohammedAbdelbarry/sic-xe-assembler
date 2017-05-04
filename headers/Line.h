@@ -5,8 +5,6 @@
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
 
-#include "enums.h"
-
 class Error;
 
 class Line {

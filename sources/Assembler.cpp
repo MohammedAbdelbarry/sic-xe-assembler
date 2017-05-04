@@ -7,8 +7,8 @@
 #include <regex>
 #include <iomanip>
 #include <iostream>
-#include "../headers/Line.h"
 #include "../headers/enums.h"
+#include "../headers/Line.h"
 #include "../headers/Error.h"
 #include "../headers/strutil.h"
 #include "../headers/Assembler.h"
@@ -117,6 +117,6 @@ void Assembler::execute(std::string fileName, std::map<std::string, std::string>
     std::vector<Line> lines;
     SymbolTable symbolTable;
     std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart,
-                                                locctr, symbolTable, firstExecutableAddress);
-    executePass2(intermediateFile, lines, programName, programStart, locctr, symbolTable, firstExecutableAddress);
+                                                locCtr, symbolTable, firstExecutableAddress);
+    executePass2(intermediateFile, lines, programName, programStart, locCtr, symbolTable, firstExecutableAddress);
 }

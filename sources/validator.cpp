@@ -1,5 +1,6 @@
 #include <string>
 #include <regex>
+#include "../headers/enums.h"
 #include "../headers/Line.h"
 #include "../headers/validator.h"
 #include "../headers/strutil.h"
