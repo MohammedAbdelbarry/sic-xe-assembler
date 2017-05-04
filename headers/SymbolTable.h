@@ -16,5 +16,4 @@ private:
     std::map<std::string, int> symTab;
 };
 
-
 #endif //SIC_XE_ASSEMBLER_SYMBOLTABLE_H
