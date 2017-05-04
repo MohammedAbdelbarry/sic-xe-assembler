@@ -7,9 +7,11 @@
 #include "../headers/Assembler.h"
 #include "../headers/OperationTable.h"
 #include "../headers/validator.h"
+#include "../headers/SymbolTable.h"
 #include <regex>
 
 Assembler *Assembler::instance = nullptr;
+SymbolTable symbolTable;
 
 Assembler *Assembler::getInstance() {
 
@@ -35,7 +37,9 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
     std::string intermediateFile;
     std::string lineString;
     std::ifstream file(fileName);
+    int lineNumber = 0;
     while (std::getline(file, lineString)) {
+        lineNumber++;
         std::transform(lineString.begin(), lineString.end(), lineString.begin(), toupper);
         int index = 0;
         std::string label;
@@ -51,6 +55,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
             {
                 case 0:
                     label = cur;
+                    symbolTable.push(label, locctr);
                     break;
                 case 1:
                     if(OperationTable::getInstance()->contains(operation))
@@ -77,6 +82,7 @@ std::string Assembler::executePass1(std::string fileName, std::map<std::string, 
             iter++;
             index++;
         }
+        
         Line line = Line(label, operation, operand);
         bool isValid = false;
         for(InstructionFormat format : OperationTable::getInstance()->getInfo(operation).supportedFormats)
