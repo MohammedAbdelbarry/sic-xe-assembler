@@ -53,7 +53,19 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
                 symbolTable.push(line.operation, locCtr);
             } else { //Instruction line.
-                //TODO: Check if format is valid and increment locCtr accordingly.
+                for (InstructionFormat instructionFormat : OperationTable::getInstance()
+                        ->getInfo(line.operation).supportedFormats) {
+                    line.lineFormat = instructionFormat;
+                    try {
+                        validator::validateFormat(line);
+                        locCtr += instructionFormat;
+                        delete line.error;
+                        line.error = nullptr;
+                        break;
+                    } catch (ErrorMessage errorMessage) {
+                        line.error = new Error(errorMessage);
+                    }
+                }
             }
             //TODO: Add line to intermediate file if it's valid.
         } catch (ErrorMessage errorMessage) {

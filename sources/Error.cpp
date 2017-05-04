@@ -12,3 +12,7 @@ Error::Error() {
 Error::Error(ErrorMessage errorMessage) {
     this->errorMessage = errorMessage;
 }
+
+Error::~Error() {
+
+}

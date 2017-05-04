@@ -12,3 +12,7 @@ Line::Line(std::string label, std::string operation, std::string operand) {
     this->operation = operation;
     this->error = nullptr;
 }
+
+Line::~Line() {
+    delete error;
+}

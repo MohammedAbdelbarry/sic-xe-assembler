@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "../headers/enums.h"
+#include "../headers/Error.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 #include "../headers/util.h"
@@ -28,4 +30,4 @@ int main() {
     //1008
 
     std::cout << std::stoi("10", 0, 16);
-}
+    }

@@ -9,6 +9,7 @@ class Error {
 
 public:
     Error();
+    ~Error();
     Error(ErrorMessage errorMessage);
     ErrorMessage errorMessage;
 };
