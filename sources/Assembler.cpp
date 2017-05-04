@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 #include <regex>
+#include <iomanip>
+#include <iostream>
 #include "../headers/Line.h"
 #include "../headers/strutil.h"
 #include "../headers/Assembler.h"
@@ -25,7 +27,7 @@ Assembler::Assembler() {
 }
 
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
-                         std::vector<Line> &lines) {
+                         std::vector<Line> &lines, std::string &programName, int &programStart, int &locctr) {
     std::string intermediateFile;
     std::string lineString;
     std::ifstream file(fileName);
@@ -40,12 +42,26 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     return intermediateFile;
 }
 
-void executePass2(std::string intermediateFileName, std::vector<Line> &lines) {
+void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName, int programStart, int locctr) {
     //TODO implement this method
+    int length = locctr - programStart;
+    std::ostringstream objCodeStream;
+    objCodeStream << "H";
+    objCodeStream << std::setw(6) << std::left << programName;
+//    objCodeStream << std::hex << std::setfill('0') << std::setw(6) << std::right << std::uppercase << programStart;
+    strutil::addHex(objCodeStream, programStart, 6);
+    strutil::addHex(objCodeStream, length, 6);
+    objCodeStream << "\n";
+    for(int i = 0 ; i < lines.size() ; i++) {
+        Line line = lines[i];
+        ostringstream
+    }
 }
 
 void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {
+    int programStart = 0;
+    std::string programName = "";
     std::vector<Line> lines;
-    std::string intermediateFile = executePass1(fileName, options, lines);
-    executePass2(intermediateFile, lines);
+    std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart, locctr);
+    executePass2(intermediateFile, lines, programName, programStart, locctr);
 }

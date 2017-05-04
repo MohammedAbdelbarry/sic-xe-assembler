@@ -16,4 +16,9 @@ enum InstructionFormat {
     THREE,
     FOUR
 };
+enum ErrorMessage {
+    INVALID_LABEL,
+    UNSUPPORTED_OPERATION,
+    UNDEFINED_OPERAND
+};
 #endif //PROJECT_ENUMS_H
