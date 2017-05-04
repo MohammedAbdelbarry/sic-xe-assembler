@@ -80,14 +80,21 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     objCodeStream << "\n";
     int prevLocCtr = -1;
     int numLines = 0;
+    std::string curRecord;
     for (int i = 0 ; i < lines.size() ; i++) {
         Line line = lines[i];
         std::ostringstream lineObjectCode;
-        if (prevLocCtr == -1) {
+        if (numLines >= 10) {
+            prevLocCtr = -1;
+        }
+        if (prevLocCtr == -1 || line.locCtr - prevLocCtr > 3) {
+            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
+            objCodeStream << curRecord;
+            objCodeStream << "\n";
+            curRecord = "";
             objCodeStream << "T";
             strutil::addHex(objCodeStream, line.locCtr, 6);
         }
-        //RAND IS USED TO SUPPRESS UNREACHABLE CODE WARNING
         if (!OperationTable::getInstance()->contains(line.operation)) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
             if (line.operation == "WORD") {
 
@@ -107,12 +114,15 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     if(symbolTable.contains(line.operand)) {
                         int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
                         strutil::addHex(lineObjectCode, address, 4);
+                    } else {
+                        //TODO: ERROR!!!!
                     }
                     break;
                 case FOUR:
                     break;
             }
         }
+        curRecord += lineObjectCode.str();
     }
     objCodeStream << "E";
     strutil::addHex(objCodeStream, firstExecutableAddress, 6);
