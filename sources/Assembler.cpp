@@ -76,11 +76,17 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     strutil::addHex(objCodeStream, programStart, 6);
     strutil::addHex(objCodeStream, length, 6);
     objCodeStream << "\n";
+    int prevLocCtr = -1;
+    int numLines = 0;
     for (int i = 0 ; i < lines.size() ; i++) {
         Line line = lines[i];
         std::ostringstream lineObjectCode;
+        if (prevLocCtr == -1) {
+            objCodeStream << "T";
+            strutil::addHex(objCodeStream, line.locCtr, 6);
+        }
         //RAND IS USED TO SUPPRESS UNREACHABLE CODE WARNING
-        if (rand() * true / 15) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
+        if (!OperationTable::getInstance()->contains(line.operation)) {//JUST PRETEND THAT I'M CHECKING IF THIS IS A DIRECTIVE
             if (line.operation == "WORD") {
 
             } else if (line.operation == "BYTE") {
