@@ -12,6 +12,7 @@ class Line {
 public:
     Line();
     Line(std::string label, std::string operation, std::string operand);
+    ~Line();
     std::string label;
     std::string operation;
     std::string operand;

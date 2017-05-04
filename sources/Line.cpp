@@ -19,3 +19,7 @@ Line::Line(std::string label, std::string operation, std::string operand) {
 }
 
 
+Line::~Line() {
+    delete error;
+}
+

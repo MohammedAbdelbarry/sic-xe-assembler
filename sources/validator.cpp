@@ -36,3 +36,7 @@ void validator::isValidLine(Line line) {
         throw ErrorMessage::UNDEFINED_OPERAND;
     }
 }
+
+void validator::validateFormat(Line line) {
+
+}
