@@ -148,6 +148,8 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                         strutil::addHex(lineObjectCode, address, 4);
                     } else {
                         //TODO: ERROR!!!!
+                        std::cout << "ERROR: symbol \"" << line.operand;
+                        std::cout << "\" at line: " << i << std::endl;
                     }
                     break;
                 case FOUR:
