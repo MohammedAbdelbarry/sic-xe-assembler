@@ -39,7 +39,7 @@ bool isValidOperand(std::string operand) {
     } catch(std::out_of_range ex) {
 
     }
-    return strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
+    return operand.empty() || strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
 }
 
 void validator::isValidLine(Line line) {

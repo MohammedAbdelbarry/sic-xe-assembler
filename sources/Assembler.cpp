@@ -44,6 +44,9 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::regex regex("\\s+");
     while (std::getline(file, lineString)) {
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
+        for (int i = lineVector.size() ; i <= 3 ; i++) {
+            lineVector.push_back("");
+        }
         Line line(lineVector[0], lineVector[1], lineVector[2]);
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         try {

@@ -194,7 +194,7 @@ void OperationTable::initOpTable() {
     opName = "RSUB";
     info.opCode = 0x4C;
     info.label = Label::OPTIONAL;
-    info.supportedFormats.push_back(InstructionFormat::TWO);
+    info.supportedFormats.push_back(InstructionFormat::ONE);
     opTable[opName] = info;
 }
 
