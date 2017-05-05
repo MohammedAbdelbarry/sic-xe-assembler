@@ -77,7 +77,15 @@ void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
         strutil::addHex(stream, 0, 2);
     }
 }
-
+void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
+    strutil::addHex(stream, curRecord.length() / 2, 2);
+    stream << curRecord;
+    stream << "\n";
+    curRecord = "";
+    initLocCtr = curLocCtr;
+    stream << "T";
+    strutil::addHex(stream, initLocCtr, 6);
+}
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
@@ -191,22 +199,16 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
         if (line.error) {
             std::cout << "Error: " << line.error->errorMessage;
             std::cout << " at Line: " + i << std::endl;
+            continue;
         }
         std::ostringstream lineObjectCode;
-        if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH) {
-            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
-            objCodeStream << curRecord;
-            objCodeStream << "\n";
-            curRecord = "";
-            initLocCtr = line.locCtr;
-            objCodeStream << "T";
-            strutil::addHex(objCodeStream, initLocCtr, 6);
-        }
         if (!OperationTable::getInstance()->contains(line.operation)) {
             if(line.operation == "WORD" || line.operation == "BYTE") {
+                if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH) {
+                    initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
+                }
                 int numBytes = 0;
                 int numHalfBytes = 0;
-                bool done = false;
                 int locCtr = line.locCtr;
                 if (line.operation == "WORD") {
                     numBytes = 3;
@@ -266,11 +268,15 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                         //TODO: ERROR!!!!
                         std::cout << "ERROR: symbol \"" << line.operand;
                         std::cout << "\" not found. At line: " << i << std::endl;
+                        continue;
                     }
                 }
-                std::cout << line << '\t' << lineObjectCode.str() << std::endl;
+//                std::cout << line << '\t' << lineObjectCode.str() << std::endl;
             }
         } else {
+            if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH) {
+                initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
+            }
             int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
             strutil::addHex(lineObjectCode, opCode, 2);
             switch(line.lineFormat) {
@@ -293,7 +299,13 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     break;
             }
         }
+        int recLen = curRecord.length();
+        int lineLen = lineObjectCode.str().length();
+        if ((recLen + lineLen) / 2 > MAX_LINE_LENGTH) {
+            initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
+        }
         curRecord += lineObjectCode.str();
+//        std::cout << line.locCtr << '\t' << line << '\t' << lineObjectCode.str() << std::endl;
     }
     if (!curRecord.empty()) {
         strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
