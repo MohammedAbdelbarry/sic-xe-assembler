@@ -48,6 +48,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         try {
             validator::isValidLine(line);
+            std::cout << line << std::endl;
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
                 line.locCtr = locCtr;

@@ -20,7 +20,7 @@ Line::Line(std::string label, std::string operation, std::string operand) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
-    stream << "Line(" << label << "\t" << operation << "\t" << operand << ")";
+    stream << "Line(" << line.label << "\t" << line.operation << "\t" << line.operand << ")";
 }
 
 Line::~Line() {
