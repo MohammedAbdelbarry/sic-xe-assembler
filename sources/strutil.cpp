@@ -7,9 +7,8 @@
 #include <iomanip>
 #include "../headers/strutil.h"
 
-std::vector<std::string> strutil::split(std::string str, std::regex regex) {
+std::vector<std::string> strutil::split(std::string str, std::regex regex, int splitsNumber) {
     std::vector<std::string> ret;
-    std::transform(str.begin(), str.end(), str.begin(), toupper);
     std::sregex_token_iterator iter(str.begin(), str.end(), regex, -1);
     std::sregex_token_iterator end;
     while (iter != end) {

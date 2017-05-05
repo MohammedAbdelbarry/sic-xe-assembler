@@ -44,7 +44,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::regex regex("\\s+");
     int instructionSize[4] = {3, 3, 3, 4};
     while (std::getline(file, lineString)) {
-        std::vector<std::string> lineVector = strutil::split(lineString, regex);
+        std::transform(lineString.begin(), lineString.end(), lineString.begin(), toupper);
+        std::vector<std::string> lineVector = strutil::split(lineString, regex, 2);
         for (int i = lineVector.size() ; i <= 3 ; i++) {
             lineVector.push_back("");
         }
