@@ -103,7 +103,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         fileStream.seekg(fileStream.beg);
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
-        Line line = constructLine(strutil::split(lineString, regex, 3));
+        Line line = constructLine(strutil::split(lineString, regex));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
             lines.push_back(line);

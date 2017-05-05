@@ -9,7 +9,8 @@
 #include "../headers/OperationTable.h"
 #include "../headers/DirectiveTable.h"
 
-const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,7}$");
+const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}$");
+const std::regex operandRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}(?:,X)?$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
 const std::regex literalRegex("^(?:[Xx]'[+-]?[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 
@@ -41,7 +42,7 @@ bool isValidOperand(std::string operand) {
     } catch(std::out_of_range ex) {
 
     }
-    return operand.empty() || strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
+    return operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, literalRegex);
 }
 
 bool isValidComment(std::string comment) {
