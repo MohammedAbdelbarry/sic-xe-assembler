@@ -32,7 +32,6 @@ void DirectiveTable::initDirTable() {
     info.label = Label::OPTIONAL;
     info.execute = [](int &locCtr, Line line) {
         try {
-            //TODO: SET PROGRAM NAME = LABEL
             int pos = std::stoi(line.operand, 0, HEX_BASE);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
@@ -40,7 +39,6 @@ void DirectiveTable::initDirTable() {
         } catch(std::out_of_range ex) {
 
         }
-        //TODO: set locCtr to the specified starting address.
     };
     dirTable[dirName] = info;
 

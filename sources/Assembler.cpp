@@ -52,8 +52,6 @@ Line constructLine(std::vector<std::string> lineVector) {
 }
 
 void appendToIntermediateFile(std::string &intermediateFile, Line line) {
-    std::string errors[] = {"Invalid label", "Unsupported operation", "Duplicate start",
-                            "Undefined Operand", "Invalid format"};
     std::ostringstream intermediateStream;
     intermediateStream << line;
     if (line.error != nullptr) {
@@ -73,6 +71,7 @@ void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
         strutil::addHex(stream, 0, 2);
     }
 }
+
 void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
     strutil::addHex(stream, curRecord.length() / 2, 2);
     stream << curRecord;
@@ -82,6 +81,7 @@ void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, s
     stream << "T";
     strutil::addHex(stream, initLocCtr, 6);
 }
+
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
@@ -92,7 +92,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
     std::getline(fileStream, lineString);
-    Line firstLine = constructLine(strutil::split(lineString, regex, 3));
+    Line firstLine = constructLine(strutil::split(strutil::toUpper(lineString), regex, 3));
     if (firstLine.operation == "START") {
         try {
             validator::validateLine(firstLine);
@@ -112,7 +112,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         fileStream.seekg(fileStream.beg);
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
-        Line line = constructLine(strutil::split(lineString, regex));
+        Line line = constructLine(strutil::split(strutil::toUpper(lineString), regex));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
             lines.push_back(line);
@@ -150,8 +150,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                         ->getInfo(line.operation).supportedFormats) {
                     line.lineFormat = instructionFormat;
                     try {
-                        validator::validateFormat(line);
                         line.locCtr = locCtr;
+                        validator::validateFormat(line);
                         locCtr += instructionSize[instructionFormat];
                         if (line.error != nullptr) {
                             delete line.error;

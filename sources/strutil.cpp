@@ -59,3 +59,8 @@ bool strutil::isCharLiteral(std::string charLiteral) {
     static const std::regex charLiteralRegex("^[Cc]'[^']+?'$");
     return matches(charLiteral, charLiteralRegex);
 }
+
+std::string strutil::toUpper(std::string str) {
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
+    return str;
+}
