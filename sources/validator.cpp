@@ -42,7 +42,7 @@ bool isValidOperand(std::string operand) {
     return operand.empty() || strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
 }
 
-void validator::isValidLine(Line line) {
+void validator::validateLine(Line line) {
     if (!isValidLabel(line.label)) {
         throw ErrorMessage::INVALID_LABEL;
     } else if (!isValidOperation(line.operation)) {
