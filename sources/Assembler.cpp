@@ -34,34 +34,83 @@ Assembler::Assembler() {
     //TODO check if we want to add any functionality
 }
 
+Line constructLine(std::vector<std::string> lineVector) {
+    for (int i = lineVector.size(); i < 4; i++)
+        lineVector.push_back("");
+    Line line(lineVector[0], lineVector[1], lineVector[2]);
+    return line;
+}
+
+void appendToIntermediateFile(std::string &intermediateFile, Line line) {
+    std::string errors[] = {"Invalid label", "Unsupported operation", "Duplicate start",
+                            "Undefined Operand", "Invalid format"};
+    std::ostringstream intermediateStream;
+    intermediateStream << line.locCtr << "\t" << line.label << "\t"
+                       << line.operation << "\t" << line.operand << "\t";
+    if (line.error != nullptr) {
+        intermediateStream << "ERROR: ";
+        intermediateStream << errors[line.error->errorMessage];
+    }
+    intermediateStream << "\n";
+    intermediateFile.append(intermediateStream.str());
+}
+
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
-
     std::string intermediateFile;
     std::string lineString;
-    std::ifstream file(fileName);
+    std::ifstream fileStream(fileName);
     std::regex regex("\\s+");
     int instructionSize[4] = {3, 3, 3, 4};
-    while (std::getline(file, lineString)) {
-        std::vector<std::string> lineVector = strutil::split(lineString, regex);
-        for (int i = lineVector.size() ; i <= 3 ; i++) {
-            lineVector.push_back("");
-        }
-        Line line(lineVector[0], lineVector[1], lineVector[2]);
-        //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
+    //Read first line
+    std::getline(fileStream, lineString);
+    Line firstLine = constructLine(strutil::split(lineString, regex));
+    if (firstLine.operation == "START") {
         try {
-            validator::isValidLine(line);
-            std::cout << locCtr << "\t" << line << std::endl;
-            if (DirectiveTable::getInstance()->contains(line.operation)) {
-                //Directive line.
-                line.locCtr = locCtr;
-                DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+            validator::validateLine(firstLine);
+            DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
+            firstLine.locCtr = locCtr;
+            programStart = locCtr;
+            if (!firstLine.label.empty()) {
+                programName = firstLine.label;
+                symbolTable.push(firstLine.label, firstLine.locCtr);
+            }
+        } catch (ErrorMessage errorMessage) {
+            firstLine.error = new Error(errorMessage);
+        }
+        lines.push_back(firstLine);
+        appendToIntermediateFile(intermediateFile, firstLine);
+    } else
+        fileStream.seekg(fileStream.beg);
+    //Read rest of the lines.
+    while (std::getline(fileStream, lineString)) {
+        Line line = constructLine(strutil::split(lineString, regex));
+        if (!line.label.empty()) {
+            if (symbolTable.contains(line.label))
+                line.error = new Error(ErrorMessage::INVALID_LABEL);
+            else
+                symbolTable.push(line.label, locCtr);
+        }
+        try {
+            validator::validateLine(line);
+            if (DirectiveTable::getInstance()->contains(line.operation)) { //Directive line.
                 line.mnemonicType = MnemonicType::DIRECTIVE;
-                if (symbolTable.contains(line.label))
-                    line.error = new Error(ErrorMessage::INVALID_LABEL);
-                else
-                    symbolTable.push(line.label, locCtr);
+                if (line.operation == "START") {
+                    line.locCtr = locCtr;
+                    line.error = new Error(ErrorMessage::DUPLICATE_START);
+                } else if (line.operation == "END") {
+                    if (symbolTable.contains(line.operand))
+                        firstExecutableAddress = symbolTable.getAddress(line.operand);
+                    else
+                        line.error = new Error(ErrorMessage::UNDEFINED_OPERAND);
+                    appendToIntermediateFile(intermediateFile, line);
+                    lines.push_back(line);
+                    break;
+                } else {
+                    line.locCtr = locCtr;
+                    DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+                }
             } else { //Instruction line.
                 line.mnemonicType = MnemonicType::INSTRUCTION;
                 for (InstructionFormat instructionFormat : OperationTable::getInstance()
@@ -81,10 +130,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     }
                 }
             }
-            //TODO: Add line to intermediate file if it's valid (line.error has some value).
         } catch (ErrorMessage errorMessage) {
             line.error = new Error(errorMessage);
         }
+        appendToIntermediateFile(intermediateFile, line);
         lines.push_back(line);
     }
     return intermediateFile;
@@ -164,5 +213,6 @@ void Assembler::execute(std::string fileName, std::map<std::string, std::string>
     SymbolTable symbolTable;
     std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart,
                                                 locCtr, symbolTable, firstExecutableAddress);
+    std::cout << intermediateFile;
     executePass2(intermediateFile, lines, programName, programStart, locCtr, symbolTable, firstExecutableAddress);
 }

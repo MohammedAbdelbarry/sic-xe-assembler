@@ -21,6 +21,7 @@ enum InstructionFormat {
 enum ErrorMessage {
     INVALID_LABEL,
     UNSUPPORTED_OPERATION,
+    DUPLICATE_START,
     UNDEFINED_OPERAND,
     INVALID_FORMAT
 };
