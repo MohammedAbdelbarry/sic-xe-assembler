@@ -30,3 +30,7 @@ std::string strutil::parseCharLiteral(std::string charLiteral) {
 void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
     stringStream << std::hex << std::setfill('0') << std::setw(numChars) << std::right << std::uppercase << decimalNumber;
 }
+bool strutil::isCharLiteral(std::string charLiteral) {
+    static const std::regex charLiteralRegex("^[Cc]'[^']+?'$");
+    return matches(charLiteral, charLiteralRegex);
+}

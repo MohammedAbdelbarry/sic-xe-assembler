@@ -5,6 +5,8 @@
 #include <sstream>
 #include <bitset>
 #include <algorithm>
+#include <regex>
+#include "../headers/strutil.h"
 #include "../headers/util.h"
 
 
@@ -56,4 +58,9 @@ int util::Binary::toDec(std::string number) {
 
 std::string util::Hexadecimal::parseHexadecimalLiteral(std::string hexLiteral) {
     return hexLiteral.substr(2, hexLiteral.length() - 3);
+}
+
+bool util::Hexadecimal::isHexLiteral(std::string hexLiteral) {
+    static const std::regex hexLiteralRegex("^[Xx]'[0-9A-Fa-f]+'$");
+    return strutil::matches(hexLiteral, hexLiteralRegex);
 }

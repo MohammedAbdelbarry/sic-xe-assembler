@@ -5,6 +5,10 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <regex>
+#include "../headers/util.h"
+#include "../headers/strutil.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 
@@ -41,18 +45,34 @@ void DirectiveTable::initDirTable() {
     dirTable[dirName] = info;
 
     dirName = "BYTE";
-    info.execute = [](int &locCtr, Line) {
+    info.execute = [](int &locCtr, Line line) {
         //TODO: check if the label is valid
         //TODO: check if the operand is a valid literal
-        locCtr++;
+        if (strutil::isCharLiteral(line.operand)) {
+            int literalLength = line.operand.length() - 3;
+            locCtr += literalLength;
+        } else if (util::Hexadecimal::isHexLiteral(line.operand)){
+            int literalLength = line.operand.length() - 3;
+            locCtr += (literalLength / 2 + ((literalLength % 2) != 0));
+        } else {
+            locCtr += 1;
+        }
     };
     dirTable[dirName] = info;
 
     dirName = "WORD";
-    info.execute = [](int &locCtr, Line) {
+    info.execute = [](int &locCtr, Line line) {
         //TODO: check if the label is valid
         //TODO: check if the operand is a valid literal
-        locCtr += 3;
+        if (strutil::isCharLiteral(line.operand)) {
+            int literalLength = line.operand.length() - 3;
+            locCtr += 3 * (literalLength / 3 + ((literalLength % 3) != 0));
+        } else if (util::Hexadecimal::isHexLiteral(line.operand)){
+            int literalLength = line.operand.length() - 3;
+            locCtr += 3 * (literalLength / 6 + ((literalLength % 6) != 0));
+        } else {
+            locCtr += 3;
+        }
     };
     dirTable[dirName] = info;
 

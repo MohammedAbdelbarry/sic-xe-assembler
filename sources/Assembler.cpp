@@ -18,6 +18,7 @@
 #include "../headers/validator.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
+#include "../headers/util.h"
 
 Assembler *Assembler::instance = nullptr;
 
@@ -39,6 +40,16 @@ Line constructLine(std::vector<std::string> lineVector) {
         lineVector.push_back("");
     Line line(lineVector[0], lineVector[1], lineVector[2]);
     return line;
+}
+
+void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
+    for (char ch : bytes) {
+        numBytes--;
+        strutil::addHex(stream, ch, 2);
+    }
+    while (numBytes--) {
+        strutil::addHex(stream, 0, 2);
+    }
 }
 
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
@@ -117,8 +128,6 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     //TODO implement this method
-    const std::regex charLiteralRegex("^[Cc]'[^']+?'$");
-    const std::regex hexLiteralRegex("^[Xx]'[0-9A-Fa-f]+'$");
     const int MAX_LINE_LENGTH = 30;
     int startingAddress = lines[1].locCtr;
     std::cout << lines[0].operation << std::endl;
@@ -150,12 +159,62 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
         }
         if (!OperationTable::getInstance()->contains(line.operation)) {
             if(line.operation == "WORD" || line.operation == "BYTE") {
+                int numBytes = 0;
+                int numHalfBytes = 0;
+                bool done = false;
+                int locCtr = line.locCtr;
                 if (line.operation == "WORD") {
-
+                    numBytes = 3;
                 } else if (line.operation == "BYTE") {
-
+                    numBytes = 1;
                 }
-
+                numHalfBytes = numBytes << 1;
+                if (util::Hexadecimal::isHexLiteral(line.operand)) {
+                    std::string hexLiteral = util::Hexadecimal::parseHexadecimalLiteral(line.operand);
+                    for (int j = 0; j < hexLiteral.length(); j += numHalfBytes) {
+                        std::ostringstream curObjCode;
+                        locCtr += numHalfBytes;
+                        std::string seg = hexLiteral.substr(j, numHalfBytes);
+                        if (locCtr < initLocCtr + MAX_LINE_LENGTH) {
+                            curObjCode << std::hex << std::setfill('0');
+                            curObjCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
+                        } else {
+                            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
+                            objCodeStream << curRecord;
+                            objCodeStream << "\n";
+                            curRecord = "";
+                            initLocCtr = locCtr;
+                            objCodeStream << "T";
+                            strutil::addHex(objCodeStream, initLocCtr, 6);
+                            curObjCode << std::hex << std::setfill('0');
+                            curObjCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
+                        }
+                        lineObjectCode << curObjCode.str();
+                        curRecord += curObjCode.str();
+                    }
+                } else if (strutil::isCharLiteral(line.operand)) {
+                    std::string charLiteral = strutil::parseCharLiteral(line.operand);
+                    for (int j = 0; j < charLiteral.length(); j += numBytes) {
+                        std::ostringstream curObjCode;
+                        locCtr += numBytes;
+                        std::string seg = charLiteral.substr(j, numBytes);
+                        if (locCtr < initLocCtr + MAX_LINE_LENGTH) {
+                            addHexBytes(curObjCode, seg, numBytes);
+                        } else {
+                            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
+                            objCodeStream << curRecord;
+                            objCodeStream << "\n";
+                            curRecord = "";
+                            initLocCtr = locCtr;
+                            objCodeStream << "T";
+                            strutil::addHex(objCodeStream, initLocCtr, 6);
+                            addHexBytes(curObjCode, seg, numBytes);
+                        }
+                        lineObjectCode << curObjCode.str();
+                        curRecord += curObjCode.str();
+                    }
+                }
+                std::cout << line << '\t' << lineObjectCode.str() << std::endl;
             }
         } else {
             int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
@@ -198,3 +257,27 @@ void Assembler::execute(std::string fileName, std::map<std::string, std::string>
                                                 locCtr, symbolTable, firstExecutableAddress);
     executePass2(intermediateFile, lines, programName, programStart, locCtr, symbolTable, firstExecutableAddress);
 }
+
+void addLiterals(std::string literalValue, int numBytes, int &locCtr, int &initLocCtr,
+                 std::ostringstream &lineObjectCode, std::ostringstream &objCodeStream, std::string &curRecord) {
+    const int MAX_LINE_LENGTH = 30;
+    for (int j = 0; j < literalValue.length(); j += numBytes) {
+        std::ostringstream curObjCode;
+        locCtr += numBytes;
+        if (locCtr < initLocCtr + MAX_LINE_LENGTH) {
+            curObjCode << std::hex << std::setfill('0');
+            curObjCode << std::setw(numBytes) << std::right << std::uppercase << literalValue.substr(j, numBytes);
+            lineObjectCode << curObjCode.str();
+            curRecord += curObjCode.str();
+        } else {
+            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
+            objCodeStream << curRecord;
+            objCodeStream << "\n";
+            curRecord = "";
+            initLocCtr = locCtr;
+            objCodeStream << "T";
+            strutil::addHex(objCodeStream, initLocCtr, 6);
+        }
+    }
+}
+

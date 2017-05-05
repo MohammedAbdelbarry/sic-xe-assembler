@@ -11,6 +11,7 @@ namespace strutil {
     bool matches(std::string str, std::regex regex);
     void addHex(std::ostringstream& stringStream, int decimalNumber, int numChars);
     std::string parseCharLiteral(std::string charLiteral);
+    bool isCharLiteral(std::string charLiteral);
 };
 
 
