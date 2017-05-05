@@ -13,6 +13,8 @@ const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,7}$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
 const std::regex literalRegex("^(?:=[Xx]'[+-]?[0-9A-Fa-f]+')|(?:=[Cc]'[^']+?')$");
 
+const int COMMENT_LINE_LENGTH = 30;
+
 bool isValidLabel(std::string label) {
     return label.empty() || strutil::matches(label, labelRegex);
 }
@@ -42,6 +44,10 @@ bool isValidOperand(std::string operand) {
     return operand.empty() || strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
 }
 
+bool isValidComment(std::string comment) {
+    return comment.size() <= COMMENT_LINE_LENGTH;
+}
+
 
 void validator::validateLine(Line &line) {
     if (!isValidLabel(line.label)) {
@@ -50,6 +56,8 @@ void validator::validateLine(Line &line) {
         throw ErrorMessage::UNSUPPORTED_OPERATION;
     } else if (!isValidOperand(line.operand)) {
         throw ErrorMessage::UNDEFINED_OPERAND;
+    } else if (!isValidComment(line.comment)) {
+        throw ErrorMessage::EXTRA_CHARACTERS_AT_EOL;
     }
 }
 

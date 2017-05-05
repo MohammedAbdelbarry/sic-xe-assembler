@@ -11,18 +11,22 @@ class Line {
 
 public:
     Line();
-    Line(std::string label, std::string operation, std::string operand);
+    Line(std::string label, std::string operation, std::string operand, std::string comment);
+    Line(std::string comment);
     ~Line();
     std::string label;
     std::string operation;
     std::string operand;
+    std::string comment;
     MnemonicType mnemonicType;
+    LineType getLineType();
     int locCtr;
     Error *error;
     bool isIndexed;
     InstructionFormat lineFormat;
 private:
     friend std::ostream& operator<<(std::ostream& stream, const Line& line);
+    LineType  lineType;
 };
 
 #endif //SIC_XE_ASSEMBLER_LINE_H

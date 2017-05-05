@@ -14,11 +14,19 @@ Line::Line() {
 
 }
 
-Line::Line(std::string label, std::string operation, std::string operand) {
+Line::Line(std::string label, std::string operation, std::string operand, std::string comment) {
     this->label = label;
     this->operand = operand;
     this->operation = operation;
+    this->comment = comment;
     this->error = nullptr;
+    this->lineType = LineType::ASSEMBLY_STATEMENT;
+}
+
+Line::Line(std::string comment) {
+    this->comment = comment;
+    this->error = nullptr;
+    this->lineType = LineType::COMMENT;
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
@@ -31,4 +39,12 @@ Line::~Line() {
     if (error != nullptr)
         delete error;
 }
+
+LineType Line::getLineType() {
+    return this->lineType;
+}
+
+
+
+
 
