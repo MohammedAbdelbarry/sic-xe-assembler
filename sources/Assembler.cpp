@@ -34,24 +34,48 @@ Assembler::Assembler() {
     //TODO check if we want to add any functionality
 }
 
+Line constructLine(std::vector<std::string> lineVector) {
+    for (int i = lineVector.size(); i < 4; i++)
+        lineVector.push_back("");
+    Line line(lineVector[0], lineVector[1], lineVector[2]);
+    return line;
+}
+
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
 
     std::string intermediateFile;
     std::string lineString;
-    std::ifstream file(fileName);
+    std::ifstream fileStream(fileName);
     std::regex regex("\\s+");
     int instructionSize[4] = {3, 3, 3, 4};
-    while (std::getline(file, lineString)) {
-        std::vector<std::string> lineVector = strutil::split(lineString, regex);
-        for (int i = lineVector.size() ; i <= 3 ; i++) {
-            lineVector.push_back("");
+    //Read first line
+    std::getline(fileStream, lineString);
+    Line line = constructLine(strutil::split(lineString, regex));
+    if (line.operation == "START") {
+        try {
+            validator::validateLine(line);
+            DirectiveTable::getInstance()->getInfo("START").execute(locCtr, line);
+            line.locCtr = locCtr;
+            programStart = firstExecutableAddress = locCtr; //TODO: temporary.
+            if (line.label.empty()) {
+                programName = line.label;
+                symbolTable.push(line.label, line.locCtr);
+            }
+        } catch (ErrorMessage errorMessage) {
+            line.error = new Error(errorMessage);
         }
-        Line line(lineVector[0], lineVector[1], lineVector[2]);
+        std::cout << locCtr << "\t" << line << std::endl;
+        lines.push_back(line);
+    } else
+        fileStream.seekg(fileStream.beg);
+
+    while (std::getline(fileStream, lineString)) {
+        Line line = constructLine(strutil::split(lineString, regex));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         try {
-            validator::isValidLine(line);
+            validator::validateLine(line);
             std::cout << locCtr << "\t" << line << std::endl;
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
@@ -81,7 +105,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     }
                 }
             }
-            //TODO: Add line to intermediate file if it's valid (line.error has some value).
+            //TODO: Add line to intermediate fileStream if it's valid (line.error has some value).
         } catch (ErrorMessage errorMessage) {
             line.error = new Error(errorMessage);
         }
