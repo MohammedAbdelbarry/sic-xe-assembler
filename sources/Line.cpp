@@ -18,6 +18,7 @@ Line::Line(std::string label, std::string operation, std::string operand) {
     this->label = label;
     this->operand = operand;
     this->operation = operation;
+    this->error = nullptr;
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
@@ -27,6 +28,7 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
 }
 
 Line::~Line() {
-//    delete error;
+    if (error != nullptr)
+        delete error;
 }
 
