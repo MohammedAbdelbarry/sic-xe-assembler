@@ -24,6 +24,9 @@ bool strutil::matches(std::string str, std::regex regex) {
     return std::regex_match(str, regex);
 }
 
+std::string strutil::parseCharLiteral(std::string charLiteral) {
+    return charLiteral.substr(2, charLiteral.length() - 3);
+}
 void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
     stringStream << std::hex << std::setfill('0') << std::setw(numChars) << std::right << std::uppercase << decimalNumber;
 }

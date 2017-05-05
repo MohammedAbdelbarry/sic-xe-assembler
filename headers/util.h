@@ -11,6 +11,7 @@ namespace util {
     namespace Hexadecimal {
         std::string toBin(std::string number);
         int toDec(std::string number);
+        std::string parseHexadecimalLiteral(std::string hexLiteral);
     }
 
     namespace Decimal {

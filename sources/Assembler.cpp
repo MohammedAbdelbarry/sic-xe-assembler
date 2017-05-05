@@ -93,6 +93,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     //TODO implement this method
+    const std::regex charLiteralRegex("^[Cc]'[^']+?'$");
+    const std::regex hexLiteralRegex("^[Xx]'[0-9A-Fa-f]+'$");
     const int MAX_LINE_LENGTH = 30;
     int startingAddress = lines[1].locCtr;
     std::cout << lines[0].operation << std::endl;
@@ -123,9 +125,12 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
             strutil::addHex(objCodeStream, initLocCtr, 6);
         }
         if (!OperationTable::getInstance()->contains(line.operation)) {
-            if (line.operation == "WORD") {
+            if(line.operation == "WORD" || line.operation == "BYTE") {
+                if (line.operation == "WORD") {
 
-            } else if (line.operation == "BYTE") {
+                } else if (line.operation == "BYTE") {
+
+                }
 
             }
         } else {

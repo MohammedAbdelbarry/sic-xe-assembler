@@ -53,3 +53,7 @@ std::string util::Binary::toHex(std::string number) {
 int util::Binary::toDec(std::string number) {
     return (int)std::strtol(number.c_str(), nullptr, BIN_BASE);
 }
+
+std::string util::Hexadecimal::parseHexadecimalLiteral(std::string hexLiteral) {
+    return hexLiteral.substr(2, hexLiteral.length() - 3);
+}
