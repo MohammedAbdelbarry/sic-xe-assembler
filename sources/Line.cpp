@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
 }
 
 Line::~Line() {
-    if (error != nullptr)
-        delete error;
+//    if (error != nullptr)
+//        delete error;
 }
 
