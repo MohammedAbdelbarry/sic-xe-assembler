@@ -42,11 +42,18 @@ bool strutil::matches(std::string str, std::regex regex) {
     return std::regex_match(str, regex);
 }
 
+bool strutil::endsWith(std::string const &value, std::string const &ending) {
+    if (ending.size() > value.size())
+        return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
 std::string strutil::parseCharLiteral(std::string charLiteral) {
     return charLiteral.substr(2, charLiteral.length() - 3);
 }
 void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
-    stringStream << std::hex << std::setfill('0') << std::setw(numChars) << std::right << std::uppercase << decimalNumber;
+    stringStream << std::hex << std::setfill('0') << std::setw(numChars)
+                 << std::right << std::uppercase << decimalNumber;
 }
 bool strutil::isCharLiteral(std::string charLiteral) {
     static const std::regex charLiteralRegex("^[Cc]'[^']+?'$");

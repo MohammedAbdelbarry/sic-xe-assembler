@@ -36,12 +36,14 @@ Assembler::Assembler() {
 }
 
 Line constructLine(std::vector<std::string> lineVector) {
-
-    //TODO CHECK FOR ALTERNATIVE WAY TO MAKE IT MORE NEAT!!
     if (lineVector.size() > 1) {
         for (int i = lineVector.size(); i <= 4; i++)
             lineVector.push_back("");
         Line line(lineVector[0], lineVector[1], lineVector[2], lineVector[3]);
+        if (strutil::endsWith(line.operand, ",X")) {
+            line.operand = line.operand.substr(0, line.operand.size() - 2);
+            line.isIndexed = true;
+        }
         return line;
     } else {
         Line line(lineVector[0]);
@@ -54,7 +56,10 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
                             "Undefined Operand", "Invalid format"};
     std::ostringstream intermediateStream;
     intermediateStream << line.locCtr << "\t" << line.label << "\t"
-                       << line.operation << "\t" << line.operand << "\t";
+                       << line.operation << "\t" << line.operand;
+    if (line.isIndexed)
+        intermediateStream << ",X";
+    intermediateStream << "\t";
     if (line.error != nullptr) {
         intermediateStream << "ERROR: ";
         intermediateStream << errors[line.error->errorMessage];

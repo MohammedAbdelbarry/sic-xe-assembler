@@ -9,6 +9,7 @@
 namespace strutil {
     std::vector<std::string> split(std::string str, std::regex &regex, int splitsNumber = -1);
     bool matches(std::string str, std::regex regex);
+    bool endsWith(std::string const &value, std::string const &ending);
     void addHex(std::ostringstream& stringStream, int decimalNumber, int numChars);
     std::string parseCharLiteral(std::string charLiteral);
     bool isCharLiteral(std::string charLiteral);
