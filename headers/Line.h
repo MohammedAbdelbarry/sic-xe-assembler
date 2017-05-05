@@ -21,6 +21,8 @@ public:
     Error *error;
     bool isIndexed;
     InstructionFormat lineFormat;
+private:
+    friend std::ostream& operator<<(std::ostream& stream, const Line& line);
 };
 
 #endif //SIC_XE_ASSEMBLER_LINE_H

@@ -3,6 +3,7 @@
 //
 
 #include <string>
+#include <iostream>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
 #include "../headers/Line.h"
@@ -18,6 +19,9 @@ Line::Line(std::string label, std::string operation, std::string operand) {
     this->operation = operation;
 }
 
+std::ostream& operator<<(std::ostream& stream, const Line& line) {
+    stream << "Line(" << label << "\t" << operation << "\t" << operand << ")";
+}
 
 Line::~Line() {
 //    delete error;
