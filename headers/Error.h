@@ -9,8 +9,8 @@ class Error {
 
 public:
     Error();
-    ~Error();
     Error(ErrorMessage errorMessage);
+    ~Error();
     ErrorMessage errorMessage;
 };
 
