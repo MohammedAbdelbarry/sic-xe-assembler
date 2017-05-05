@@ -55,14 +55,10 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     std::string errors[] = {"Invalid label", "Unsupported operation", "Duplicate start",
                             "Undefined Operand", "Invalid format"};
     std::ostringstream intermediateStream;
-    intermediateStream << line.locCtr << "\t" << line.label << "\t"
-                       << line.operation << "\t" << line.operand;
-    if (line.isIndexed)
-        intermediateStream << ",X";
-    intermediateStream << "\t";
+    intermediateStream << line;
     if (line.error != nullptr) {
-        intermediateStream << "ERROR: ";
-        intermediateStream << errors[line.error->errorMessage];
+        intermediateStream << "\t";
+        intermediateStream << *line.error;
     }
     intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
@@ -168,6 +164,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 }
             }
         } catch (ErrorMessage errorMessage) {
+            line.locCtr = locCtr;
             line.error = new Error(errorMessage);
         }
         appendToIntermediateFile(intermediateFile, line);

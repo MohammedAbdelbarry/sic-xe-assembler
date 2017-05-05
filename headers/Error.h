@@ -5,6 +5,8 @@
 #ifndef SIC_XE_ASSEMBLER_ERROR_H
 #define SIC_XE_ASSEMBLER_ERROR_H
 
+#include <iosfwd>
+
 class Error {
 
 public:
@@ -12,6 +14,9 @@ public:
     Error(ErrorMessage errorMessage);
     ~Error();
     ErrorMessage errorMessage;
+
+private:
+    friend std::ostream& operator<<(std::ostream& stream, const Error& error);
 };
 
 #endif //SIC_XE_ASSEMBLER_ERROR_H
