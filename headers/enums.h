@@ -21,12 +21,19 @@ enum InstructionFormat {
 enum ErrorMessage {
     INVALID_LABEL,
     UNSUPPORTED_OPERATION,
+    DUPLICATE_START,
     UNDEFINED_OPERAND,
-    INVALID_FORMAT
+    INVALID_FORMAT,
+    EXTRA_CHARACTERS_AT_EOL
 };
 
 enum MnemonicType {
     INSTRUCTION,
     DIRECTIVE
+};
+
+enum LineType {
+    ASSEMBLY_STATEMENT,
+    COMMENT
 };
 #endif //PROJECT_ENUMS_H

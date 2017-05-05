@@ -7,7 +7,7 @@
 
 
 namespace strutil {
-    std::vector<std::string> split(std::string str, std::regex &regex);
+    std::vector<std::string> split(std::string str, std::regex &regex, int splitsNumber = -1);
     bool matches(std::string str, std::regex regex);
     void addHex(std::ostringstream& stringStream, int decimalNumber, int numChars);
     std::string parseCharLiteral(std::string charLiteral);

@@ -7,15 +7,33 @@
 #include <iomanip>
 #include "../headers/strutil.h"
 
-std::vector<std::string> strutil::split(std::string str, std::regex &regex) {
+std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
+    std::stringstream stringStream;
+    while (iterator != end) {
+        stringStream << " " << *iterator;
+        iterator++;
+    }
+    return stringStream.str();
+}
+
+std::vector<std::string> strutil::split(std::string str, std::regex &regex, int splitsNumber) {
+    int splittingCounter = 0;
     std::vector<std::string> ret;
-    std::transform(str.begin(), str.end(), str.begin(), toupper);
+    if (str.find(".") == 0) {
+        ret.push_back(str);
+        return ret;
+    }
     std::sregex_token_iterator iter(str.begin(), str.end(), regex, -1);
     std::sregex_token_iterator end;
     while (iter != end) {
+        if(splittingCounter == splitsNumber) {
+            ret.push_back(concatenateLine(iter, end));
+            break;
+        }
         std::string cur = *iter;
         ret.push_back(cur);
         iter++;
+        splittingCounter++;
     }
     return ret;
 }

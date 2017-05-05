@@ -7,8 +7,8 @@
 
 
 namespace validator {
-    void validateLine(Line line);
-    void validateFormat(Line line);
+    void validateLine(Line &line);
+    void validateFormat(Line &line);
 };
 
 
