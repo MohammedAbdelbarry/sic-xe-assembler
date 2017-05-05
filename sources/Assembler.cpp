@@ -95,6 +95,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     //TODO implement this method
     const int MAX_LINE_LENGTH = 30;
     int startingAddress = lines[1].locCtr;
+    std::cout << lines[0].operation << std::endl;
     int length = locCtr - startingAddress;
     std::ostringstream objCodeStream;
     objCodeStream << "H";
@@ -109,10 +110,10 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     std::string curRecord;
     objCodeStream << "T";
     strutil::addHex(objCodeStream, initLocCtr, 6);
-    for (int i = 0 ; i < lines.size() ; i++) {
+    for (int i = 1 ; i < lines.size() ; i++) {
         Line line = lines[i];
         std::ostringstream lineObjectCode;
-        if (line.locCtr >= initLocCtr + 30) {
+        if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH) {
             strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
             objCodeStream << curRecord;
             objCodeStream << "\n";

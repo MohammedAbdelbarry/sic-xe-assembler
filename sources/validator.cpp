@@ -11,7 +11,7 @@
 
 const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,7}$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
-const std::regex literalRegex("^(?:=[Xx]'[+-]?[0-9A-Fa-f]+')|(?:=[Cc]'[^']+?')$");
+const std::regex literalRegex("^(?:[Xx]'[+-]?[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 
 bool isValidLabel(std::string label) {
     return label.empty() || strutil::matches(label, labelRegex);
