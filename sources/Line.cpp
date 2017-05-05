@@ -4,6 +4,7 @@
 
 #include <string>
 #include "../headers/enums.h"
+#include "../headers/Error.h"
 #include "../headers/Line.h"
 
 
@@ -19,6 +20,6 @@ Line::Line(std::string label, std::string operation, std::string operand) {
 
 
 Line::~Line() {
-    delete error;
+//    delete error;
 }
 

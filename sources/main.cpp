@@ -1,13 +1,14 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <regex>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 #include "../headers/util.h"
 #include "../headers/Assembler.h"
-
+#include "../headers/strutil.h"
 
 int main() {
     int locCtr = 1;
@@ -28,6 +29,13 @@ int main() {
     //3fo
     std::cout << util::Binary::toDec("00000000001111110000") << std::endl;
     //1008
-
+    for (std::string str : strutil::split("RDDEV\tSTART\t0x1000", std::regex("\\s+"))) {
+        std::cout << str << std::endl;
+    }
+    try {
+        Assembler::getInstance()->execute("p12.asm", std::map<std::string, std::string>());
+    } catch (std::bad_alloc ex) {
+        std::cout << ex.what();
+    }
     std::cout << std::stoi("10", 0, 16);
     }

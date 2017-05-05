@@ -15,6 +15,7 @@ std::vector<std::string> strutil::split(std::string str, std::regex regex) {
     while (iter != end) {
         std::string cur = *iter;
         ret.push_back(cur);
+        iter++;
     }
     return ret;
 }

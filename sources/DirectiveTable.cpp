@@ -38,6 +38,7 @@ void DirectiveTable::initDirTable() {
         }
         //TODO: set locCtr to the specified starting address.
     };
+    dirTable[dirName] = info;
 
     dirName = "BYTE";
     info.execute = [](int &locCtr, Line) {

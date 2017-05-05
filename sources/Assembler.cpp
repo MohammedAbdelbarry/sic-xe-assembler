@@ -146,6 +146,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     }
     objCodeStream << "E";
     strutil::addHex(objCodeStream, firstExecutableAddress, 6);
+    std::cout << objCodeStream.str() << std::endl;
 }
 
 void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {
