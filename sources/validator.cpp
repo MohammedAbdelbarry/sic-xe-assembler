@@ -24,6 +24,21 @@ bool isValidOperation(std::string operation) {
 }
 
 bool isValidOperand(std::string operand) {
+    try {
+        std::stoi(operand);
+        return true;
+    } catch(std::invalid_argument ex) {
+        try {
+            std::stoi(operand, 0, 16);
+            return true;
+        } catch (std::invalid_argument ex2) {
+
+        } catch (std::out_of_range ex2) {
+
+        }
+    } catch(std::out_of_range ex) {
+
+    }
     return strutil::matches(operand, literalRegex) || strutil::matches(operand, labelRegex);
 }
 
