@@ -42,6 +42,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::string lineString;
     std::ifstream file(fileName);
     std::regex regex("\\s+");
+    int instructionSize[4] = {3, 3, 3, 4};
     while (std::getline(file, lineString)) {
         std::vector<std::string> lineVector = strutil::split(lineString, regex);
         for (int i = lineVector.size() ; i <= 3 ; i++) {
@@ -51,18 +52,17 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         try {
             validator::isValidLine(line);
-            std::cout << line << std::endl;
+            std::cout << locCtr << "\t" << line << std::endl;
             if (DirectiveTable::getInstance()->contains(line.operation)) {
                 //Directive line.
                 line.locCtr = locCtr;
                 DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
                 line.mnemonicType = MnemonicType::DIRECTIVE;
-                if (symbolTable.contains(line.operand))
+                if (symbolTable.contains(line.label))
                     line.error = new Error(ErrorMessage::INVALID_LABEL);
                 else
-                    symbolTable.push(line.operand, locCtr);
+                    symbolTable.push(line.label, locCtr);
             } else { //Instruction line.
-
                 line.mnemonicType = MnemonicType::INSTRUCTION;
                 for (InstructionFormat instructionFormat : OperationTable::getInstance()
                         ->getInfo(line.operation).supportedFormats) {
@@ -70,9 +70,11 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     try {
                         validator::validateFormat(line);
                         line.locCtr = locCtr;
-                        locCtr += instructionFormat;
-                        delete line.error;
-                        line.error = nullptr;
+                        locCtr += instructionSize[instructionFormat];
+                        if (line.error != nullptr) {
+                            delete line.error;
+                            line.error = nullptr;
+                        }
                         break;
                     } catch (ErrorMessage errorMessage) {
                         line.error = new Error(errorMessage);
@@ -89,34 +91,35 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 }
 
 void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
-                  int programStart, int locctr, SymbolTable symbolTable, int firstExecutableAddress) {
+                  int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     //TODO implement this method
-    int length = locctr - programStart;
+    const int MAX_LINE_LENGTH = 30;
+    int startingAddress = lines[1].locCtr;
+    int length = locCtr - startingAddress;
     std::ostringstream objCodeStream;
     objCodeStream << "H";
 //    objCodeStream << std::setw(6) << std::left << programName;
     objCodeStream << std::setw(6) << std::left;
     objCodeStream << programName;
 //    objCodeStream << std::hex << std::setfill('0') << std::setw(6) << std::right << std::uppercase << programStart;
-    strutil::addHex(objCodeStream, programStart, 6);
+    strutil::addHex(objCodeStream, startingAddress, 6);
     strutil::addHex(objCodeStream, length, 6);
     objCodeStream << "\n";
-    int prevLocCtr = -1;
-    int numLines = 0;
+    int initLocCtr = startingAddress;
     std::string curRecord;
+    objCodeStream << "T";
+    strutil::addHex(objCodeStream, initLocCtr, 6);
     for (int i = 0 ; i < lines.size() ; i++) {
         Line line = lines[i];
         std::ostringstream lineObjectCode;
-        if (numLines >= 10) {
-            prevLocCtr = -1;
-        }
-        if (prevLocCtr == -1 || line.locCtr - prevLocCtr > 3) {
+        if (line.locCtr >= initLocCtr + 30) {
             strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
             objCodeStream << curRecord;
             objCodeStream << "\n";
             curRecord = "";
+            initLocCtr = line.locCtr;
             objCodeStream << "T";
-            strutil::addHex(objCodeStream, line.locCtr, 6);
+            strutil::addHex(objCodeStream, initLocCtr, 6);
         }
         if (!OperationTable::getInstance()->contains(line.operation)) {
             if (line.operation == "WORD") {
@@ -145,17 +148,17 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     break;
             }
         }
-        prevLocCtr = line.locCtr;
         curRecord += lineObjectCode.str();
     }
+    objCodeStream << "\n";
     objCodeStream << "E";
     strutil::addHex(objCodeStream, firstExecutableAddress, 6);
     std::cout << objCodeStream.str() << std::endl;
 }
 
 void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {
+    int firstExecutableAddress = locCtr = 0;
     int programStart = 0;
-    int firstExecutableAddress = 0;
     std::string programName = "";
     std::vector<Line> lines;
     SymbolTable symbolTable;

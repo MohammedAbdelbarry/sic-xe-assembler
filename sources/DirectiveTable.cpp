@@ -86,7 +86,7 @@ void DirectiveTable::initDirTable() {
 
     dirName = "END";
     info.execute = [](int &locCtr, Line) {
-        //TODO: optional operand marks the start of the program :D
+        //TODO: optional operand marks the start of the program.
     };
     dirTable[dirName] = info;
 }
