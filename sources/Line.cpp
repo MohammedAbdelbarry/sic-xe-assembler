@@ -30,8 +30,8 @@ Line::Line(std::string comment) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
-    stream << line.locCtr  << "\t" << line.label << "\t" << line.operation << "\t";
-    stream << line.operand;
+    stream << line.locCtr  << "\t" << line.label << "\t" << line.operation << "\t"
+           << line.operand;
     if (line.isIndexed) {
         stream << ",X";
     }

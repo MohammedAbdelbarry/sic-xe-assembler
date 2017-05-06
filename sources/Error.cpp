@@ -54,10 +54,5 @@ std::ostream &operator<<(std::ostream &stream, const Error &error) {
         default:
             break;
     }
-    if (error.errorMessage == ErrorMessage::INVALID_LABEL) {
-        stream << invalidInput;
-    }
-
-
 }
 
