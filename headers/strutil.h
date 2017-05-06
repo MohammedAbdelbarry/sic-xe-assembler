@@ -7,7 +7,7 @@
 
 
 namespace strutil {
-    std::vector<std::string> split(std::string str, std::regex &regex, int splitsNumber = -1);
+    std::vector<std::string> split(std::string str, std::regex &regex, int splitsNumber = 3);
     bool matches(std::string str, std::regex regex);
     bool endsWith(std::string const &value, std::string const &ending);
     bool beginWith(std::string const &value, std::string const &beginning);

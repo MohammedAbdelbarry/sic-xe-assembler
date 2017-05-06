@@ -30,13 +30,22 @@ Line::Line(std::string comment) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
-    stream << std::hex << std::uppercase << line.locCtr << "\t";
-    stream << line.label << "\t" << line.operation << "\t"
-           << line.operand;
-    if (line.isIndexed) {
-        stream << ",X";
+    if (line.getLineType() == LineType::ASSEMBLY_STATEMENT) {
+        stream << std::hex << std::uppercase << std::setw(4) << std::left << line.locCtr << "\t";
+        stream << std::setw(6) << std::left << line.label << "\t";
+        stream << std::setw(6) << std::left << line.operation << "\t";
+        if (line.isIndexed) {
+            std::string indexedOperand = line.operand;
+            indexedOperand.append(",X");
+            stream << std::setw(8) << std::left << indexedOperand;
+        } else {
+            stream << std::setw(8) << std::left << line.operand;
+        }
+        stream << "\t" << std::setw(30) << std::left << line.comment;
+    } else {
+        stream << line.comment;
     }
-    stream << "\t" << line.comment;
+
 }
 
 Line::~Line() {
@@ -44,7 +53,7 @@ Line::~Line() {
 //        delete error;
 }
 
-LineType Line::getLineType() {
+LineType Line::getLineType() const {
     return this->lineType;
 }
 

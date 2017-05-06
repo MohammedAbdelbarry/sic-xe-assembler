@@ -34,12 +34,21 @@ std::vector<std::string> strutil::split(std::string str, std::regex &regex, int 
         ret.push_back(cur);
         iter++;
         splittingCounter++;
-        if(splittingCounter == splitsNumber
-                || (OperationTable::getInstance()->contains(cur)
-                    && OperationTable::getInstance()->getInfo(cur).supportedFormats[0] == InstructionFormat::ONE)) {
+        if(splittingCounter == splitsNumber) {
             ret.push_back(concatenateLine(iter, end));
             break;
         }
+    }
+
+    if (OperationTable::getInstance()->contains(ret[1])
+        && OperationTable::getInstance()->getInfo(ret[1]).supportedFormats[0]
+           == InstructionFormat::ONE) {
+        if(ret.size() > 3) {
+            ret[2].append(ret[3]);
+            ret[3] = ret[2];
+            ret[2] = "";
+        } else if (ret.size() > 2)
+            ret[2] = "";
     }
     return ret;
 }
