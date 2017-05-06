@@ -188,7 +188,6 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
-    const int MAX_SIC_MEMORY = 1 << 15;
     int length = locCtr - programStart;
     std::ostringstream objCodeStream;
     objCodeStream << "H";
@@ -206,8 +205,8 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     for (int i = 1 ; i < lines.size() ; i++) {
         Line line = lines[i];
         if (line.error) {
-            errors << "Error: " << line.error->errorMessage;
-            errors << " at Line: " + i << std::endl;
+            errors << *line.error;
+            errors << ". At line: " << i + 1 << std::endl;
             continue;
         }
         std::ostringstream lineObjectCode;
@@ -312,7 +311,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {
-        throw errors.str();
+        throw std::invalid_argument(errors.str());
     }
 }
 
@@ -329,11 +328,14 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     SymbolTable symbolTable;
     std::string intermediateFile = executePass1(filePath, options, lines, programName, programStart,
                                                 locCtr, symbolTable, firstExecutableAddress);
+    std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;
     writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
     std::string objFile = executePass2(intermediateFile, lines, programName,
                                        programStart, locCtr, symbolTable, firstExecutableAddress);
     writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
+    std::cout << "Assembled Successfully!" << std::endl;
+    std::cout << "Object File:" << std::endl;
     std::cout << objFile;
 }
 
