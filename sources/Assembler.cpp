@@ -37,10 +37,11 @@ Assembler::Assembler() {
 
 Line constructLine(std::vector<std::string> lineVector) {
     if (lineVector.size() > 1) {
-        for (int i = lineVector.size(); i <= 4; i++)
+
+        for (int i = lineVector.size(); i < 4; i++)
             lineVector.push_back("");
         Line line(lineVector[0], lineVector[1], lineVector[2], lineVector[3]);
-        if (strutil::endsWith(line.operand, ",X")) {
+        if (strutil::endsWith(strutil::toUpper(line.operand), ",X")) {
             line.operand = line.operand.substr(0, line.operand.size() - 2);
             line.isIndexed = true;
         }
@@ -54,6 +55,7 @@ Line constructLine(std::vector<std::string> lineVector) {
 void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     std::ostringstream intermediateStream;
     intermediateStream << line;
+
     if (line.error != nullptr) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
@@ -92,8 +94,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
     std::getline(fileStream, lineString);
-    Line firstLine = constructLine(strutil::split(strutil::toUpper(lineString), regex, 3));
-    if (firstLine.operation == "START") {
+    Line firstLine = constructLine(strutil::split(lineString, regex, 3));
+    if (strutil::toUpper(firstLine.operation) == "START") {
         try {
             validator::validateLine(firstLine);
             DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
@@ -112,9 +114,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         fileStream.seekg(fileStream.beg);
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
-        Line line = constructLine(strutil::split(strutil::toUpper(lineString), regex));
+        Line line = constructLine(strutil::split(lineString, regex, 3));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
+            appendToIntermediateFile(intermediateFile, line);
             lines.push_back(line);
             continue;
         }
@@ -128,10 +131,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
             validator::validateLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) { //Directive line.
                 line.mnemonicType = MnemonicType::DIRECTIVE;
-                if (line.operation == "START") {
+                if (strutil::toUpper(line.operation) == "START") {
                     line.locCtr = locCtr;
                     line.error = new Error(ErrorMessage::DUPLICATE_START);
-                } else if (line.operation == "END") {
+                } else if (strutil::toUpper(line.operation) == "END") {
                     line.locCtr = locCtr;
                     if (symbolTable.contains(line.operand))
                         firstExecutableAddress = symbolTable.getAddress(line.operand);

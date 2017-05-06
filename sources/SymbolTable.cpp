@@ -4,10 +4,10 @@
 
 #include <string>
 #include <map>
-#include <regex>
 #include <vector>
-#include "../headers/strutil.h"
+#include <regex>
 #include "../headers/SymbolTable.h"
+#include "../headers/strutil.h"
 
 void SymbolTable::push(std::string label, int address) {
     SymbolTable::symTab[strutil::toUpper(label)] = address;

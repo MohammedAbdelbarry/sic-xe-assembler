@@ -4,8 +4,11 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <regex>
 #include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
+#include "../headers/strutil.h"
 
 OperationTable *OperationTable::instance = nullptr;
 
@@ -224,9 +227,9 @@ void OperationTable::initOpTable() {
 }
 
 bool OperationTable::contains(std::string operation) {
-    return OperationTable::opTable.find(operation) != OperationTable::opTable.end();
+    return OperationTable::opTable.find(strutil::toUpper(operation)) != OperationTable::opTable.end();
 }
 
 InstructionInfo OperationTable::getInfo(std::string operation) {
-    return OperationTable::opTable[operation];
+    return OperationTable::opTable[strutil::toUpper(operation)];
 }
