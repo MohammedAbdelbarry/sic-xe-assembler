@@ -21,6 +21,7 @@ Line::Line(std::string label, std::string operation, std::string operand, std::s
     this->comment = comment;
     this->error = nullptr;
     this->lineType = LineType::ASSEMBLY_STATEMENT;
+    this->isIndexed = false;
 }
 
 Line::Line(std::string comment) {

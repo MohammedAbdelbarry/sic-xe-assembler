@@ -40,7 +40,7 @@ Line constructLine(std::vector<std::string> lineVector) {
         for (int i = lineVector.size(); i <= 4; i++)
             lineVector.push_back("");
         Line line(lineVector[0], lineVector[1], lineVector[2], lineVector[3]);
-        if (strutil::endsWith(line.operand, ",X")) {
+        if (strutil::endsWith(strutil::toUpper(line.operand), ",X")) {
             line.operand = line.operand.substr(0, line.operand.size() - 2);
             line.isIndexed = true;
         }
@@ -93,7 +93,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     //Read first line
     std::getline(fileStream, lineString);
     Line firstLine = constructLine(strutil::split(lineString, regex, 3));
-    if (firstLine.operation == "START") {
+    if (strutil::toUpper(firstLine.operation) == "START") {
         try {
             validator::validateLine(firstLine);
             DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
@@ -128,10 +128,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
             validator::validateLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) { //Directive line.
                 line.mnemonicType = MnemonicType::DIRECTIVE;
-                if (line.operation == "START") {
+                if (strutil::toUpper(line.operation) == "START") {
                     line.locCtr = locCtr;
                     line.error = new Error(ErrorMessage::DUPLICATE_START);
-                } else if (line.operation == "END") {
+                } else if (strutil::toUpper(line.operation) == "END") {
                     line.locCtr = locCtr;
                     if (symbolTable.contains(line.operand))
                         firstExecutableAddress = symbolTable.getAddress(line.operand);
