@@ -114,8 +114,17 @@ void DirectiveTable::initDirTable() {
     dirTable[dirName] = info;
 
     dirName = "END";
-    info.execute = [](int &locCtr, Line) {
-        //TODO: optional operand marks the start of the program.
+    info.execute = [](int &locCtr, Line line) {
+        try {
+            int pos = std::stoi(line.operand, 0, HEX_BASE);
+            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+                throw ErrorMessage::INVALID_OPERAND;
+            locCtr = pos;
+        } catch(std::invalid_argument ex) {
+            throw ErrorMessage::INVALID_OPERAND;
+        } catch(std::out_of_range ex) {
+            throw ErrorMessage::INVALID_OPERAND;
+        }
     };
     dirTable[dirName] = info;
 }

@@ -105,7 +105,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 validator::validateLine(firstLine);
                 DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
                 firstLine.locCtr = locCtr;
-                programStart = locCtr;
+                firstExecutableAddress = programStart = locCtr;
                 if (!firstLine.label.empty()) {
                     programName = firstLine.label;
                     symbolTable.push(firstLine.label, firstLine.locCtr);
@@ -143,10 +143,12 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     line.error = new Error(ErrorMessage::DUPLICATE_START);
                 } else if (strutil::toUpper(line.operation) == "END") {
                     line.locCtr = locCtr;
-                    if (symbolTable.contains(line.operand))
-                        firstExecutableAddress = symbolTable.getAddress(line.operand);
-                    else
-                        line.error = new Error(ErrorMessage::INVALID_OPERAND);
+                    if (!line.operand.empty()) {
+                        if (symbolTable.contains(line.operand))
+                            firstExecutableAddress = symbolTable.getAddress(line.operand);
+                        else
+                            DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line);
+                    }
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
