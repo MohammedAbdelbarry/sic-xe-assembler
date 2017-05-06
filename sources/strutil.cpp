@@ -75,4 +75,10 @@ std::string strutil::toUpper(std::string str) {
     return str;
 }
 
-
+std::string fileutil::removeExtension(std::string str) {
+    int lastIndex = str.find_last_of(".");
+    if (lastIndex != std::string::npos) {
+        return str.substr(0, lastIndex);
+    }
+    return str;
+}

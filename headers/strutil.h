@@ -17,5 +17,8 @@ namespace strutil {
     std::string toUpper(std::string str);
 };
 
+namespace fileutil {
+    std::string removeExtension(std::string str);
+}
 
 #endif //SIC_XE_ASSEMBLER_STRUTIL_H

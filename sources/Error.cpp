@@ -6,9 +6,6 @@
 #include "../headers/enums.h"
 #include "../headers/Error.h"
 
-
-
-
 const std::string invalidInput = "Invalid label";
 const std::string unsupportedOperation = "Unsupported operation";
 const std::string duplicateStart = "Duplicate start";
