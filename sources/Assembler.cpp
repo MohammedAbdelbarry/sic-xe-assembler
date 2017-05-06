@@ -310,7 +310,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {
-        throw errors.str();
+        throw std::invalid_argument(errors.str());
     }
 }
 
