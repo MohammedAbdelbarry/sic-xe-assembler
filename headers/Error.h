@@ -8,7 +8,6 @@
 #include <iosfwd>
 
 class Error {
-
 public:
     Error(ErrorType errorType, std::string errorCase);
     Error(ErrorType errorType, InstructionFormat instructionFormat);

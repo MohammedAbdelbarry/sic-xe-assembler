@@ -5,7 +5,6 @@
 #ifndef SIC_XE_ASSEMBLER_DIRECTIVETABLE_H
 #define SIC_XE_ASSEMBLER_DIRECTIVETABLE_H
 
-
 class DirectiveTable {
 public:
     static DirectiveTable *getInstance();

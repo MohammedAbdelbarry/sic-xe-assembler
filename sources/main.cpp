@@ -32,8 +32,6 @@ int main() {
     try {
         Assembler::getInstance()->execute("p12.asm", std::map<std::string, std::string>());
     } catch (std::invalid_argument ex) {
-        std::cerr << ex.what();
+        std::cout << ex.what();
     }
-    std::cout << std::stoi("0x10", 0, 16) << std::endl;
-    std::cout << std::stoi("10", 0, 16);
 }

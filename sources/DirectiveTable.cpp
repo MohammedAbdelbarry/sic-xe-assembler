@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 #include <regex>
+#include "../headers/enums.h"
+#include "../headers/Error.h"
 #include "../headers/util.h"
 #include "../headers/strutil.h"
 #include "../headers/DirectiveInfo.h"
@@ -36,12 +38,12 @@ void DirectiveTable::initDirTable() {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
             if (pos < 0 || pos >= SIC_MAX_MEMORY)
-                throw ErrorType::INVALID_OPERAND;
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         } catch(std::out_of_range ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
     };
     dirTable[dirName] = info;
@@ -55,7 +57,7 @@ void DirectiveTable::initDirTable() {
             int literalLength = line.operand.length() - 3;
             locCtr += (literalLength / 2 + ((literalLength % 2) != 0));
         } else {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
     };
     dirTable[dirName] = info;
@@ -72,12 +74,12 @@ void DirectiveTable::initDirTable() {
             try {
                 int op = std::stoi(line.operand);
                 if (op < 0 || op > SIC_MAX_WORD)
-                    throw ErrorType::INVALID_OPERAND;
+                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
                 locCtr += 3;
             } catch(std::invalid_argument ex) {
-                throw ErrorType::INVALID_OPERAND;
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             } catch(std::out_of_range ex) {
-                throw ErrorType::INVALID_OPERAND;
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             }
         }
     };
@@ -88,12 +90,12 @@ void DirectiveTable::initDirTable() {
         try {
             int count = std::stoi(line.operand);
             if (count < 0 || count >= SIC_MAX_MEMORY)
-                throw ErrorType::INVALID_OPERAND;
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         } catch(std::out_of_range ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
     };
     dirTable[dirName] = info;
@@ -103,19 +105,28 @@ void DirectiveTable::initDirTable() {
         try {
             int count = 3 * std::stoi(line.operand);
             if (count < 0 || count >= SIC_MAX_MEMORY)
-                throw ErrorType::INVALID_OPERAND;
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         } catch(std::out_of_range ex) {
-            throw ErrorType::INVALID_OPERAND;
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
     };
     dirTable[dirName] = info;
 
     dirName = "END";
-    info.execute = [](int &locCtr, Line) {
-        //TODO: optional operand marks the start of the program.
+    info.execute = [](int &locCtr, Line line) {
+        try {
+            int pos = std::stoi(line.operand, 0, HEX_BASE);
+            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+            locCtr = pos;
+        } catch(std::invalid_argument ex) {
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+        } catch(std::out_of_range ex) {
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+        }
     };
     dirTable[dirName] = info;
 }
