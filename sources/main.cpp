@@ -36,4 +36,4 @@ int main() {
     }
     std::cout << std::stoi("0x10", 0, 16) << std::endl;
     std::cout << std::stoi("10", 0, 16);
-    }
+}

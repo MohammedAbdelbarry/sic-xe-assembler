@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <iomanip>
+#include <iostream>
 #include "../headers/strutil.h"
 
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {

@@ -104,7 +104,7 @@ void DirectiveTable::initDirTable() {
             int count = 3 * std::stoi(line.operand);
             if (count < 0 || count >= SIC_MAX_MEMORY)
                 throw ErrorMessage::INVALID_OPERAND;
-            locCtr += count * 3;
+            locCtr += count;
         } catch(std::invalid_argument ex) {
             throw ErrorMessage::INVALID_OPERAND;
         } catch(std::out_of_range ex) {

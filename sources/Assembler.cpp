@@ -202,7 +202,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
         }
         std::ostringstream lineObjectCode;
         if (!OperationTable::getInstance()->contains(line.operation)) {
-            if(line.operation == "WORD" || line.operation == "BYTE") {
+            if(strutil::toUpper(line.operation) == "WORD" || strutil::toUpper(line.operation) == "BYTE") {
                 if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH || startNewLine) {
                     startNewLine = false;
                     initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
@@ -210,9 +210,9 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                 int numBytes = 0;
                 int numHalfBytes = 0;
                 int locCtr = line.locCtr;
-                if (line.operation == "WORD") {
+                if (strutil::toUpper(line.operation) == "WORD") {
                     numBytes = 3;
-                } else if (line.operation == "BYTE") {
+                } else if (strutil::toUpper(line.operation) == "BYTE") {
                     numBytes = 1;
                 }
                 numHalfBytes = numBytes << 1;
@@ -246,25 +246,19 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                             addHexBytes(lineObjectCode, seg, numBytes);
                         }
                     }
-                } else if (line.operation == "WORD") {
+                } else if (strutil::toUpper(line.operation) == "WORD") {
                     try {
                         strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
                     } catch (std::invalid_argument ex) {
-
+                        std::cout << "ERROR: operand \"" << line.operand;
+                        std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                     }
                 } else {
-                    if(symbolTable.contains(line.operand)) {
-                        int address = symbolTable.getAddress(line.operand);
-                        strutil::addHex(lineObjectCode, address, 4);
-                    } else {
-                        //TODO: ERROR!!!!
-                        std::cout << "ERROR: symbol \"" << line.operand;
-                        std::cout << "\" not found. At line: " << i << std::endl;
-                        continue;
-                    }
+                    std::cout << "ERROR: operand \"" << line.operand;
+                    std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                 }
 //                std::cout << line << '\t' << lineObjectCode.str() << std::endl;
-            } else if (line.operation == "RESB" || line.operation == "RESW") {
+            } else if (strutil::toUpper(line.operation) == "RESB" || strutil::toUpper(line.operation) == "RESW") {
                 startNewLine = true;
             }
         } else {
@@ -287,7 +281,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     } else {
                         //TODO: ERROR!!!!
                         std::cout << "ERROR: symbol \"" << line.operand;
-                        std::cout << "\" not found. At line: " << i << std::endl;
+                        std::cout << "\" not found. At line: " << i + 1 << std::endl;
                     }
                     break;
                 case FOUR:
