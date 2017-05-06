@@ -17,7 +17,8 @@ const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 const int COMMENT_LINE_LENGTH = 30;
 
 bool isValidLabel(std::string label) {
-    return label.empty() || strutil::matches(label, labelRegex);
+    return (label.empty() || strutil::matches(label, labelRegex)) && !(OperationTable::getInstance()->contains(label)
+            || DirectiveTable::getInstance()->contains(label));
 }
 
 bool isValidOperation(std::string operation) {
