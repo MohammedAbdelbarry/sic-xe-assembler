@@ -10,7 +10,12 @@
 #include "../headers/Assembler.h"
 #include "../headers/strutil.h"
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cout << "Invalid Number of Parameters" << std::endl;
+        return 1;
+    }
+    std::string fileName(argv[1]);
 //    int locCtr = 1;
 //    DirectiveTable::getInstance()->getInfo("WORD").execute.operator()(locCtr, Line("a", "b", "c"));
 //    std::cout << locCtr;
@@ -30,7 +35,7 @@ int main() {
 //    std::cout << util::Binary::toDec("00000000001111110000") << std::endl;
 //    //1008
     try {
-        Assembler::getInstance()->execute("p12.asm", std::map<std::string, std::string>());
+        Assembler::getInstance()->execute(fileName, std::map<std::string, std::string>());
     } catch (std::invalid_argument ex) {
         std::cout << ex.what();
     }
