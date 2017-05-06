@@ -9,7 +9,7 @@
 #include <regex>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 #include "../headers/strutil.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
@@ -53,7 +53,7 @@ void DirectiveTable::initDirTable() {
         if (strutil::isCharLiteral(line.operand)) {
             int literalLength = line.operand.length() - 3;
             locCtr += literalLength;
-        } else if (util::Hexadecimal::isHexLiteral(line.operand)){
+        } else if (numutil::Hexadecimal::isHexLiteral(line.operand)){
             int literalLength = line.operand.length() - 3;
             locCtr += (literalLength / 2 + ((literalLength % 2) != 0));
         } else {
@@ -67,7 +67,7 @@ void DirectiveTable::initDirTable() {
         if (strutil::isCharLiteral(line.operand)) {
             int literalLength = line.operand.length() - 3;
             locCtr += 3 * (literalLength / 3 + ((literalLength % 3) != 0));
-        } else if (util::Hexadecimal::isHexLiteral(line.operand)){
+        } else if (numutil::Hexadecimal::isHexLiteral(line.operand)){
             int literalLength = line.operand.length() - 3;
             locCtr += 3 * (literalLength / 6 + ((literalLength % 6) != 0));
         } else {

@@ -17,17 +17,47 @@ const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 
 const int COMMENT_LINE_LENGTH = 30;
 
+/**
+ * Checks whether a label is valid or not. returns true in these cases:
+ * <ul>
+ * <li> label is empty.</li>
+ * <li> label matches label regex.</li>
+ * <li> label doesn't match a reserved keyword for instructions or directives.</li>
+ * </ul>
+ * @param label - label to be checked passed in the form of string.
+ * @return true if it is a valid label.
+ */
 bool isValidLabel(std::string label) {
     return (label.empty() || strutil::matches(label, labelRegex)) && !(OperationTable::getInstance()->contains(label)
             || DirectiveTable::getInstance()->contains(label));
 }
 
+/**
+ * Checks whether an operation is valid or not. returns true in these cases:
+ * <ul>
+ * <li> operation matches operation regex.</li>
+ * <li> operation matches a reserved keyword for instructions or directives.</li>
+ * </ul>
+ * @param operation - operation to be checked passed in the form of string.
+ * @return true if it is a valid operation.
+ */
 bool isValidOperation(std::string operation) {
     return strutil::matches(operation, operationRegex) &&
            (OperationTable::getInstance()->contains(operation) ||
             DirectiveTable::getInstance()->contains(operation));
 }
 
+/**
+ * Checks whether an operand is valid or not. returns true in these cases:
+ * <ul>
+ * <li> operand is a decimal or a hexadecimal integer.</li>
+ * <li> operand is empty.</li>
+ * <li> operand matches operand regex or literal regex.</li>
+ * <li> operand doesn't match a reserved keyword for instructions or directives.</li>
+ * </ul>
+ * @param operand - operand to be checked passed in the form of string.
+ * @return true if it is a valid operand.
+ */
 bool isValidOperand(std::string operand) {
     try {
         std::stoi(operand);
@@ -48,10 +78,17 @@ bool isValidOperand(std::string operand) {
             && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand));
 }
 
+/**
+ * Checks whether a comment is valid or not. returns true in these cases:
+ * <ul>
+ * <li> comment's size is less than or equal 30 bytes.</li>
+ * </ul>
+ * @param comment - comment to be checked passed in the form of string.
+ * @return true if it is a valid comment.
+ */
 bool isValidComment(std::string comment) {
     return comment.size() <= COMMENT_LINE_LENGTH;
 }
-
 
 void validator::validateLine(Line &line) {
     if (!isValidLabel(line.label)) {
@@ -81,7 +118,8 @@ void validator::validateFormat(Line &line) {
             break;
         case FOUR:
             //This will never happen though since the "+OP" operations
-            // won't pass the regex check at anytime since it's not supported in SIC.
+            // won't pass the regex check at anytime since they are not supported in SIC.
+            //Mainly this passed error cause is just relevant for one of the two essential conditions.
             if (line.operation[0] != '+' || line.operand == "")
                 throw new Error(ErrorType::INVALID_FORMAT, "Missing Operand");
             break;

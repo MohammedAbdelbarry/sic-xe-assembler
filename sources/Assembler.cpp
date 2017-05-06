@@ -18,7 +18,7 @@
 #include "../headers/validator.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 
 Assembler *Assembler::instance = nullptr;
 
@@ -238,8 +238,8 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                     numBytes = 1;
                 }
                 numHalfBytes = numBytes << 1;
-                if (util::Hexadecimal::isHexLiteral(line.operand)) {
-                    std::string hexLiteral = util::Hexadecimal::parseHexadecimalLiteral(line.operand);
+                if (numutil::Hexadecimal::isHexLiteral(line.operand)) {
+                    std::string hexLiteral = numutil::Hexadecimal::parseHexadecimalLiteral(line.operand);
                     for (int j = 0; j < hexLiteral.length(); j += numHalfBytes) {
                         locCtr += numHalfBytes;
                         std::string seg = hexLiteral.substr(j, numHalfBytes);

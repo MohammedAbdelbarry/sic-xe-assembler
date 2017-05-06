@@ -7,14 +7,14 @@
 #include <algorithm>
 #include <regex>
 #include "../headers/strutil.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 
 
 const int HEX_BASE = 16;
 const int BIN_BASE = 2;
 const int INTEGER_SIZE_IN_BITS = 32;
 
-std::string util::Hexadecimal::toBin(std::string number) {
+std::string numutil::Hexadecimal::toBin(std::string number) {
     std::stringstream stringStream;
     stringStream << std::hex << number;
     unsigned int num;
@@ -23,16 +23,16 @@ std::string util::Hexadecimal::toBin(std::string number) {
     return bSet.to_string();
 }
 
-int util::Hexadecimal::toDec(std::string number) {
+int numutil::Hexadecimal::toDec(std::string number) {
     return (int)std::strtol(number.c_str(), nullptr, HEX_BASE);
 }
 
-std::string util::Decimal::toBin(int number) {
-    std::string hexadecimalNumber = util::Decimal::toHex(number);
-    return util::Hexadecimal::toBin(hexadecimalNumber);
+std::string numutil::Decimal::toBin(int number) {
+    std::string hexadecimalNumber = numutil::Decimal::toHex(number);
+    return numutil::Hexadecimal::toBin(hexadecimalNumber);
 }
 
-std::string util::Decimal::toHex(int number) {
+std::string numutil::Decimal::toHex(int number) {
     std::stringstream stringStream;
     stringStream << std::hex << number;
     std::string hexadecimalNumber = stringStream.str();
@@ -41,26 +41,26 @@ std::string util::Decimal::toHex(int number) {
     return hexadecimalNumber;
 }
 
-std::string util::Decimal::toString(int number) {
+std::string numutil::Decimal::toString(int number) {
     std::ostringstream stringStream;
     stringStream << number;
     return stringStream.str();
 }
 
-std::string util::Binary::toHex(std::string number) {
-    int hexadecimalNumber = util::Binary::toDec(number);
-    return util::Decimal::toHex(hexadecimalNumber);
+std::string numutil::Binary::toHex(std::string number) {
+    int hexadecimalNumber = numutil::Binary::toDec(number);
+    return numutil::Decimal::toHex(hexadecimalNumber);
 }
 
-int util::Binary::toDec(std::string number) {
+int numutil::Binary::toDec(std::string number) {
     return (int)std::strtol(number.c_str(), nullptr, BIN_BASE);
 }
 
-std::string util::Hexadecimal::parseHexadecimalLiteral(std::string hexLiteral) {
+std::string numutil::Hexadecimal::parseHexadecimalLiteral(std::string hexLiteral) {
     return hexLiteral.substr(2, hexLiteral.length() - 3);
 }
 
-bool util::Hexadecimal::isHexLiteral(std::string hexLiteral) {
+bool numutil::Hexadecimal::isHexLiteral(std::string hexLiteral) {
     static const std::regex hexLiteralRegex("^[Xx]'[0-9A-Fa-f]+'$");
     return strutil::matches(hexLiteral, hexLiteralRegex);
 }
