@@ -43,7 +43,8 @@ bool isValidOperand(std::string operand) {
     } catch(std::out_of_range ex) {
 
     }
-    return operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, literalRegex);
+    return (operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, literalRegex))
+            && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand));
 }
 
 bool isValidComment(std::string comment) {
