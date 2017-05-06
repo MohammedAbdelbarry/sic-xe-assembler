@@ -175,16 +175,14 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 
 void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
-    //TODO implement this method
     const int MAX_LINE_LENGTH = 30;
     const int MAX_SIC_MEMORY = 1 << 15;
     int length = locCtr - programStart;
     std::ostringstream objCodeStream;
     objCodeStream << "H";
-//    objCodeStream << std::setw(6) << std::left << programName;
     objCodeStream << std::setw(6) << std::left;
     objCodeStream << programName;
-//    objCodeStream << std::hex << std::setfill('0') << std::setw(6) << std::right << std::uppercase << programStart;
+    bool errorsFound = false;
     strutil::addHex(objCodeStream, programStart, 6);
     strutil::addHex(objCodeStream, length, 6);
     objCodeStream << "\n";
@@ -198,6 +196,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
         if (line.error) {
             std::cout << "Error: " << line.error->errorMessage;
             std::cout << " at Line: " + i << std::endl;
+            errorsFound = true;
             continue;
         }
         std::ostringstream lineObjectCode;
@@ -221,16 +220,13 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     for (int j = 0; j < hexLiteral.length(); j += numHalfBytes) {
                         locCtr += numHalfBytes;
                         std::string seg = hexLiteral.substr(j, numHalfBytes);
-                        if (locCtr <= initLocCtr + MAX_LINE_LENGTH) {
-                            lineObjectCode << std::hex << std::setfill('0');
-                            lineObjectCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
-                        } else {
+                        if (locCtr > initLocCtr + MAX_LINE_LENGTH) {
                             curRecord += lineObjectCode.str();
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
-                            lineObjectCode << std::hex << std::setfill('0');
-                            lineObjectCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
                         }
+                        lineObjectCode << std::hex << std::setfill('0');
+                        lineObjectCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
                     }
                 } else if (strutil::isCharLiteral(line.operand)) {
                     std::string charLiteral = strutil::parseCharLiteral(line.operand);
@@ -250,14 +246,15 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     try {
                         strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
                     } catch (std::invalid_argument ex) {
+                        errorsFound = true;
                         std::cout << "ERROR: operand \"" << line.operand;
                         std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                     }
                 } else {
+                    errorsFound = true;
                     std::cout << "ERROR: operand \"" << line.operand;
                     std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                 }
-//                std::cout << line << '\t' << lineObjectCode.str() << std::endl;
             } else if (strutil::toUpper(line.operation) == "RESB" || strutil::toUpper(line.operation) == "RESW") {
                 startNewLine = true;
             }
@@ -279,7 +276,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                         int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
                         strutil::addHex(lineObjectCode, address, 4);
                     } else {
-                        //TODO: ERROR!!!!
+                        errorsFound = true;
                         std::cout << "ERROR: symbol \"" << line.operand;
                         std::cout << "\" not found. At line: " << i + 1 << std::endl;
                     }
@@ -294,7 +291,6 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
         }
         curRecord += lineObjectCode.str();
-//        std::cout << line.locCtr << '\t' << line << '\t' << lineObjectCode.str() << std::endl;
     }
     if (!curRecord.empty()) {
         strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
@@ -303,6 +299,9 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     objCodeStream << "\n";
     objCodeStream << "E";
     strutil::addHex(objCodeStream, firstExecutableAddress, 6);
+    if (!errorsFound) {
+        //writeObjCode;
+    }
     std::cout << objCodeStream.str() << std::endl;
 }
 
