@@ -326,12 +326,14 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     SymbolTable symbolTable;
     std::string intermediateFile = executePass1(filePath, options, lines, programName, programStart,
                                                 locCtr, symbolTable, firstExecutableAddress);
+    std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;
     writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
     std::string objFile = executePass2(intermediateFile, lines, programName,
                                        programStart, locCtr, symbolTable, firstExecutableAddress);
     writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
     std::cout << "Assembled Successfully!" << std::endl;
+    std::cout << "Object File:" << std::endl;
     std::cout << objFile;
 }
 
