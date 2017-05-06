@@ -12,7 +12,7 @@
 const std::string invalidInput = "Invalid label";
 const std::string unsupportedOperation = "Unsupported operation";
 const std::string duplicateStart = "Duplicate start";
-const std::string undefinedOperand = "Undefined Operand";
+const std::string invalidOperand = "Invalid Operand";
 const std::string invalidFormat = "Invalid Format";
 const std::string extraCharacters = "Extra Character At End of Line";
 
@@ -36,8 +36,8 @@ std::ostream &operator<<(std::ostream &stream, const Error &error) {
         case ErrorMessage::INVALID_LABEL:
             stream << invalidInput;
             break;
-        case ErrorMessage::UNDEFINED_OPERAND:
-            stream << undefinedOperand;
+        case ErrorMessage::INVALID_OPERAND:
+            stream << invalidOperand;
             break;
         case ErrorMessage::EXTRA_CHARACTERS_AT_EOL:
             stream << extraCharacters;

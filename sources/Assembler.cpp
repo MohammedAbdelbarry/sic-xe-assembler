@@ -136,7 +136,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     if (symbolTable.contains(line.operand))
                         firstExecutableAddress = symbolTable.getAddress(line.operand);
                     else
-                        line.error = new Error(ErrorMessage::UNDEFINED_OPERAND);
+                        line.error = new Error(ErrorMessage::INVALID_OPERAND);
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
@@ -177,6 +177,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     //TODO implement this method
     const int MAX_LINE_LENGTH = 30;
+    const int MAX_SIC_MEMORY = 1 << 15;
     int length = locCtr - programStart;
     std::ostringstream objCodeStream;
     objCodeStream << "H";

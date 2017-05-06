@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <iomanip>
+#include <iostream>
 #include "../headers/strutil.h"
 #include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
