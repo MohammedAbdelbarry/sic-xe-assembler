@@ -7,6 +7,9 @@
 #include <iomanip>
 #include <iostream>
 #include "../headers/strutil.h"
+#include "../headers/InstructionInfo.h"
+#include "../headers/OperationTable.h"
+
 
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
     std::stringstream stringStream;
@@ -20,21 +23,32 @@ std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_to
 std::vector<std::string> strutil::split(std::string str, std::regex &regex, int splitsNumber) {
     int splittingCounter = 0;
     std::vector<std::string> ret;
-    if (str.find(".") == 0) {
+    if (strutil::beginWith(str, ".")) {
         ret.push_back(str);
         return ret;
     }
     std::sregex_token_iterator iter(str.begin(), str.end(), regex, -1);
     std::sregex_token_iterator end;
     while (iter != end) {
-        if(splittingCounter == splitsNumber) {
-            ret.push_back(concatenateLine(iter, end));
-            break;
-        }
         std::string cur = *iter;
         ret.push_back(cur);
         iter++;
         splittingCounter++;
+        if(splittingCounter == splitsNumber) {
+            ret.push_back(concatenateLine(iter, end));
+            break;
+        }
+    }
+
+    if (OperationTable::getInstance()->contains(ret[1])
+        && OperationTable::getInstance()->getInfo(ret[1]).supportedFormats[0]
+           == InstructionFormat::ONE) {
+        if(ret.size() > 3) {
+            ret[2].append(ret[3]);
+            ret[3] = ret[2];
+            ret[2] = "";
+        } else if (ret.size() > 2)
+            ret[2] = "";
     }
     return ret;
 }
@@ -47,6 +61,12 @@ bool strutil::endsWith(std::string const &value, std::string const &ending) {
     if (ending.size() > value.size())
         return false;
     return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+bool ::strutil::beginWith(std::string const &value, std::string const &beginning) {
+    if (beginning.size() > value.size())
+        return false;
+    return std::equal(beginning.begin(), beginning.end(), value.begin());
 }
 
 std::string strutil::parseCharLiteral(std::string charLiteral) {
@@ -65,3 +85,5 @@ std::string strutil::toUpper(std::string str) {
     std::transform(str.begin(), str.end(), str.begin(), toupper);
     return str;
 }
+
+

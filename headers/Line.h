@@ -19,14 +19,14 @@ public:
     std::string operand;
     std::string comment;
     MnemonicType mnemonicType;
-    LineType getLineType();
+    LineType getLineType() const;
     int locCtr;
     Error *error;
     bool isIndexed;
     InstructionFormat lineFormat;
 private:
     friend std::ostream& operator<<(std::ostream& stream, const Line& line);
-    LineType  lineType;
+    LineType lineType;
 };
 
 #endif //SIC_XE_ASSEMBLER_LINE_H

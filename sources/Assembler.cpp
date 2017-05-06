@@ -37,7 +37,8 @@ Assembler::Assembler() {
 
 Line constructLine(std::vector<std::string> lineVector) {
     if (lineVector.size() > 1) {
-        for (int i = lineVector.size(); i <= 4; i++)
+
+        for (int i = lineVector.size(); i < 4; i++)
             lineVector.push_back("");
         Line line(lineVector[0], lineVector[1], lineVector[2], lineVector[3]);
         if (strutil::endsWith(strutil::toUpper(line.operand), ",X")) {
@@ -54,6 +55,7 @@ Line constructLine(std::vector<std::string> lineVector) {
 void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     std::ostringstream intermediateStream;
     intermediateStream << line;
+
     if (line.error != nullptr) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
@@ -115,6 +117,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         Line line = constructLine(strutil::split(lineString, regex, 3));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
+            appendToIntermediateFile(intermediateFile, line);
             lines.push_back(line);
             continue;
         }
