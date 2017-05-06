@@ -91,27 +91,34 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::string lineString;
     std::ifstream fileStream(fileName);
     std::regex regex("\\s+");
+    std::streampos firstLinePos = fileStream.tellg();
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
-    std::getline(fileStream, lineString);
-    Line firstLine = constructLine(strutil::split(lineString, regex, 3));
-    if (strutil::toUpper(firstLine.operation) == "START") {
-        try {
-            validator::validateLine(firstLine);
-            DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
-            firstLine.locCtr = locCtr;
-            programStart = locCtr;
-            if (!firstLine.label.empty()) {
-                programName = firstLine.label;
-                symbolTable.push(firstLine.label, firstLine.locCtr);
-            }
-        } catch (ErrorMessage errorMessage) {
-            firstLine.error = new Error(errorMessage);
+    while (std::getline(fileStream, lineString)) {
+        Line firstLine = constructLine(strutil::split(lineString, regex, 3));
+        if (firstLine.getLineType() == LineType::COMMENT) {
+            firstLinePos = fileStream.tellg();
+            continue;
         }
-        lines.push_back(firstLine);
-        appendToIntermediateFile(intermediateFile, firstLine);
-    } else
-        fileStream.seekg(fileStream.beg);
+        if (strutil::toUpper(firstLine.operation) == "START") {
+            try {
+                validator::validateLine(firstLine);
+                DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
+                firstLine.locCtr = locCtr;
+                programStart = locCtr;
+                if (!firstLine.label.empty()) {
+                    programName = firstLine.label;
+                    symbolTable.push(firstLine.label, firstLine.locCtr);
+                }
+            } catch (ErrorMessage errorMessage) {
+                firstLine.error = new Error(errorMessage);
+            }
+            lines.push_back(firstLine);
+            appendToIntermediateFile(intermediateFile, firstLine);
+        } else
+            fileStream.seekg(firstLinePos);
+        break;
+    }
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
         Line line = constructLine(strutil::split(lineString, regex, 3));
