@@ -158,6 +158,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                         else
                             DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line);
                     }
+                    //Invalid label for END operation.
+                    if (!line.label.empty()) {
+                        line.error = new Error(ErrorType::INVALID_LABEL, line.label);
+                    }
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
