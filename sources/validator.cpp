@@ -61,7 +61,7 @@ void validator::validateLine(Line &line) {
     } else if (!isValidOperand(line.operand)) {
         throw new Error(ErrorType::INVALID_OPERAND, line.operand);
     } else if (!isValidComment(line.comment)) {
-        throw new Error(ErrorType::EXTRA_CHARACTERS_AT_EOL, line.comment);
+        throw new Error(ErrorType::LONG_COMMENT, std::to_string(line.comment.size()));
     }
 }
 

@@ -24,7 +24,7 @@ enum ErrorType {
     DUPLICATE_START,
     INVALID_OPERAND,
     INVALID_FORMAT,
-    EXTRA_CHARACTERS_AT_EOL
+    LONG_COMMENT
 };
 
 enum MnemonicType {

@@ -5,14 +5,9 @@
 #include <iomanip>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
-
-const std::string invalidLabel = "Invalid label ";
-const std::string unsupportedOperation = "Unsupported operation ";
-const std::string duplicateStart = "Duplicate start ";
-const std::string invalidOperand = "Invalid Operand ";
-const std::string invalidFormat = "Invalid Format ";
-//TODO assuming that bars will concatenate "line" and its number.
-const std::string extraCharacters = "Extra Character At End of ";
+const std::string errorMessages[] = {"Invalid label ", "Unsupported operation ", "Duplicate start ",
+                       "Invalid operand ", "Invalid format ", "Comment size shouldn't be greater than 30, found "};
+const std::string DOUBLE_QUOTE = "\"";
 
 Error::Error(ErrorType errorType, std::string errorCause) {
     this->errorType = errorType;
@@ -29,30 +24,9 @@ Error::~Error() {
 }
 
 std::ostream &operator<<(std::ostream &stream, const Error &error) {
-    //TODO Check this statement below for these nasty compiler error "God bless rms"
     std::string errorString= "ERROR: ";
     stream << errorString;
-    switch(error.errorType) {
-        case ErrorType::INVALID_LABEL:
-            stream << invalidLabel << error.errorCause;
-            break;
-        case ErrorType::INVALID_OPERAND:
-            stream << invalidOperand << error.errorCause;
-            break;
-        case ErrorType::EXTRA_CHARACTERS_AT_EOL:
-            stream << extraCharacters;
-            break;
-        case ErrorType::UNSUPPORTED_OPERATION:
-            stream << unsupportedOperation << error.errorCause;
-            break;
-        case ErrorType::DUPLICATE_START:
-            stream << duplicateStart << error.errorCause;
-            break;
-        case ErrorType::INVALID_FORMAT:
-            stream << invalidFormat << error.errorCause;
-            break;
-        default:
-            break;
-    }
+    stream << errorMessages[error.errorType];
+    stream << DOUBLE_QUOTE << error.errorCause << DOUBLE_QUOTE;
 }
 

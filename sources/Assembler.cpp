@@ -265,11 +265,11 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                     try {
                         strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
                     } catch (std::invalid_argument ex) {
-                        errors << "ERROR: operand \"" << line.operand;
+                        errors << "ERROR: Operand \"" << line.operand;
                         errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                     }
                 } else {
-                    errors << "ERROR: operand \"" << line.operand;
+                    errors << "ERROR: Operand \"" << line.operand;
                     errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                 }
             } else if (strutil::toUpper(line.operation) == "RESB" || strutil::toUpper(line.operation) == "RESW") {
@@ -293,7 +293,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                         int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
                         strutil::addHex(lineObjectCode, address, 4);
                     } else {
-                        errors << "ERROR: symbol \"" << line.operand;
+                        errors << "ERROR: Symbol \"" << line.operand;
                         errors << "\" not found. At line: " << i + 1 << std::endl;
                     }
                     break;
