@@ -121,9 +121,9 @@ void DirectiveTable::initDirTable() {
 }
 
 bool DirectiveTable::contains(std::string directive) {
-    return dirTable.find(directive) != dirTable.end();
+    return dirTable.find(strutil::toUpper(directive)) != dirTable.end();
 }
 
 DirectiveInfo DirectiveTable::getInfo(std::string directive) {
-    return dirTable[directive];
+    return dirTable[strutil::toUpper(directive)];
 }

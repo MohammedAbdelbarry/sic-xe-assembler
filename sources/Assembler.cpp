@@ -92,7 +92,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
     std::getline(fileStream, lineString);
-    Line firstLine = constructLine(strutil::split(strutil::toUpper(lineString), regex, 3));
+    Line firstLine = constructLine(strutil::split(lineString, regex, 3));
     if (firstLine.operation == "START") {
         try {
             validator::validateLine(firstLine);
@@ -112,7 +112,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         fileStream.seekg(fileStream.beg);
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
-        Line line = constructLine(strutil::split(strutil::toUpper(lineString), regex));
+        Line line = constructLine(strutil::split(lineString, regex, 3));
         //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
             lines.push_back(line);
