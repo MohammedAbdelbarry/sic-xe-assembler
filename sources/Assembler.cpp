@@ -37,7 +37,16 @@ Assembler::Assembler() {
 
 Line constructLine(std::vector<std::string> lineVector) {
     if (lineVector.size() > 1) {
-
+        if (OperationTable::getInstance()->contains(lineVector[1])
+            && OperationTable::getInstance()->getInfo(lineVector[1]).supportedFormats[0]
+               == InstructionFormat::ONE) {
+            if(lineVector.size() > 3) {
+                lineVector[2].append(lineVector[3]);
+                lineVector[3] = lineVector[2];
+                lineVector[2] = "";
+            } else if (lineVector.size() > 2)
+                lineVector[2] = "";
+        }
         for (int i = lineVector.size(); i < 4; i++)
             lineVector.push_back("");
         Line line(lineVector[0], lineVector[1], lineVector[2], lineVector[3]);

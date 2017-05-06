@@ -28,6 +28,7 @@ Line::Line(std::string comment) {
     this->comment = comment;
     this->error = nullptr;
     this->lineType = LineType::COMMENT;
+    this->isIndexed = false;
 }
 
 std::ostream& operator<<(std::ostream& stream, const Line& line) {
