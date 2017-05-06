@@ -92,7 +92,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
     std::getline(fileStream, lineString);
-    Line firstLine = constructLine(strutil::split(strutil::toUpper(lineString), regex, 3));
+    Line firstLine = constructLine(strutil::split(strutil::toUpper(lineString), regex));
     if (firstLine.operation == "START") {
         try {
             validator::validateLine(firstLine);
