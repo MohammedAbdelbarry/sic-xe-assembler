@@ -9,7 +9,7 @@ class Assembler {
 
 public:
     static Assembler *getInstance();
-    void execute(std::string fileName, std::map<std::string, std::string> options);
+    void execute(std::string filePath, std::map<std::string, std::string> options);
 
 private:
     Assembler();

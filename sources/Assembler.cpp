@@ -176,7 +176,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     return intermediateFile;
 }
 
-void executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
+std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
     const int MAX_SIC_MEMORY = 1 << 15;
@@ -184,8 +184,7 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     std::ostringstream objCodeStream;
     objCodeStream << "H";
     objCodeStream << std::setw(6) << std::left;
-    objCodeStream << programName;
-    bool errorsFound = false;
+    objCodeStream << strutil::toUpper(programName);
     strutil::addHex(objCodeStream, programStart, 6);
     strutil::addHex(objCodeStream, length, 6);
     objCodeStream << "\n";
@@ -194,12 +193,12 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     std::string curRecord;
     objCodeStream << "T";
     strutil::addHex(objCodeStream, initLocCtr, 6);
+    std::ostringstream errors;
     for (int i = 1 ; i < lines.size() ; i++) {
         Line line = lines[i];
         if (line.error) {
-            std::cout << "Error: " << line.error->errorMessage;
-            std::cout << " at Line: " + i << std::endl;
-            errorsFound = true;
+            errors << "Error: " << line.error->errorMessage;
+            errors << " at Line: " + i << std::endl;
             continue;
         }
         std::ostringstream lineObjectCode;
@@ -249,14 +248,12 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                     try {
                         strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
                     } catch (std::invalid_argument ex) {
-                        errorsFound = true;
-                        std::cout << "ERROR: operand \"" << line.operand;
-                        std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                        errors << "ERROR: operand \"" << line.operand;
+                        errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                     }
                 } else {
-                    errorsFound = true;
-                    std::cout << "ERROR: operand \"" << line.operand;
-                    std::cout << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                    errors << "ERROR: operand \"" << line.operand;
+                    errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                 }
             } else if (strutil::toUpper(line.operation) == "RESB" || strutil::toUpper(line.operation) == "RESW") {
                 startNewLine = true;
@@ -279,9 +276,8 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
                         int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
                         strutil::addHex(lineObjectCode, address, 4);
                     } else {
-                        errorsFound = true;
-                        std::cout << "ERROR: symbol \"" << line.operand;
-                        std::cout << "\" not found. At line: " << i + 1 << std::endl;
+                        errors << "ERROR: symbol \"" << line.operand;
+                        errors << "\" not found. At line: " << i + 1 << std::endl;
                     }
                     break;
                 case FOUR:
@@ -298,26 +294,38 @@ void executePass2(std::string intermediateFileName, std::vector<Line> &lines, st
     if (!curRecord.empty()) {
         strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
         objCodeStream << curRecord;
+    } else {
+        throw std::invalid_argument(errors.str());
     }
     objCodeStream << "\n";
     objCodeStream << "E";
     strutil::addHex(objCodeStream, firstExecutableAddress, 6);
-    if (!errorsFound) {
-        //writeObjCode;
+    if (errors.str().empty()) {
+        return objCodeStream.str();
+    } else {
+        throw errors.str();
     }
-    std::cout << objCodeStream.str() << std::endl;
 }
 
-void Assembler::execute(std::string fileName, std::map<std::string, std::string> options) {
+void writeFile(std::string filePath, std::string data) {
+    std::ofstream fileStream(filePath);
+    fileStream << data;
+}
+
+void Assembler::execute(std::string filePath, std::map<std::string, std::string> options) {
     int firstExecutableAddress = locCtr = 0;
     int programStart = 0;
     std::string programName = "";
     std::vector<Line> lines;
     SymbolTable symbolTable;
-    std::string intermediateFile = executePass1(fileName, options, lines, programName, programStart,
+    std::string intermediateFile = executePass1(filePath, options, lines, programName, programStart,
                                                 locCtr, symbolTable, firstExecutableAddress);
     std::cout << intermediateFile;
-    executePass2(intermediateFile, lines, programName, programStart, locCtr, symbolTable, firstExecutableAddress);
+    writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
+    std::string objFile = executePass2(intermediateFile, lines, programName,
+                                       programStart, locCtr, symbolTable, firstExecutableAddress);
+    writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
+    std::cout << objFile;
 }
 
 void addLiterals(std::string literalValue, int numBytes, int &locCtr, int &initLocCtr,
