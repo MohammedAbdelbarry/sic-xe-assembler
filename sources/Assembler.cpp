@@ -186,7 +186,6 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
-    const int MAX_SIC_MEMORY = 1 << 15;
     int length = locCtr - programStart;
     std::ostringstream objCodeStream;
     objCodeStream << "H";
@@ -332,6 +331,7 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     std::string objFile = executePass2(intermediateFile, lines, programName,
                                        programStart, locCtr, symbolTable, firstExecutableAddress);
     writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
+    std::cout << "Assembled Successfully!" << std::endl;
     std::cout << objFile;
 }
 
