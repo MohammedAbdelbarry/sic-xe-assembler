@@ -1,6 +1,7 @@
 #include <string>
 #include <regex>
 #include "../headers/enums.h"
+#include "../headers/Error.h"
 #include "../headers/Line.h"
 #include "../headers/validator.h"
 #include "../headers/strutil.h"
@@ -54,13 +55,13 @@ bool isValidComment(std::string comment) {
 
 void validator::validateLine(Line &line) {
     if (!isValidLabel(line.label)) {
-        throw ErrorMessage::INVALID_LABEL;
+        throw new Error(ErrorType::INVALID_LABEL, line.label);
     } else if (!isValidOperation(line.operation)) {
-        throw ErrorMessage::UNSUPPORTED_OPERATION;
+        throw new Error(ErrorType::UNSUPPORTED_OPERATION, line.operation);
     } else if (!isValidOperand(line.operand)) {
-        throw ErrorMessage::INVALID_OPERAND;
+        throw new Error(ErrorType::INVALID_OPERAND, line.operand);
     } else if (!isValidComment(line.comment)) {
-        throw ErrorMessage::EXTRA_CHARACTERS_AT_EOL;
+        throw new Error(ErrorType::EXTRA_CHARACTERS_AT_EOL, line.comment);
     }
 }
 
@@ -68,7 +69,7 @@ void validator::validateFormat(Line &line) {
     switch (line.lineFormat) {
         case ONE:
             if (line.operand != "")
-                throw ErrorMessage::INVALID_FORMAT;
+                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
             break;
         case TWO:
             //Register-to-register operations... Not implemented
@@ -76,13 +77,13 @@ void validator::validateFormat(Line &line) {
             break;
         case THREE:
             if (line.operand == "")
-                throw ErrorMessage::INVALID_FORMAT;
+                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
             break;
         case FOUR:
             //This will never happen though since the "+OP" operations
             // won't pass the regex check at anytime since it's not supported in SIC.
             if (line.operation[0] != '+' || line.operand == "")
-                throw ErrorMessage::INVALID_FORMAT;
+                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
             break;
         default:
             break;

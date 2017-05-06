@@ -10,10 +10,11 @@
 class Error {
 
 public:
-    Error();
-    Error(ErrorMessage errorMessage);
+    Error(ErrorType errorType, std::string errorCase);
+    Error(ErrorType errorType, InstructionFormat instructionFormat);
     ~Error();
-    ErrorMessage errorMessage;
+    ErrorType errorType;
+    std::string errorCause;
 
 private:
     friend std::ostream& operator<<(std::ostream& stream, const Error& error);

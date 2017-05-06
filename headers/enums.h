@@ -18,7 +18,7 @@ enum InstructionFormat {
     FOUR
 };
 
-enum ErrorMessage {
+enum ErrorType {
     INVALID_LABEL,
     UNSUPPORTED_OPERATION,
     DUPLICATE_START,

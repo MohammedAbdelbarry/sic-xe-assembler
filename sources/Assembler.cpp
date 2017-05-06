@@ -119,8 +119,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     programName = firstLine.label;
                     symbolTable.push(firstLine.label, firstLine.locCtr);
                 }
-            } catch (ErrorMessage errorMessage) {
-                firstLine.error = new Error(errorMessage);
+            } catch (Error* error) {
+                firstLine.error = error;
             }
             lines.push_back(firstLine);
             appendToIntermediateFile(intermediateFile, firstLine);
@@ -139,7 +139,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         }
         if (!line.label.empty()) {
             if (symbolTable.contains(line.label))
-                line.error = new Error(ErrorMessage::INVALID_LABEL);
+                line.error = new Error(ErrorType::INVALID_LABEL, line.label);
             else
                 symbolTable.push(line.label, locCtr);
         }
@@ -149,13 +149,13 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 line.mnemonicType = MnemonicType::DIRECTIVE;
                 if (strutil::toUpper(line.operation) == "START") {
                     line.locCtr = locCtr;
-                    line.error = new Error(ErrorMessage::DUPLICATE_START);
+                    line.error = new Error(ErrorType::DUPLICATE_START, line.operation);
                 } else if (strutil::toUpper(line.operation) == "END") {
                     line.locCtr = locCtr;
                     if (symbolTable.contains(line.operand))
                         firstExecutableAddress = symbolTable.getAddress(line.operand);
                     else
-                        line.error = new Error(ErrorMessage::INVALID_OPERAND);
+                        line.error = new Error(ErrorType::INVALID_OPERAND, line.operand);
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
@@ -177,14 +177,14 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                             line.error = nullptr;
                         }
                         break;
-                    } catch (ErrorMessage errorMessage) {
-                        line.error = new Error(errorMessage);
+                    } catch (Error *error) {
+                        line.error = error;
                     }
                 }
             }
-        } catch (ErrorMessage errorMessage) {
+        } catch (Error *error) {
             line.locCtr = locCtr;
-            line.error = new Error(errorMessage);
+            line.error = error;
         }
         appendToIntermediateFile(intermediateFile, line);
         lines.push_back(line);
@@ -213,7 +213,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     for (int i = 1 ; i < lines.size() ; i++) {
         Line line = lines[i];
         if (line.error) {
-            errors << "Error: " << line.error->errorMessage;
+            errors << "Error: " << line.error->errorType;
             errors << " at Line: " + i << std::endl;
             continue;
         }

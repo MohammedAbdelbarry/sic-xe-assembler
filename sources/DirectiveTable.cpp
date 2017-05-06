@@ -36,12 +36,12 @@ void DirectiveTable::initDirTable() {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
             if (pos < 0 || pos >= SIC_MAX_MEMORY)
-                throw ErrorMessage::INVALID_OPERAND;
+                throw ErrorType::INVALID_OPERAND;
             locCtr = pos;
         } catch(std::invalid_argument ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         } catch(std::out_of_range ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         }
     };
     dirTable[dirName] = info;
@@ -55,7 +55,7 @@ void DirectiveTable::initDirTable() {
             int literalLength = line.operand.length() - 3;
             locCtr += (literalLength / 2 + ((literalLength % 2) != 0));
         } else {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         }
     };
     dirTable[dirName] = info;
@@ -72,12 +72,12 @@ void DirectiveTable::initDirTable() {
             try {
                 int op = std::stoi(line.operand);
                 if (op < 0 || op > SIC_MAX_WORD)
-                    throw ErrorMessage::INVALID_OPERAND;
+                    throw ErrorType::INVALID_OPERAND;
                 locCtr += 3;
             } catch(std::invalid_argument ex) {
-                throw ErrorMessage::INVALID_OPERAND;
+                throw ErrorType::INVALID_OPERAND;
             } catch(std::out_of_range ex) {
-                throw ErrorMessage::INVALID_OPERAND;
+                throw ErrorType::INVALID_OPERAND;
             }
         }
     };
@@ -88,12 +88,12 @@ void DirectiveTable::initDirTable() {
         try {
             int count = std::stoi(line.operand);
             if (count < 0 || count >= SIC_MAX_MEMORY)
-                throw ErrorMessage::INVALID_OPERAND;
+                throw ErrorType::INVALID_OPERAND;
             locCtr += count;
         } catch(std::invalid_argument ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         } catch(std::out_of_range ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         }
     };
     dirTable[dirName] = info;
@@ -103,12 +103,12 @@ void DirectiveTable::initDirTable() {
         try {
             int count = 3 * std::stoi(line.operand);
             if (count < 0 || count >= SIC_MAX_MEMORY)
-                throw ErrorMessage::INVALID_OPERAND;
+                throw ErrorType::INVALID_OPERAND;
             locCtr += count;
         } catch(std::invalid_argument ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         } catch(std::out_of_range ex) {
-            throw ErrorMessage::INVALID_OPERAND;
+            throw ErrorType::INVALID_OPERAND;
         }
     };
     dirTable[dirName] = info;
