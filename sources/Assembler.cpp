@@ -204,8 +204,8 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     for (int i = 1 ; i < lines.size() ; i++) {
         Line line = lines[i];
         if (line.error) {
-            errors << "Error: " << line.error->errorMessage;
-            errors << " at Line: " + i << std::endl;
+            errors << *line.error;
+            errors << ". At line: " << i + 1 << std::endl;
             continue;
         }
         std::ostringstream lineObjectCode;
