@@ -69,7 +69,7 @@ void validator::validateFormat(Line &line) {
     switch (line.lineFormat) {
         case ONE:
             if (line.operand != "")
-                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
+                throw new Error(ErrorType::INVALID_FORMAT, line.operand);
             break;
         case TWO:
             //Register-to-register operations... Not implemented
@@ -77,13 +77,13 @@ void validator::validateFormat(Line &line) {
             break;
         case THREE:
             if (line.operand == "")
-                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
+                throw new Error(ErrorType::INVALID_FORMAT, "Missing Operand");
             break;
         case FOUR:
             //This will never happen though since the "+OP" operations
             // won't pass the regex check at anytime since it's not supported in SIC.
             if (line.operation[0] != '+' || line.operand == "")
-                throw new Error(ErrorType::INVALID_FORMAT, line.lineFormat);
+                throw new Error(ErrorType::INVALID_FORMAT, "Missing Operand");
             break;
         default:
             break;

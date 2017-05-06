@@ -9,12 +9,12 @@ const std::string errorMessages[] = {"Invalid label ", "Unsupported operation ",
                        "Invalid operand ", "Invalid format ", "Comment size shouldn't be greater than 30, found "};
 const std::string DOUBLE_QUOTE = "\"";
 
-Error::Error(ErrorType errorType, std::string errorCause) {
-    this->errorType = errorType;
-    this->errorCause = errorCause;
+
+Error::Error() {
+
 }
 
-Error::Error(ErrorType errorType, InstructionFormat instructionFormat) {
+Error::Error(ErrorType errorType, std::string errorCause) {
     this->errorType = errorType;
     this->errorCause = errorCause;
 }
@@ -29,4 +29,6 @@ std::ostream &operator<<(std::ostream &stream, const Error &error) {
     stream << errorMessages[error.errorType];
     stream << DOUBLE_QUOTE << error.errorCause << DOUBLE_QUOTE;
 }
+
+
 

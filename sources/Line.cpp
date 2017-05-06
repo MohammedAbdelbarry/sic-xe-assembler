@@ -9,7 +9,6 @@
 #include "../headers/Error.h"
 #include "../headers/Line.h"
 
-
 Line::Line() {
 
 }
@@ -47,7 +46,6 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
     } else {
         stream << line.comment;
     }
-
 }
 
 Line::~Line() {
