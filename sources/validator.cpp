@@ -12,7 +12,7 @@
 const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}$");
 const std::regex operandRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}(?:,X)?$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
-const std::regex literalRegex("^(?:[Xx]'[+-]?[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
+const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 
 const int COMMENT_LINE_LENGTH = 30;
 
@@ -56,7 +56,7 @@ void validator::validateLine(Line &line) {
     } else if (!isValidOperation(line.operation)) {
         throw ErrorMessage::UNSUPPORTED_OPERATION;
     } else if (!isValidOperand(line.operand)) {
-        throw ErrorMessage::UNDEFINED_OPERAND;
+        throw ErrorMessage::INVALID_OPERAND;
     } else if (!isValidComment(line.comment)) {
         throw ErrorMessage::EXTRA_CHARACTERS_AT_EOL;
     }
