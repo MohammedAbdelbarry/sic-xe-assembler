@@ -10,8 +10,8 @@ class OperationTable {
 public:
 
     /**
-     * Returns a static instance of the operation table class itself.
-     * @return A singleton instance of the operation table class itself.
+     * Gets the operation table singleton instance.
+     * @return The operation table singleton instance.
      */
     static OperationTable *getInstance();
 
@@ -32,8 +32,20 @@ public:
     InstructionInfo getInfo(std::string operation);
 
 private:
+
+    /**
+     * A static operation table object which stores the singleton instance to be used in further operations.
+     */
     static OperationTable *instance;
+
+    /**
+     * A map which stores the operations as keys and its informationInfo objects as values.
+     */
     std::map<std::string, InstructionInfo> opTable;
+
+    /**
+     * A private default no-args constructor.
+     */
     OperationTable();
 
     /**
