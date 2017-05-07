@@ -1,14 +1,12 @@
-//
-// Created by Mohamed A.Tolba on 5/4/2017.
-//
-
+/**
+ * @file The file containing the numerical utilities namespace implementation.
+ */
 #include <sstream>
 #include <bitset>
 #include <algorithm>
 #include <regex>
 #include "../headers/strutil.h"
 #include "../headers/numutil.h"
-
 
 const int HEX_BASE = 16;
 const int BIN_BASE = 2;

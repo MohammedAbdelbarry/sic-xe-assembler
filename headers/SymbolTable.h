@@ -1,14 +1,13 @@
-//
-// Created by salem.harby on 05/01/2017.
-//
-
+/**
+ * @file The file containing the symbol table class declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_SYMBOLTABLE_H
 #define SIC_XE_ASSEMBLER_SYMBOLTABLE_H
-
-
+/**
+ * The symbol table class.
+ */
 class SymbolTable {
 public:
-
     /**
      * Adds a label with its address to the symbol table.
      * @param label - A label which is required to be added to the symbol table.

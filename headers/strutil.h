@@ -1,17 +1,14 @@
-//
-// Created by salem.harby on 05/04/2017.
-//
-
+/**
+ * @file The file containing the string utilities namespace declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_STRUTIL_H
 #define SIC_XE_ASSEMBLER_STRUTIL_H
-
 /*!
 *  \addtogroup Utilities\String Utilities
 *  @{
 */
 //! A utilities namespace which is dedicated to support some utility functions with strings.
 namespace strutil {
-
     /**
      * Splits the line read from the assembly file using regex pattern and returns a vector of strings contains the
      * individual strings forming this line.
