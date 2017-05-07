@@ -5,9 +5,7 @@
 #ifndef SIC_XE_ASSEMBLER_UTIL_H
 #define SIC_XE_ASSEMBLER_UTIL_H
 
-
-namespace util {
-
+namespace numutil {
     namespace Hexadecimal {
         std::string toBin(std::string number);
         int toDec(std::string number);

@@ -22,6 +22,9 @@ OperationTable* OperationTable::getInstance() {
     return instance;
 }
 
+/**
+ * fsakfaslkflaskf
+ */
 void OperationTable::initOpTable() {
     std::string opName;
     InstructionInfo info;
