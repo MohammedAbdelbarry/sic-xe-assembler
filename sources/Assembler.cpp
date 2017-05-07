@@ -83,16 +83,6 @@ void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
     }
 }
 
-void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
-    strutil::addHex(stream, recordLength, 2);
-    stream << curRecord;
-    stream << "\n";
-    curRecord = "";
-    initLocCtr = curLocCtr;
-    stream << "T";
-    strutil::addHex(stream, initLocCtr, 6);
-}
-
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
@@ -198,18 +188,37 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     return intermediateFile;
 }
 
+void initHeader(std::ostringstream &stream, std::string programName, int initLocCtr, int programLength) {
+    stream << "H";
+    stream << std::setw(6) << std::left;
+    stream << strutil::toUpper(programName);
+    strutil::addHex(stream, initLocCtr, 6);
+    strutil::addHex(stream, programLength, 6);
+    stream << "\n";
+}
+
+void initRecord(std::ostringstream &stream,
+                int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
+    strutil::addHex(stream, recordLength, 2);
+    stream << curRecord;
+    stream << "\n";
+    curRecord = "";
+    initLocCtr = curLocCtr;
+    stream << "T";
+    strutil::addHex(stream, initLocCtr, 6);
+}
+
+void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
+    stream << "E";
+    strutil::addHex(stream, firstExecutableAddress, 6);
+}
+
 std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
-    int length = locCtr - programStart;
     std::ostringstream objCodeStream;
-    objCodeStream << "H";
-    objCodeStream << std::setw(6) << std::left;
-    objCodeStream << strutil::toUpper(programName);
-    strutil::addHex(objCodeStream, programStart, 6);
-    strutil::addHex(objCodeStream, length, 6);
-    objCodeStream << "\n";
     int initLocCtr = programStart;
+    initHeader(objCodeStream, programName, initLocCtr, locCtr - initLocCtr);
     bool startNewLine = false;
     std::string curRecord;
     objCodeStream << "T";
@@ -319,8 +328,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
         throw std::invalid_argument(errors.str());
     }
     objCodeStream << "\n";
-    objCodeStream << "E";
-    strutil::addHex(objCodeStream, firstExecutableAddress, 6);
+    addEndRecord(objCodeStream, firstExecutableAddress);
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {
