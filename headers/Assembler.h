@@ -1,5 +1,6 @@
 /**
- * @file The file containing the assembler class declaration.
+ * @file Assembler.h
+ * The file containing the assembler class declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_ASSEMBLER_H
 #define SIC_XE_ASSEMBLER_ASSEMBLER_H

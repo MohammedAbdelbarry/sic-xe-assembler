@@ -1,14 +1,20 @@
-//
-// Created by Mohamed A.Tolba on 5/4/2017.
-//
-
+/**
+ * @file Error.cpp
+ * The file containing the implementation of the Error class.
+ */
 #include <iomanip>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
+/**
+ * A static array containing the error message
+ * corresponding to the type of the error.
+ */
 const std::string errorMessages[] = {"Invalid label ", "Unsupported operation ", "Duplicate start ",
                        "Invalid operand ", "Invalid format ", "Comment size shouldn't be greater than 30, found "};
+/**
+ * Double quote """.
+ */
 const std::string DOUBLE_QUOTE = "\"";
-
 
 Error::Error() {
 
