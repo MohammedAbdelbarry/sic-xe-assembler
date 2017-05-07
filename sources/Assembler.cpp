@@ -1,6 +1,6 @@
-//
-// Created by Mohamed A.Tolba on 5/1/2017.
-//
+/**
+ * @file The file containing the assembler class implementation.
+ */
 
 #include <vector>
 #include <fstream>
@@ -34,7 +34,11 @@ Assembler *Assembler::getInstance() {
 Assembler::Assembler() {
     //TODO check if we want to add any functionality
 }
-
+/**
+ * Constructs and returns a new line.
+ * @param lineVector A vector containing the split source code lines.
+ * @return The constructed line.
+ */
 Line constructLine(std::vector<std::string> lineVector) {
     if (lineVector.size() > 1) {
         if (OperationTable::getInstance()->contains(lineVector[1])
@@ -60,7 +64,11 @@ Line constructLine(std::vector<std::string> lineVector) {
         return line;
     }
 }
-
+/**
+ * Appends a line to the intermediate file.
+ * @param intermediateFile A string containing the intermediate file.
+ * @param line The line to be appended.
+ */
 void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     std::ostringstream intermediateStream;
     intermediateStream << line;
@@ -72,7 +80,13 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
-
+/**
+ * Adds all the characters in the strings as bytes to the output stream
+ * in hex.
+ * @param stream The string stream containing the object code.
+ * @param bytes The string containing the bytes to be appended.
+ * @param numBytes The number of bytes to be appended.
+ */
 void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
     for (char ch : bytes) {
         numBytes--;
@@ -82,7 +96,38 @@ void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
         strutil::addHex(stream, 0, 2);
     }
 }
-
+/**
+ * Initializes a new record in the object code.
+ * @param stream The output stream containing the object code.
+ * @param initLocCtr  The value of the location counter in the record.
+ * @param recordLength The length of the record.
+ * @param curRecord The current record that will be appended.
+ * @param curLocCtr The current value of the location counter.
+ */
+void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
+    strutil::addHex(stream, recordLength, 2);
+    stream << curRecord;
+    stream << "\n";
+    curRecord = "";
+    initLocCtr = curLocCtr;
+    stream << "T";
+    strutil::addHex(stream, initLocCtr, 6);
+}
+/**
+ * Executes pass one on the object code and returns the intermediate file.
+ * @param fileName The name of the file to be assembled.
+ * @param options The command line options.
+ * @param lines A vector that will have all the lines in the source code added to it.
+ * @param programName A string that will have the name of the program assigned to it.
+ * @param programStart An in that will have the starting index of the program
+ * assigned to it.
+ * @param locCtr An int representing the location counter.
+ * @param symbolTable A table that will have all the symbols and their respective
+ * addresses added to it.
+ * @param firstExecutableAddress An int that will have the first executable address
+ * in the source code assigned to it.
+ * @return A string containing the intermediate file.
+ */
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
                          int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
@@ -121,7 +166,6 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     //Read rest of the lines.
     while (std::getline(fileStream, lineString)) {
         Line line = constructLine(strutil::split(lineString, regex));
-        //TODO: ignore if it's a comment line, or stop if it's an 'END' directive (DEBATABLE).
         if (line.getLineType() == LineType::COMMENT) {
             appendToIntermediateFile(intermediateFile, line);
             lines.push_back(line);
@@ -187,7 +231,14 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     }
     return intermediateFile;
 }
-
+/**
+ * Initializes the header record and appends it to the object code
+ * output stream.
+ * @param stream The output stream containing the object code.
+ * @param programName The name of the program.
+ * @param initLocCtr The initial location counter.
+ * @param programLength The length of the program.
+ */
 void initHeader(std::ostringstream &stream, std::string programName, int initLocCtr, int programLength) {
     stream << "H";
     stream << std::setw(6) << std::left;
@@ -196,23 +247,26 @@ void initHeader(std::ostringstream &stream, std::string programName, int initLoc
     strutil::addHex(stream, programLength, 6);
     stream << "\n";
 }
-
-void initRecord(std::ostringstream &stream,
-                int &initLocCtr, int recordLength, std::string &curRecord, int curLocCtr) {
-    strutil::addHex(stream, recordLength, 2);
-    stream << curRecord;
-    stream << "\n";
-    curRecord = "";
-    initLocCtr = curLocCtr;
-    stream << "T";
-    strutil::addHex(stream, initLocCtr, 6);
-}
-
+/**
+ * Adds the end record to the object code stream.
+ * @param stream The object code stream.
+ * @param firstExecutableAddress The first executable address in the assembly program.
+ */
 void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
     stream << "E";
     strutil::addHex(stream, firstExecutableAddress, 6);
 }
-
+/**
+ * Executes pass 2 of the assembly process and returns the object code.
+ * @param intermediateFileName The name of the intermediate file.
+ * @param lines A vector containing all the lines in the program.
+ * @param programName The name of the assembly program.
+ * @param programStart The starting address of the assembly program.
+ * @param locCtr The final value of the location counter.
+ * @param symbolTable The symbol table.
+ * @param firstExecutableAddress The address of the first executable instruction in the assembly program.
+ * @return The object file.
+ */
 std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
@@ -335,7 +389,11 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
         throw std::invalid_argument(errors.str());
     }
 }
-
+/**
+ * Writes a string to a file.
+ * @param filePath The path of the file.
+ * @param data The string to be written.
+ */
 void writeFile(std::string filePath, std::string data) {
     std::ofstream fileStream(filePath);
     fileStream << data;
@@ -360,26 +418,4 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     std::cout << objFile;
 }
 
-void addLiterals(std::string literalValue, int numBytes, int &locCtr, int &initLocCtr,
-                 std::ostringstream &lineObjectCode, std::ostringstream &objCodeStream, std::string &curRecord) {
-    const int MAX_LINE_LENGTH = 30;
-    for (int j = 0; j < literalValue.length(); j += numBytes) {
-        std::ostringstream curObjCode;
-        locCtr += numBytes;
-        if (locCtr < initLocCtr + MAX_LINE_LENGTH) {
-            curObjCode << std::hex << std::setfill('0');
-            curObjCode << std::setw(numBytes) << std::right << std::uppercase << literalValue.substr(j, numBytes);
-            lineObjectCode << curObjCode.str();
-            curRecord += curObjCode.str();
-        } else {
-            strutil::addHex(objCodeStream, curRecord.length() / 2, 2);
-            objCodeStream << curRecord;
-            objCodeStream << "\n";
-            curRecord = "";
-            initLocCtr = locCtr;
-            objCodeStream << "T";
-            strutil::addHex(objCodeStream, initLocCtr, 6);
-        }
-    }
-}
 
