@@ -10,7 +10,7 @@ class SymbolTable {
 public:
 
     /**
-     * Adds a label with its address to the map of the symbol table.
+     * Adds a label with its address to the symbol table.
      * @param label - A label which is required to be added to the symbol table.
      * @param address - An address for the passed label to be added to the symbol table.
      */
