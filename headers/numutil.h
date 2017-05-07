@@ -9,7 +9,7 @@
 *  \addtogroup Utilities
 *  @{
 */
-//! A utilities namespace dedicated to work with numbers in different bases.
+//! A utilities namespace which is dedicated to support some utility functions with numbers in different bases.
 namespace numutil {
 
     //TODO not sure of this can work with sub-grouping or not
@@ -17,7 +17,7 @@ namespace numutil {
      * \addtogroup Utilities/Numerical Utilities
      * @{
      */
-    //! A namespace dedicated to perform different operations on hexadecimal numbers.
+    //! A namespace dedicated to perform different operations on hexadecimal numbers (Integers mainly).
     namespace Hexadecimal {
 
         /**
@@ -36,7 +36,7 @@ namespace numutil {
 
         /**
          * Parses the given hexadecimal literal to a string contains the actual hexadecimal value.
-         * @param hexLiteral - A hexadecimal literal which is required to be parsed
+         * @param hexLiteral - A string contains hexadecimal literal which is required to be parsed.
          * @return - A string contains the actual hexadecimal value of the passed hexadecimal literal.
          */
         std::string parseHexadecimalLiteral(std::string hexLiteral);
@@ -47,7 +47,7 @@ namespace numutil {
          * <li> The passed literal matches the hexadecimal literal's regex.</li>
          * </ul>
          * @param hexLiteral - The hexadecimal literal which is required to check if it is valid or not.
-         * @return true if the passed literal is valid hexadecimal literal or not.
+         * @return true if the passed literal is valid hexadecimal literal else it returns false.
          */
         bool isHexLiteral(std::string hexLiteral);
     }
@@ -56,7 +56,7 @@ namespace numutil {
      * \addtogroup Utilities/Numerical Utilities
      * @{
      */
-    //! A namespace dedicated to perform different operations on decimal numbers.
+    //! A namespace dedicated to perform different operations on decimal numbers (Integers mainly).
     namespace Decimal {
 
         /**
@@ -85,7 +85,7 @@ namespace numutil {
      * \addtogroup Utilities/Numerical Utilities
      * @{
      */
-    //! A namespace dedicated to perform different operations on binary numbers.
+    //! A namespace dedicated to perform different operations on binary numbers (Integers mainly).
     namespace Binary {
 
         /**
