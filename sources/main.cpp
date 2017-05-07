@@ -6,7 +6,7 @@
 #include "../headers/Error.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 #include "../headers/Assembler.h"
 #include "../headers/strutil.h"
 

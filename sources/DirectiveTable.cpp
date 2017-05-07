@@ -9,7 +9,7 @@
 #include <regex>
 #include "../headers/enums.h"
 #include "../headers/Error.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 #include "../headers/strutil.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"

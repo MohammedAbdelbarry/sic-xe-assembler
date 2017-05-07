@@ -18,10 +18,8 @@
 #include "../headers/validator.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
-#include "../headers/util.h"
-/**
- * The singleton instance.
- */
+#include "../headers/numutil.h"
+
 Assembler *Assembler::instance = nullptr;
 
 Assembler *Assembler::getInstance() {
@@ -194,6 +192,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                         else
                             DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line);
                     }
+                    //Invalid label for END operation.
+                    if (!line.label.empty()) {
+                        line.error = new Error(ErrorType::INVALID_LABEL, line.label);
+                    }
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
@@ -230,6 +232,31 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     return intermediateFile;
 }
 /**
+ * Initializes the header record and appends it to the object code
+ * output stream.
+ * @param stream The output stream containing the object code.
+ * @param programName The name of the program.
+ * @param initLocCtr The initial location counter.
+ * @param programLength The length of the program.
+ */
+void initHeader(std::ostringstream &stream, std::string programName, int initLocCtr, int programLength) {
+    stream << "H";
+    stream << std::setw(6) << std::left;
+    stream << strutil::toUpper(programName);
+    strutil::addHex(stream, initLocCtr, 6);
+    strutil::addHex(stream, programLength, 6);
+    stream << "\n";
+}
+/**
+ * Adds the end record to the object code stream.
+ * @param stream The object code stream.
+ * @param firstExecutableAddress The first executable address in the assembly program.
+ */
+void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
+    stream << "E";
+    strutil::addHex(stream, firstExecutableAddress, 6);
+}
+/**
  * Executes pass 2 of the assembly process and returns the object code.
  * @param intermediateFileName The name of the intermediate file.
  * @param lines A vector containing all the lines in the program.
@@ -243,15 +270,9 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
 std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
-    int length = locCtr - programStart;
     std::ostringstream objCodeStream;
-    objCodeStream << "H";
-    objCodeStream << std::setw(6) << std::left;
-    objCodeStream << strutil::toUpper(programName);
-    strutil::addHex(objCodeStream, programStart, 6);
-    strutil::addHex(objCodeStream, length, 6);
-    objCodeStream << "\n";
     int initLocCtr = programStart;
+    initHeader(objCodeStream, programName, initLocCtr, locCtr - initLocCtr);
     bool startNewLine = false;
     std::string curRecord;
     objCodeStream << "T";
@@ -361,8 +382,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
         throw std::invalid_argument(errors.str());
     }
     objCodeStream << "\n";
-    objCodeStream << "E";
-    strutil::addHex(objCodeStream, firstExecutableAddress, 6);
+    addEndRecord(objCodeStream, firstExecutableAddress);
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {

@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <regex>
 #include "../headers/strutil.h"
-#include "../headers/util.h"
+#include "../headers/numutil.h"
 
 
 const int HEX_BASE = 16;
