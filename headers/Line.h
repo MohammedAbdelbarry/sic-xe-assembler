@@ -1,14 +1,14 @@
-//
-// Created by Mohamed A.Tolba on 5/1/2017.
-//
-
+/**
+ * @file The file containing the line class declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
-
 class Error;
+/**
+ * The line class.
+ */
 class Line {
 public:
-
     /**
      * Default no-args constructor of line class objects.
      */

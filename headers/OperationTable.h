@@ -1,14 +1,13 @@
-//
-// Created by Mohammed Abdelbarry on 01-May-17.
-//
-
+/**
+ * @file The file containing the operation table class declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_OPERATION_TABLE_H
 #define SIC_XE_ASSEMBLER_OPERATION_TABLE_H
-
-
+/**
+ * The operation table singleton class.
+ */
 class OperationTable {
 public:
-
     /**
      * Gets the operation table singleton instance.
      * @return The operation table singleton instance.

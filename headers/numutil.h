@@ -1,18 +1,14 @@
-//
-// Created by Mohamed A.Tolba on 5/4/2017.
-//
-
+/**
+ * @file The file containing the numerical utilities namespace declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_UTIL_H
 #define SIC_XE_ASSEMBLER_UTIL_H
-
 /*!
 *  \addtogroup Utilities
 *  @{
 */
 //! A utilities namespace which is dedicated to support some utility functions with numbers in different bases.
 namespace numutil {
-
-    //TODO not sure of this can work with sub-grouping or not
     /*!
      * \addtogroup Utilities/Numerical Utilities
      * @{

@@ -1,3 +1,6 @@
+/**
+ * @file The file containing the validator namespace implementation.
+ */
 #include <string>
 #include <regex>
 #include "../headers/enums.h"

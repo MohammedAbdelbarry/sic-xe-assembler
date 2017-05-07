@@ -1,7 +1,6 @@
-//
-// Created by Mohamed A.Tolba on 5/1/2017.
-//
-
+/**
+ * @file The file containing the line class implementation.
+ */
 #include <string>
 #include <iostream>
 #include <iomanip>

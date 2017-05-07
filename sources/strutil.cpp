@@ -1,7 +1,6 @@
-//
-// Created by salem.harby on 05/04/2017.
-//
-
+/**
+ * @file The file containing the string utilities namespace implementation.
+ */
 #include <algorithm>
 #include <regex>
 #include <iomanip>
@@ -9,7 +8,6 @@
 #include "../headers/strutil.h"
 #include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
-
 
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
     std::stringstream stringStream;

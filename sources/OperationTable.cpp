@@ -1,7 +1,6 @@
-//
-// Created by Mohammed Abdelbarry on 01-May-17.
-//
-
+/**
+ * @file The file containing the operation table class implementation.
+ */
 #include <string>
 #include <map>
 #include <vector>

@@ -1,13 +1,14 @@
-//
-// Created by salem.harby on 05/01/2017.
-//
-
+/**
+ * @file The file containing the validator namespace declaration.
+ */
 #ifndef SIC_XE_ASSEMBLER_VALIDATOR_H
 #define SIC_XE_ASSEMBLER_VALIDATOR_H
-
-
+/*!
+*  \addtogroup Validator
+*  @{
+*/
+//! A namespace which is dedicated to support some validation functions.
 namespace validator {
-
     /**
      * Checks whether a line is valid or not. doesn't throw an error if all these cases are met:
      * <ul>
