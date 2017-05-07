@@ -1,5 +1,6 @@
 /**
- * @file The file containing the validator namespace declaration.
+ * @file validator.h
+ * The file containing the validator namespace declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_VALIDATOR_H
 #define SIC_XE_ASSEMBLER_VALIDATOR_H

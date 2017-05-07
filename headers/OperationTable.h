@@ -1,5 +1,6 @@
 /**
- * @file The file containing the operation table class declaration.
+ * @file OperationTable.h
+ * The file containing the operation table class declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_OPERATION_TABLE_H
 #define SIC_XE_ASSEMBLER_OPERATION_TABLE_H

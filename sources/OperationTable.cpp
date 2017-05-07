@@ -1,5 +1,6 @@
 /**
- * @file The file containing the operation table class implementation.
+ * @file OperationTable.cpp
+ * The file containing the operation table class implementation.
  */
 #include <string>
 #include <map>
@@ -22,7 +23,7 @@ OperationTable* OperationTable::getInstance() {
 }
 
 /**
- * fsakfaslkflaskf
+ * Initializes the operation table
  */
 void OperationTable::initOpTable() {
     std::string opName;

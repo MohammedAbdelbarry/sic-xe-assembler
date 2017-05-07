@@ -1,5 +1,6 @@
 /**
- * @file The file containing the validator namespace implementation.
+ * @file validator.cpp
+ * The file containing the validator namespace implementation.
  */
 #include <string>
 #include <regex>

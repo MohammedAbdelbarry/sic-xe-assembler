@@ -1,5 +1,6 @@
 /**
- * @file The file containing the line class declaration.
+ * @file line.h
+ * The file containing the line class declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H

@@ -1,5 +1,6 @@
 /**
- * @file The file containing the line class implementation.
+ * @file Line.cpp
+ * The file containing the line class implementation.
  */
 #include <string>
 #include <iostream>

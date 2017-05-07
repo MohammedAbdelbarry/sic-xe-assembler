@@ -1,5 +1,6 @@
 /**
- * @file The file containing the string utilities namespace implementation.
+ * @file strutil.cpp
+ * The file containing the string utilities namespace implementation.
  */
 #include <algorithm>
 #include <regex>

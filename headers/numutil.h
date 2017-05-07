@@ -1,5 +1,6 @@
 /**
- * @file The file containing the numerical utilities namespace declaration.
+ * @file numutil.h
+ * The file containing the numerical utilities namespace declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_UTIL_H
 #define SIC_XE_ASSEMBLER_UTIL_H

@@ -1,5 +1,6 @@
 /**
- * @file The file containing the numerical utilities namespace implementation.
+ * @file numutil.cpp
+ * The file containing the numerical utilities namespace implementation.
  */
 #include <sstream>
 #include <bitset>

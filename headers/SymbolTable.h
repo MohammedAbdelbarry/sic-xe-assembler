@@ -1,5 +1,6 @@
 /**
- * @file The file containing the symbol table class declaration.
+ * @file SymbolTable.h
+ * The file containing the symbol table class declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_SYMBOLTABLE_H
 #define SIC_XE_ASSEMBLER_SYMBOLTABLE_H

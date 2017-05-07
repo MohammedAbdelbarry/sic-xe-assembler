@@ -1,5 +1,6 @@
 /**
- * @file The file containing the string utilities namespace declaration.
+ * @file strutil.h
+ * The file containing the string utilities namespace declaration.
  */
 #ifndef SIC_XE_ASSEMBLER_STRUTIL_H
 #define SIC_XE_ASSEMBLER_STRUTIL_H

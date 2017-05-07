@@ -1,5 +1,6 @@
 /**
- * @file The file containing the symbol table class implementation.
+ * @file SymbolTable.cpp
+ * The file containing the symbol table class implementation.
  */
 #include <string>
 #include <map>
