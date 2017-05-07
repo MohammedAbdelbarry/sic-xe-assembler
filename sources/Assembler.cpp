@@ -1,5 +1,6 @@
 /**
- * @file The file containing the assembler class implementation.
+ * @file Assembler.cpp
+ * The file containing the assembler class implementation.
  */
 
 #include <vector>
