@@ -1,6 +1,7 @@
-//
-// Created by salem.harby on 05/03/2017.
-//
+/**
+ * @file DirectiveTable.cpp
+ * Directive table implementation.
+ */
 
 #include <functional>
 #include <iostream>
@@ -14,18 +15,39 @@
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 
+/**
+ * Singleton instance.
+ */
 DirectiveTable *DirectiveTable::instance = nullptr;
 
+/**
+ * Constructs directive table.
+ */
 DirectiveTable::DirectiveTable() {
     initDirTable();
 }
 
+/**
+ * Gets the singleton instance of directive table.
+ * @return [instance to directive table].
+ */
 DirectiveTable* DirectiveTable::getInstance() {
     if (instance == nullptr)
         instance = new DirectiveTable();
     return instance;
 }
 
+/**
+ * Initializes directive table (lists all supported directives):
+ * <ul>
+ * <li>START</li>
+ * <li>BYTE</li>
+ * <li>WORD</li>
+ * <li>RESW</li>
+ * <li>RESB</li>
+ * <li>END</li>
+ * </ul>
+ */
 void DirectiveTable::initDirTable() {
     std::string dirName;
     DirectiveInfo info;
@@ -131,10 +153,20 @@ void DirectiveTable::initDirTable() {
     dirTable[dirName] = info;
 }
 
+/**
+ * Checks if directive table contains a certain directive (case insensitive).
+ * @param  directive [Directive to be checked for the bottom of its existence in this futile universe.]
+ * @return           [True if directive table contains this directive.]
+ */
 bool DirectiveTable::contains(std::string directive) {
     return dirTable.find(strutil::toUpper(directive)) != dirTable.end();
 }
 
+/**
+ * Gets {@link DirectiveInfo.h} corresponding to each directive.
+ * @param  directive [Directive that has the required corresponding info.]
+ * @return           [description]
+ */
 DirectiveInfo DirectiveTable::getInfo(std::string directive) {
     return dirTable[strutil::toUpper(directive)];
 }
