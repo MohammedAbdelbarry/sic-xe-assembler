@@ -17,7 +17,7 @@
 const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}$");
 const std::regex operandRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}(?:,X)?$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
-const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
+const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$"); // checks the reluctant here in c' '
 
 const int COMMENT_LINE_LENGTH = 30;
 

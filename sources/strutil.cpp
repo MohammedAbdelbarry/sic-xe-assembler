@@ -12,9 +12,16 @@
 
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
     std::stringstream stringStream;
+    //TODO check for this fishy conditioning in the if-statement in the while loop;
+    /* it can be substituted with adding white spaces for every append
+     * operation in the stringStream then trimming the extra one white space at the end.
+     */
     while (iterator != end) {
-        stringStream << " " << *iterator;
+        stringStream << *iterator;
         iterator++;
+        if (iterator != end) {
+            stringStream << " ";
+        }
     }
     return stringStream.str();
 }

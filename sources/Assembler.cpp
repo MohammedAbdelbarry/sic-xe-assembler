@@ -135,12 +135,12 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::string intermediateFile;
     std::string lineString;
     std::ifstream fileStream(fileName);
-    std::regex regex("\\s+");
+    std::regex regex("\\s+(?=(?:[^']*'[^']*')*[^']*$)");
     std::streampos firstLinePos = fileStream.tellg();
     int instructionSize[4] = {3, 3, 3, 4};
     //Read first line
     while (std::getline(fileStream, lineString)) {
-        Line firstLine = constructLine(strutil::split(lineString, regex, 3));
+        Line firstLine = constructLine(strutil::split(lineString, regex));
         if (firstLine.getLineType() == LineType::COMMENT) {
             firstLinePos = fileStream.tellg();
             continue;
