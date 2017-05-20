@@ -34,7 +34,7 @@ namespace numutil {
         /**
          * Parses the given hexadecimal literal to a string contains the actual hexadecimal value.
          * @param hexLiteral - A string contains hexadecimal literal which is required to be parsed.
-         * @return - A string contains the actual hexadecimal value of the passed hexadecimal literal.
+         * @return A string contains the actual hexadecimal value of the passed hexadecimal literal.
          */
         std::string parseHexadecimalLiteral(std::string hexLiteral);
 
@@ -47,6 +47,13 @@ namespace numutil {
          * @return true if the passed literal is valid hexadecimal literal else it returns false.
          */
         bool isHexLiteral(std::string hexLiteral);
+
+        /**
+         * Decodes a hexadecimal string to a character string.
+         * @param hexString - A string which is required to be decoded.
+         * @return A string which represents the decoded equivalent of the hexadecimal string.
+         */
+        std::string toString(std::string hexString);
     }
 
     /*!

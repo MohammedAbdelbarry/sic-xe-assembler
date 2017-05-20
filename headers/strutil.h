@@ -80,6 +80,13 @@ namespace strutil {
      * @return A string after converting its letters' case to uppercase.
      */
     std::string toUpper(std::string str);
+
+    /**
+     * Encodes a character string to a hexadecimal string.
+     * @param str - A string which is required to be encoded.
+     * @return A string which represents the encoded equivalent of the character string.
+     */
+    std::string toHex(std::string str);
 };
 
 /*!

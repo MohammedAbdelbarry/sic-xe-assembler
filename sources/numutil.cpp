@@ -63,3 +63,18 @@ bool numutil::Hexadecimal::isHexLiteral(std::string hexLiteral) {
     static const std::regex hexLiteralRegex("^[Xx]'[0-9A-Fa-f]+'$");
     return strutil::matches(hexLiteral, hexLiteralRegex);
 }
+
+//TODO search for an alternative using stringStream lib
+std::string numutil::Hexadecimal::toString(std::string hexString){
+    std::string characterString;
+    if (hexString.size() & 1) {
+        throw std::invalid_argument("Hexadecimal string of odd length");
+    }
+    int decimalValue;
+    std::string character;
+    for (int i = 0 ; i < hexString.size() ; i+=2) {
+        decimalValue = numutil::Hexadecimal::toDec(hexString.substr(i,2));
+        characterString.push_back(char(decimalValue));
+    }
+    return characterString;
+}

@@ -34,6 +34,11 @@ int main(int argc, char* argv[]) {
 //    //3fo
 //    std::cout << numutil::Binary::toDec("00000000001111110000") << std::endl;
 //    //1008
+//      std::cout << strutil::toHex("I'm a friend of anas Hebrewz") << std::endl;
+//      //49276D206120667269656E64206F6620616E6173204865627265777A
+//        std::cout << numutil::Hexadecimal::toString("49276D206120667269656E64206F6620616E6173204865627265777A")
+//        << std::endl;
+//        //I'm a friend of anas Hebrewz
     try {
         Assembler::getInstance()->execute(fileName, std::map<std::string, std::string>());
     } catch (std::invalid_argument ex) {
