@@ -1,7 +1,7 @@
-//
-// Created by salem.harby on 05/01/2017.
-//
-
+/**
+ * @file SymbolTable.cpp
+ * The file containing the symbol table class implementation.
+ */
 #include <string>
 #include <map>
 #include <vector>

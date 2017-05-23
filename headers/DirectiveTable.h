@@ -1,6 +1,7 @@
-//
-// Created by salem.harby on 05/03/2017.
-//
+/**
+ * @file DirectiveTable.h
+ * Directive table (holds all directives and their corresponding info).
+ */
 
 #ifndef SIC_XE_ASSEMBLER_DIRECTIVETABLE_H
 #define SIC_XE_ASSEMBLER_DIRECTIVETABLE_H

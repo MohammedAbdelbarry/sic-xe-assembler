@@ -1,7 +1,7 @@
-//
-// Created by salem.harby on 05/04/2017.
-//
-
+/**
+ * @file strutil.cpp
+ * The file containing the string utilities namespace implementation.
+ */
 #include <algorithm>
 #include <regex>
 #include <iomanip>
@@ -10,12 +10,21 @@
 #include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
 
-
+const std::string HEX_BASE_NUMBERS = "0123456789ABCDEF";
+const int HEX_BASE = 16;
+const int NIBBLE = 4;
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
     std::stringstream stringStream;
+    //TODO check for this fishy conditioning in the if-statement in the while loop;
+    /* it can be substituted with adding white spaces for every append
+     * operation in the stringStream then trimming the extra one white space at the end.
+     */
     while (iterator != end) {
-        stringStream << " " << *iterator;
+        stringStream << *iterator;
         iterator++;
+        if (iterator != end) {
+            stringStream << " ";
+        }
     }
     return stringStream.str();
 }
@@ -73,6 +82,19 @@ bool strutil::isCharLiteral(std::string charLiteral) {
 std::string strutil::toUpper(std::string str) {
     std::transform(str.begin(), str.end(), str.begin(), toupper);
     return str;
+}
+
+//TODO search for an alternative using stringStream lib
+std::string strutil::toHex(std::string str){
+    std::string hexadecimalString;
+    int characterDecimalValue;
+    for (int i=0 ; i < str.size() ; i++) {
+        characterDecimalValue = str[i];
+        hexadecimalString.push_back(HEX_BASE_NUMBERS[characterDecimalValue >> NIBBLE]);
+        //alternative for taking the modulo due to its performance issues.
+        hexadecimalString.push_back(HEX_BASE_NUMBERS[characterDecimalValue & (HEX_BASE - 1)]);
+    }
+    return hexadecimalString;
 }
 
 std::string fileutil::removeExtension(std::string str) {
