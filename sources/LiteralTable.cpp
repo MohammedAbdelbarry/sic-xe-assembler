@@ -7,7 +7,8 @@
 #include "../headers/strutil.h"
 
 void LiteralTable::push(std::string literal, LiteralInfo literalInfo) {
-    LiteralTable::litTab[strutil::toUpper(literal)] = literalInfo;
+    LiteralTable::keySet.push_back(literal);
+    LiteralTable::litTab.insert(std::make_pair(literal, literalInfo));
 }
 
 bool LiteralTable::contains(std::string literal) {
@@ -18,6 +19,6 @@ LiteralInfo& LiteralTable::getInfo(std::string literal) {
     return LiteralTable::litTab[strutil::toUpper(literal)];
 }
 
-std::map<std::string, LiteralInfo>& LiteralTable::getMap() {
-    return LiteralTable::litTab;
+std::vector<std::string>& LiteralTable::getKeySet() {
+    return LiteralTable::keySet;
 }
