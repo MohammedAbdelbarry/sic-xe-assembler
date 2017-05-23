@@ -87,6 +87,10 @@ namespace strutil {
      * @return A string which represents the encoded equivalent of the character string.
      */
     std::string toHex(std::string str);
+
+    bool isValidInteger(std::string str);
+
+    bool isValidHexadecimal(std::string str);
 };
 
 /*!

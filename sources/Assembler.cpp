@@ -354,8 +354,18 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
                     }
                 } else if (strutil::toUpper(line.operation) == "WORD") {
                     try {
-                        strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
+                        if (strutil::isValidInteger(line.operand)) {
+                            strutil::addHex(lineObjectCode, std::stoi(line.operand), 6);
+                        } else if (strutil::isValidHexadecimal(line.operand)) {
+                            strutil::addHex(lineObjectCode, std::stoi(line.operand, 0, 16), 6);
+                        } else {
+                            errors << "ERROR: Operand \"" << line.operand;
+                            errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                        }
                     } catch (std::invalid_argument ex) {
+                        errors << "ERROR: Operand \"" << line.operand;
+                        errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                    } catch (std::out_of_range ex) {
                         errors << "ERROR: Operand \"" << line.operand;
                         errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
                     }

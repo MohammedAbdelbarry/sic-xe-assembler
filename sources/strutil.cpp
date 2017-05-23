@@ -104,3 +104,13 @@ std::string fileutil::removeExtension(std::string str) {
     }
     return str;
 }
+
+bool strutil::isValidHexadecimal(std::string str) {
+    const static std::regex hexRegex("^[+-]?0[Xx][0-9A-Fa-f]+$");
+    return matches(str, hexRegex);
+}
+
+bool strutil::isValidInteger(std::string str) {
+    const static std::regex hexRegex("^[+-]?[0-9]+$");
+    return matches(str, hexRegex);
+}
