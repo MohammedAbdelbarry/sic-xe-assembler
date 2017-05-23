@@ -403,8 +403,14 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                         }
-                        lineObjectCode << std::hex << std::setfill('0');
-                        lineObjectCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
+                        try {
+                            int num = std::stoi(seg, 0, 16);
+                            strutil::addHex(lineObjectCode, num, numHalfBytes);
+                        } catch (...) {
+                            errors << "ERROR: Operand \"" << line.operand;
+                            errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                            break;
+                        }
                     }
                 } else if (strutil::isCharLiteral(line.operand)) {
                     std::string charLiteral = strutil::parseCharLiteral(line.operand);
