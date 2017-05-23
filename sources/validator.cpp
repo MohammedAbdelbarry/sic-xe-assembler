@@ -17,7 +17,10 @@
 const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}$");
 const std::regex operandRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}(?:,X)?$");
 const std::regex operationRegex("^[a-zA-Z]{1,6}$");
-const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$"); // checks the reluctant here in c' '
+const std::regex hexLiteralRegex("^[=]?(?:[Xx]'[0-9A-Fa-f]+')$");
+const std::regex charLiteralRegex("^[=]?(?:[Cc]'[^']+?')$");
+const std::regex decLiteralRegex("^=[Ww]'[-+]?[0-9]+'$");
+//const std::regex literalRegex("^(?:[Xx]'[0-9A-Fa-f]+')|(?:[Cc]'[^']+?')$");
 
 const int COMMENT_LINE_LENGTH = 30;
 
@@ -63,6 +66,7 @@ bool isValidOperation(std::string operation) {
  * @return true if it is a valid operand.
  */
 bool isValidOperand(std::string operand) {
+    //These tries of parsing the operand as decimal or hexadecimal integers don't check its boundaries.
     try {
         std::stoi(operand);
         return true;
@@ -78,7 +82,8 @@ bool isValidOperand(std::string operand) {
     } catch(std::out_of_range ex) {
 
     }
-    return (operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, literalRegex))
+    return (operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, hexLiteralRegex)
+           || strutil::matches(operand, charLiteralRegex) || strutil::matches(operand, decLiteralRegex))
             && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand));
 }
 
