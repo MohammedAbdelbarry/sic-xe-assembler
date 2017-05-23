@@ -16,6 +16,7 @@ public:
     std::string operation;
     std::string operand;
     std::string comment;
+    std::string objCode;
     MnemonicType mnemonicType;
     LineType getLineType() const;
     int locCtr;

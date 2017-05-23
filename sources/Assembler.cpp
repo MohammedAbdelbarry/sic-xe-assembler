@@ -69,7 +69,7 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
     }
-    intermediateStream << "\n";
+//    intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
 
@@ -209,7 +209,23 @@ void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
     strutil::addHex(stream, firstExecutableAddress, 6);
 }
 
-std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
+void writeFile(std::string filePath, std::string data) {
+    std::ofstream fileStream(filePath);
+    fileStream << data;
+}
+
+void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
+    std::cout << "\n\nListing File:\n";
+    std::ostringstream stream;
+    for(Line line : lines) {
+        stream << line;
+    }
+    std::string listingFile = stream.str();
+    std::cout << listingFile << std::endl;
+    writeFile(fileutil::removeExtension(filePath) + " - list.txt", listingFile);
+}
+
+std::string executePass2(std::string filePath, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
     std::ostringstream objCodeStream;
@@ -250,6 +266,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                         std::string seg = hexLiteral.substr(j, numHalfBytes);
                         if (locCtr > initLocCtr + MAX_LINE_LENGTH) {
                             curRecord += lineObjectCode.str();
+                            lines[i].objCode += lineObjectCode.str();
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                         }
@@ -265,6 +282,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                             addHexBytes(lineObjectCode, seg, numBytes);
                         } else {
                             curRecord += lineObjectCode.str();
+                            lines[i].objCode += lineObjectCode.str();
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                             addHexBytes(lineObjectCode, seg, numBytes);
@@ -315,6 +333,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
         if ((recLen + lineLen) / 2 > MAX_LINE_LENGTH) {
             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
         }
+        lines[i].objCode += lineObjectCode.str();
         curRecord += lineObjectCode.str();
     }
     if (!curRecord.empty()) {
@@ -325,16 +344,12 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     }
     objCodeStream << "\n";
     addEndRecord(objCodeStream, firstExecutableAddress);
+    writeListingFile(filePath, lines);
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {
         throw std::invalid_argument(errors.str());
     }
-}
-
-void writeFile(std::string filePath, std::string data) {
-    std::ofstream fileStream(filePath);
-    fileStream << data;
 }
 
 void Assembler::execute(std::string filePath, std::map<std::string, std::string> options) {
@@ -348,7 +363,7 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;
     writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
-    std::string objFile = executePass2(intermediateFile, lines, programName,
+    std::string objFile = executePass2(filePath, lines, programName,
                                        programStart, locCtr, symbolTable, firstExecutableAddress);
     writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
     std::cout << "Assembled Successfully!" << std::endl;
