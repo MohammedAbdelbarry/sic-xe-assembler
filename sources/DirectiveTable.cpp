@@ -59,7 +59,8 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line) {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
-            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+            if (pos < 0 || pos >= SIC_MAX_MEMORY || !(strutil::isValidInteger(line.operand)
+                                                     || strutil::isValidHexadecimal(line.operand)))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
@@ -106,7 +107,7 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line) {
         try {
             int count = std::stoi(line.operand);
-            if (count < 0 || count >= SIC_MAX_MEMORY)
+            if (count < 0 || count >= SIC_MAX_MEMORY || !strutil::isValidInteger(line.operand))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
@@ -121,7 +122,7 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line) {
         try {
             int count = 3 * std::stoi(line.operand);
-            if (count < 0 || count >= SIC_MAX_MEMORY)
+            if (count < 0 || count >= SIC_MAX_MEMORY || !strutil::isValidInteger(line.operand))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
@@ -136,7 +137,8 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line) {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
-            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+            if (pos < 0 || pos >= SIC_MAX_MEMORY || !(strutil::isValidInteger(line.operand)
+                                                      || strutil::isValidHexadecimal(line.operand)))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
