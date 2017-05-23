@@ -83,6 +83,10 @@ namespace numutil {
          * @return A string contains the hexadecimal equivalent of the passed decimal number.
          */
         std::string toHex(int number);
+
+        bool isDecLiteral(std::string decLiteral);
+
+        std::string parseDecimalLiteral(std::string decLiteral);
     }
 
     /*!

@@ -50,7 +50,8 @@ enum LineType {
 };
 
 enum LiteralType {
-    BYTE,
-    WORD
+    HEXADECIMAL,
+    CHARACTER,
+    DECIMAL
 };
 #endif //PROJECT_ENUMS_H

@@ -1,5 +1,7 @@
 #include <string>
 #include <map>
+#include <vector>
+#include <regex>
 #include "../headers/LiteralInfo.h"
 #include "../headers/LiteralTable.h"
 #include "../headers/strutil.h"

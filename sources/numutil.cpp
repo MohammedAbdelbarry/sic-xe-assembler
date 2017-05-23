@@ -46,6 +46,15 @@ std::string numutil::Decimal::toString(int number) {
     return stringStream.str();
 }
 
+bool ::numutil::Decimal::isDecLiteral(std::string decLiteral) {
+    static const std::regex decLiteralRegex("^[Ww]'[0-9]+'$");
+    return strutil::matches(decLiteral, decLiteralRegex);
+}
+
+std::string numutil::Decimal::parseDecimalLiteral(std::string decLiteral) {
+    return decLiteral.substr(2, decLiteral.length() - 3);
+}
+
 std::string numutil::Binary::toHex(std::string number) {
     int hexadecimalNumber = numutil::Binary::toDec(number);
     return numutil::Decimal::toHex(hexadecimalNumber);

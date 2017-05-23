@@ -20,6 +20,8 @@
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
 #include "../headers/numutil.h"
+#include "../headers/LiteralInfo.h"
+#include "../headers/LiteralTable.h"
 
 Assembler *Assembler::instance = nullptr;
 
@@ -78,7 +80,7 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
     }
-//    intermediateStream << "\n";
+    intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
 /**
@@ -114,6 +116,35 @@ void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, s
     stream << "T";
     strutil::addHex(stream, initLocCtr, 6);
 }
+
+void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLabelCounter) {
+    LiteralInfo literalInfo;
+    std::string literalString = operand;
+    literalString.erase(literalString.begin()); // removing the '=' character.
+    if (numutil::Hexadecimal::isHexLiteral(literalString)) {
+        literalInfo.literal = literalString;
+        literalString = numutil::Hexadecimal::parseHexadecimalLiteral(literalString);
+        literalInfo.literalType = LiteralType::HEXADECIMAL;
+    } else if (strutil::isCharLiteral(literalString)) {
+        literalInfo.literal = literalString;
+        literalString = strutil::parseCharLiteral(literalString);
+        literalInfo.literalType = LiteralType::CHARACTER;
+        literalString = strutil::toHex(literalString);
+    } else {
+        literalString = numutil::Decimal::parseDecimalLiteral(literalString);
+        literalInfo.literal = literalString;
+        literalInfo.literalType = LiteralType::DECIMAL;
+        literalString = numutil::Decimal::toHex(std::stoi(literalString));
+    }
+    if(!literalTable.contains(literalString)) {
+        operand = "$" + std::to_string(literalLabelCounter);
+        literalInfo.label = operand;
+        literalTable.push(literalString, literalInfo);
+        literalLabelCounter++;
+    } else {
+        operand = literalTable.getInfo(literalString).label;
+    }
+}
 /**
  * Executes pass one on the object code and returns the intermediate file.
  * @param fileName The name of the file to be assembled.
@@ -131,7 +162,8 @@ void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, s
  */
 std::string executePass1(std::string fileName, std::map<std::string, std::string> options,
                          std::vector<Line> &lines, std::string &programName, int &programStart,
-                         int &locCtr, SymbolTable &symbolTable, int &firstExecutableAddress) {
+                         int &locCtr, LiteralTable &literalTable, SymbolTable &symbolTable,
+                         int &firstExecutableAddress, int &literalTableCounter) {
     std::string intermediateFile;
     std::string lineString;
     std::ifstream fileStream(fileName);
@@ -206,6 +238,10 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 }
             } else { //Instruction line.
                 line.mnemonicType = MnemonicType::INSTRUCTION;
+                //Calling Literal add function.
+                if (line.operand[0] == '=') {
+                    addLiteral(line.operand, literalTable, literalTableCounter);
+                }
                 for (InstructionFormat instructionFormat : OperationTable::getInstance()
                         ->getInfo(line.operation).supportedFormats) {
                     line.lineFormat = instructionFormat;
@@ -433,11 +469,14 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
 void Assembler::execute(std::string filePath, std::map<std::string, std::string> options) {
     int firstExecutableAddress = locCtr = 0;
     int programStart = 0;
+    int literalLabelCounter = 0;
     std::string programName = "";
     std::vector<Line> lines;
     SymbolTable symbolTable;
+    LiteralTable literalTable;
     std::string intermediateFile = executePass1(filePath, options, lines, programName, programStart,
-                                                locCtr, symbolTable, firstExecutableAddress);
+                                                locCtr, literalTable ,symbolTable, firstExecutableAddress,
+                                                literalLabelCounter);
     std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;
     writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
