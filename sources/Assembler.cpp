@@ -139,7 +139,7 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
     if(!literalTable.contains(literalString)) {
         operand = "$" + std::to_string(literalLabelCounter);
         literalInfo.label = operand;
-        literalTable.push(literalString, literalInfo);
+        literalTable.push(strutil::toUpper(literalString), literalInfo);
         literalLabelCounter++;
     } else {
         operand = literalTable.getInfo(literalString).label;
