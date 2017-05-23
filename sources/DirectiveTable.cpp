@@ -200,7 +200,7 @@ void DirectiveTable::initDirTable() {
 
     dirName = "LTORG";
     info.label = Label::NONE; // Assuming it can't have a label.
-    info.execute = [](int &locCtr, Line line) {
+    info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
         if (!line.label.empty()) {
             throw new Error(ErrorType::INVALID_LABEL, line.label);
         } else if (!line.operand.empty()) {

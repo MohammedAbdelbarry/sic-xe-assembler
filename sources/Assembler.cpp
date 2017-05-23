@@ -162,7 +162,7 @@ void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &
             }
             line.locCtr = locCtr;
             symbolTable.push(line.label, locCtr);
-            DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+            DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line, symbolTable);
             lines.push_back(line);
             appendToIntermediateFile(intermediateFile, line);
         } else {
@@ -259,7 +259,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     break;
                 } else if (strutil::toUpper(line.operation) == "LTORG") {
                     line.locCtr = locCtr;
-                    DirectiveTable::getInstance()->getInfo("LTORG").execute(locCtr, line);
+                    DirectiveTable::getInstance()->getInfo("LTORG").execute(locCtr, line, symbolTable);
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
