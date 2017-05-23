@@ -59,7 +59,7 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line) {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
-            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+            if (pos < -SIC_MAX_WORD || pos >= SIC_MAX_MEMORY)
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {

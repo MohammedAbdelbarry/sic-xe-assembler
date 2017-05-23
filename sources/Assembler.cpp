@@ -278,8 +278,6 @@ void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
     std::cout << listingFile << std::endl;
     writeFile(fileutil::removeExtension(filePath) + " - list.txt", listingFile);
 }
-
-std::string executePass2(std::string filePath, std::vector<Line> &lines, std::string programName,
 /**
  * Executes pass 2 of the assembly process and returns the object code.
  * @param intermediateFileName The name of the intermediate file.
@@ -291,6 +289,7 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
  * @param firstExecutableAddress The address of the first executable instruction in the assembly program.
  * @return The object file.
  */
+std::string executePass2(std::string filePath, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
     std::ostringstream objCodeStream;
@@ -416,7 +415,11 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
         throw std::invalid_argument(errors.str());
     }
 }
-
+/**
+ * Takes an assembly file and generates its object code.
+ * @param filePath The path of the assembly file.
+ * @param options The assembler options.
+ */
 void Assembler::execute(std::string filePath, std::map<std::string, std::string> options) {
     int firstExecutableAddress = locCtr = 0;
     int programStart = 0;
