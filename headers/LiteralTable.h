@@ -1,7 +1,6 @@
 #ifndef SIC_XE_ASSEMBLER_LITERALTABLE_H
 #define SIC_XE_ASSEMBLER_LITERALTABLE_H
 
-
 #include <unordered_map>
 
 class LiteralTable {

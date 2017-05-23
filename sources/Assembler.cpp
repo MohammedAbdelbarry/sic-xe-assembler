@@ -150,11 +150,11 @@ void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &
                      std::string &intermediateFile, SymbolTable &symbolTable) {
     LiteralInfo literalInfo;
     Line line;
-    for (std::map<std::string, LiteralInfo>::iterator iterator = literalTable.getMap().begin();
-            iterator != literalTable.getMap().end() ; iterator++) {
-        if (!iterator->second.resolved) {
-            iterator->second.resolved = true;
-            literalInfo = iterator->second;
+    for (std::vector<std::string>::iterator iterator = literalTable.getKeySet().begin();
+            iterator != literalTable.getKeySet().end() ; iterator++) {
+        if (!literalTable.getInfo(*iterator).resolved) {
+            literalInfo = literalTable.getInfo(*iterator);
+            literalTable.getInfo(*iterator).resolved = true;
             if (literalInfo.literalDirective == LiteralDirective::BYTE) {
                 line = Line(literalInfo.label, "BYTE", literalInfo.literal, "");
             } else {
