@@ -49,9 +49,8 @@ enum LineType {
     COMMENT
 };
 
-enum LiteralType {
-    HEXADECIMAL,
-    CHARACTER,
-    DECIMAL
+enum LiteralDirective {
+    BYTE,
+    WORD
 };
 #endif //PROJECT_ENUMS_H

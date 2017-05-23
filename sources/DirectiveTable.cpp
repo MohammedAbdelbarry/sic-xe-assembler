@@ -175,6 +175,17 @@ void DirectiveTable::initDirTable() {
         //TODO: search the symbol table for the operand and modify the location counter accordingly.
     };
     dirTable[dirName] = info;
+
+    dirName = "LTORG";
+    info.label = Label::NONE; // Assuming it can't have a label.
+    info.execute = [](int &locCtr, Line line) {
+        if (!line.label.empty()) {
+            throw new Error(ErrorType::INVALID_LABEL, line.label);
+        } else if (!line.operand.empty()) {
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+        }
+    };
+    dirTable[dirName] = info;
 }
 
 /**

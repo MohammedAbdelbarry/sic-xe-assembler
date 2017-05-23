@@ -7,7 +7,7 @@ class LiteralInfo {
 
 public:
     std::string literal;
-    LiteralType literalType;
+    LiteralDirective literalDirective;
     bool resolved;
     std::string label;
 };
