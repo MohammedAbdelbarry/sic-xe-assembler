@@ -48,4 +48,10 @@ enum LineType {
     ASSEMBLY_STATEMENT,
     COMMENT
 };
+
+enum LiteralType {
+    HEXADECIMAL,
+    CHARACTER,
+    DECIMAL
+};
 #endif //PROJECT_ENUMS_H

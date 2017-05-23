@@ -108,9 +108,18 @@ std::string fileutil::removeExtension(std::string str) {
     return str;
 }
 
-
 std::string strutil::trim(std::string str) {
     const std::string none = "";
     std::string trimmed = std::regex_replace(str, leftTrimReg, none);
     return std::regex_replace(trimmed, rightTrimReg, none);
+}
+
+bool strutil::isValidHexadecimal(std::string str) {
+    const static std::regex hexRegex("^[+-]?0[Xx][0-9A-Fa-f]+$");
+    return matches(str, hexRegex);
+}
+
+bool strutil::isValidInteger(std::string str) {
+    const static std::regex hexRegex("^[+-]?[0-9]+$");
+    return matches(str, hexRegex);
 }

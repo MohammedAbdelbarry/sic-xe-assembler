@@ -51,6 +51,9 @@ int evaluate(std::string operand, SymbolTable symTab);
  * <li>WORD</li>
  * <li>RESW</li>
  * <li>RESB</li>
+ * <li>EQU</li>
+ * <li>LTORG</li>
+ * <li>ORG</li>
  * <li>END</li>
  * </ul>
  */
@@ -65,7 +68,8 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
-            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+            if (pos < 0 || pos >= SIC_MAX_MEMORY || !(strutil::isValidInteger(line.operand)
+                                                     || strutil::isValidHexadecimal(line.operand)))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
@@ -99,23 +103,9 @@ void DirectiveTable::initDirTable() {
             int literalLength = line.operand.length() - 3;
             locCtr += 3 * (literalLength / 6 + ((literalLength % 6) != 0));
         } else {
-            try {
-                int op = std::stoi(line.operand);
-                if (op < -SIC_MAX_WORD || op >= SIC_MAX_WORD)
-                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+            if (strutil::isValidInteger(line.operand) || strutil::isValidHexadecimal(line.operand)) {
                 locCtr += 3;
-            } catch(std::invalid_argument ex) {
-                try {
-                    int op = std::stoi(line.operand, 0, HEX_BASE);
-                    if (op < -SIC_MAX_WORD || op >= SIC_MAX_WORD)
-                        throw new Error(ErrorType::INVALID_OPERAND, line.operand);
-                    locCtr += 3;
-                } catch(std::invalid_argument ex) {
-                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
-                } catch(std::out_of_range ex) {
-                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
-                }
-            } catch(std::out_of_range ex) {
+            } else {
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             }
         }
@@ -126,7 +116,7 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
         try {
             int count = std::stoi(line.operand);
-            if (count < 0 || count >= SIC_MAX_MEMORY)
+            if (count < 0 || count >= SIC_MAX_MEMORY || !strutil::isValidInteger(line.operand))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
@@ -141,7 +131,7 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
         try {
             int count = 3 * std::stoi(line.operand);
-            if (count < 0 || count >= SIC_MAX_MEMORY)
+            if (count < 0 || count >= SIC_MAX_MEMORY || !strutil::isValidInteger(line.operand))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr += count;
         } catch(std::invalid_argument ex) {
@@ -168,7 +158,8 @@ void DirectiveTable::initDirTable() {
     info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
         try {
             int pos = std::stoi(line.operand, 0, HEX_BASE);
-            if (pos < 0 || pos >= SIC_MAX_MEMORY)
+            if (pos < 0 || pos >= SIC_MAX_MEMORY || !(strutil::isValidInteger(line.operand)
+                                                      || strutil::isValidHexadecimal(line.operand)))
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             locCtr = pos;
         } catch(std::invalid_argument ex) {
@@ -176,6 +167,30 @@ void DirectiveTable::initDirTable() {
         } catch(std::out_of_range ex) {
             throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
+    };
+    dirTable[dirName] = info;
+
+    dirName = "ORG";
+    info.label = Label::OPTIONAL;
+    info.execute = [](int &locCtr, Line line, SymbolTable &symTab) {
+        static int prevLocCtr = -1;
+        if(line.operand.empty()) {
+            if(prevLocCtr != -1) {
+                locCtr = prevLocCtr;
+            } else {
+                //TODO: throw some exception.
+            }
+            return;
+        }
+        prevLocCtr = locCtr;
+        /*
+         * TODO: Modify the locctr and store the original value.
+         * ORG requires some special handling in pass1 since the operand is optional
+         * and it requires some communication with the assembler to store the previous value of the locctr
+         * or revert to it (NOTE: this can be done with a static variable that stores the previous value of the locctr
+         * and reverts the locctr to it if the operand is empty)
+         */
+        //TODO: search the symbol table for the operand and modify the location counter accordingly.
     };
     dirTable[dirName] = info;
 }
