@@ -78,7 +78,7 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
     }
-    intermediateStream << "\n";
+//    intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
 /**
@@ -258,6 +258,27 @@ void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
     strutil::addHex(stream, firstExecutableAddress, 6);
 }
 /**
+ * Writes a string to a file.
+ * @param filePath The path of the file.
+ * @param data The string to be written.
+ */
+
+void writeFile(std::string filePath, std::string data) {
+    std::ofstream fileStream(filePath);
+    fileStream << data;
+}
+
+void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
+    std::cout << "\n\nListing File:\n";
+    std::ostringstream stream;
+    for(Line line : lines) {
+        stream << line;
+    }
+    std::string listingFile = stream.str();
+    std::cout << listingFile << std::endl;
+    writeFile(fileutil::removeExtension(filePath) + " - list.txt", listingFile);
+}
+/**
  * Executes pass 2 of the assembly process and returns the object code.
  * @param intermediateFileName The name of the intermediate file.
  * @param lines A vector containing all the lines in the program.
@@ -268,7 +289,7 @@ void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
  * @param firstExecutableAddress The address of the first executable instruction in the assembly program.
  * @return The object file.
  */
-std::string executePass2(std::string intermediateFileName, std::vector<Line> &lines, std::string programName,
+std::string executePass2(std::string filePath, std::vector<Line> &lines, std::string programName,
                   int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
     std::ostringstream objCodeStream;
@@ -309,6 +330,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                         std::string seg = hexLiteral.substr(j, numHalfBytes);
                         if (locCtr > initLocCtr + MAX_LINE_LENGTH) {
                             curRecord += lineObjectCode.str();
+                            lines[i].objCode += lineObjectCode.str();
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                         }
@@ -324,6 +346,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
                             addHexBytes(lineObjectCode, seg, numBytes);
                         } else {
                             curRecord += lineObjectCode.str();
+                            lines[i].objCode += lineObjectCode.str();
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                             addHexBytes(lineObjectCode, seg, numBytes);
@@ -374,6 +397,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
         if ((recLen + lineLen) / 2 > MAX_LINE_LENGTH) {
             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
         }
+        lines[i].objCode += lineObjectCode.str();
         curRecord += lineObjectCode.str();
     }
     if (!curRecord.empty()) {
@@ -384,6 +408,7 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     }
     objCodeStream << "\n";
     addEndRecord(objCodeStream, firstExecutableAddress);
+    writeListingFile(filePath, lines);
     if (errors.str().empty()) {
         return objCodeStream.str();
     } else {
@@ -391,15 +416,10 @@ std::string executePass2(std::string intermediateFileName, std::vector<Line> &li
     }
 }
 /**
- * Writes a string to a file.
- * @param filePath The path of the file.
- * @param data The string to be written.
+ * Takes an assembly file and generates its object code.
+ * @param filePath The path of the assembly file.
+ * @param options The assembler options.
  */
-void writeFile(std::string filePath, std::string data) {
-    std::ofstream fileStream(filePath);
-    fileStream << data;
-}
-
 void Assembler::execute(std::string filePath, std::map<std::string, std::string> options) {
     int firstExecutableAddress = locCtr = 0;
     int programStart = 0;
@@ -411,7 +431,7 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;
     writeFile(fileutil::removeExtension(filePath) + " - inter.txt", intermediateFile);
-    std::string objFile = executePass2(intermediateFile, lines, programName,
+    std::string objFile = executePass2(filePath, lines, programName,
                                        programStart, locCtr, symbolTable, firstExecutableAddress);
     writeFile(fileutil::removeExtension(filePath) + ".obj", objFile);
     std::cout << "Assembled Successfully!" << std::endl;

@@ -59,6 +59,11 @@ public:
     std::string comment;
 
     /**
+     * The object code of this line.
+     */
+    std::string objCode;
+
+    /**
      * A MnemonicType enum to store the type of the mnemonic (Instruction or directive)
      * of a line if and only if the line is of type assembly statement.
      */

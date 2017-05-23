@@ -95,11 +95,20 @@ void DirectiveTable::initDirTable() {
         } else {
             try {
                 int op = std::stoi(line.operand);
-                if (op < 0 || op > SIC_MAX_WORD)
+                if (op < -SIC_MAX_WORD || op >= SIC_MAX_WORD)
                     throw new Error(ErrorType::INVALID_OPERAND, line.operand);
                 locCtr += 3;
             } catch(std::invalid_argument ex) {
-                throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+                try {
+                    int op = std::stoi(line.operand, 0, HEX_BASE);
+                    if (op < -SIC_MAX_WORD || op >= SIC_MAX_WORD)
+                        throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+                    locCtr += 3;
+                } catch(std::invalid_argument ex) {
+                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+                } catch(std::out_of_range ex) {
+                    throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+                }
             } catch(std::out_of_range ex) {
                 throw new Error(ErrorType::INVALID_OPERAND, line.operand);
             }
