@@ -39,9 +39,9 @@ DirectiveTable* DirectiveTable::getInstance() {
     return instance;
 }
 
-std::regex addSubRegex("\\s+");
-
-int evaluate(std::string operand, SymbolTable symTab);
+std::regex whiteSpaceRegex("\\s+");
+std::regex addSubRegex("[+-]");
+int evaluate(std::string operand, SymbolTable &symTab);
 
 /**
  * Initializes directive table (lists all supported directives):
@@ -183,6 +183,10 @@ void DirectiveTable::initDirTable() {
             return;
         }
         prevLocCtr = locCtr;
+        int address = evaluate(line.operand, symTab);
+        if (address < 0 || address >= SIC_MAX_MEMORY)
+            throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+        locCtr = address;
         /*
          * TODO: Modify the locctr and store the original value.
          * ORG requires some special handling in pass1 since the operand is optional
@@ -213,20 +217,28 @@ DirectiveInfo DirectiveTable::getInfo(std::string directive) {
     return dirTable[strutil::toUpper(directive)];
 }
 
-int evaluate(std::string operand, SymbolTable symTab) {
+int evaluate(std::string operand, SymbolTable &symTab) {
     std::vector<std::string> ops;
-    for (std::string x : strutil::split(operand, addSubRegex, 1))
+    std::cout << "\n" << std::regex_replace(operand, addSubRegex, " $& ") << '\n';
+    operand = std::regex_replace(operand, addSubRegex, " $& ");
+    for (std::string x : strutil::split(operand, whiteSpaceRegex, 2))
         ops.push_back(strutil::trim(x));
     if (!(ops.size() == 1 || ops.size() == 3))
         throw new Error(ErrorType::INVALID_OPERAND, operand);
-    std::function<int(std::string)> f = [operand, &symTab](std::string operand) {
+    std::function<int(std::string)> f = [operand, &symTab](std::string splitOperand) {
         int res = 0;
         try {
-            res = std::stoi(operand);
+            if (strutil::isValidInteger(splitOperand)) {
+                res = std::stoi(splitOperand);
+            } else if (strutil::isValidHexadecimal(splitOperand)) {
+                res = std::stoi(splitOperand, 0, 16);
+            } else {
+                if (!symTab.contains(splitOperand))
+                    throw new Error(ErrorType::INVALID_OPERAND, operand);
+                res = symTab.getAddress(splitOperand);
+            }
         } catch (...) {
-            if (!symTab.contains(operand))
-                throw new Error(ErrorType::INVALID_OPERAND, operand);
-            res = symTab.getAddress(operand);
+            throw new Error(ErrorType::INVALID_OPERAND, operand);
         }
         return res;
     };

@@ -66,25 +66,10 @@ bool isValidOperation(std::string operation) {
  * @return true if it is a valid operand.
  */
 bool isValidOperand(std::string operand) {
-    //These tries of parsing the operand as decimal or hexadecimal integers don't check its boundaries.
-    try {
-        std::stoi(operand);
-        return true;
-    } catch(std::invalid_argument ex) {
-        try {
-            std::stoi(operand, 0, 16);
-            return true;
-        } catch (std::invalid_argument ex2) {
-
-        } catch (std::out_of_range ex2) {
-
-        }
-    } catch(std::out_of_range ex) {
-
-    }
     return (operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, hexLiteralRegex)
            || strutil::matches(operand, charLiteralRegex) || strutil::matches(operand, decLiteralRegex))
-            && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand));
+            && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand))
+            || strutil::isValidInteger(operand) || strutil::isValidHexadecimal(operand);
 }
 
 /**
