@@ -45,6 +45,9 @@ DirectiveTable* DirectiveTable::getInstance() {
  * <li>WORD</li>
  * <li>RESW</li>
  * <li>RESB</li>
+ * <li>EQU</li>
+ * <li>LTORG</li>
+ * <li>ORG</li>
  * <li>END</li>
  * </ul>
  */
@@ -146,6 +149,30 @@ void DirectiveTable::initDirTable() {
         } catch(std::out_of_range ex) {
             throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         }
+    };
+    dirTable[dirName] = info;
+
+    dirName = "ORG";
+    info.label = Label::OPTIONAL;
+    info.execute = [](int &locCtr, Line line) {
+        static int prevLocCtr = -1;
+        if(line.operand.empty()) {
+            if(prevLocCtr != -1) {
+                locCtr = prevLocCtr;
+            } else {
+                //TODO: throw some exception.
+            }
+            return;
+        }
+        prevLocCtr = locCtr;
+        /*
+         * TODO: Modify the locctr and store the original value.
+         * ORG requires some special handling in pass1 since the operand is optional
+         * and it requires some communication with the assembler to store the previous value of the locctr
+         * or revert to it (NOTE: this can be done with a static variable that stores the previous value of the locctr
+         * and reverts the locctr to it if the operand is empty)
+         */
+        //TODO: search the symbol table for the operand and modify the location counter accordingly.
     };
     dirTable[dirName] = info;
 }

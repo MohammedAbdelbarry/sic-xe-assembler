@@ -78,7 +78,7 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
         intermediateStream << "\t";
         intermediateStream << *line.error;
     }
-//    intermediateStream << "\n";
+    intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
 /**
@@ -272,7 +272,7 @@ void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
     std::cout << "\n\nListing File:\n";
     std::ostringstream stream;
     for(Line line : lines) {
-        stream << line;
+        stream << line << std::endl;
     }
     std::string listingFile = stream.str();
     std::cout << listingFile << std::endl;

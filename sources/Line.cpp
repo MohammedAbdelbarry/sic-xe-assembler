@@ -43,9 +43,9 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
             stream << std::setw(8) << std::left << line.operand;
         }
         stream << "\t" << std::setw(30) << std::left << line.comment;
-        stream << "\t" << line.objCode << std::endl;
+        stream << "\t" << line.objCode;
     } else {
-        stream << line.comment << std::endl;
+        stream << line.comment;
     }
 }
 
