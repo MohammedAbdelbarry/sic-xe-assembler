@@ -48,4 +48,9 @@ enum LineType {
     ASSEMBLY_STATEMENT,
     COMMENT
 };
+
+enum LiteralType {
+    BYTE,
+    WORD
+};
 #endif //PROJECT_ENUMS_H
