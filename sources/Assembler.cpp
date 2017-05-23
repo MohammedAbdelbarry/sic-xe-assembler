@@ -148,7 +148,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         if (strutil::toUpper(firstLine.operation) == "START") {
             try {
                 validator::validateLine(firstLine);
-                DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine);
+                DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine, symbolTable);
                 firstLine.locCtr = locCtr;
                 firstExecutableAddress = programStart = locCtr;
                 if (!firstLine.label.empty()) {
@@ -191,7 +191,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                         if (symbolTable.contains(line.operand))
                             firstExecutableAddress = symbolTable.getAddress(line.operand);
                         else
-                            DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line);
+                            DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line, symbolTable);
                     }
                     //Invalid label for END operation.
                     if (!line.label.empty()) {
@@ -202,7 +202,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     break;
                 } else {
                     line.locCtr = locCtr;
-                    DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+                    DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line, symbolTable);
                 }
             } else { //Instruction line.
                 line.mnemonicType = MnemonicType::INSTRUCTION;

@@ -29,6 +29,8 @@ namespace strutil {
      */
     bool matches(std::string str, std::regex regex);
 
+    std::string trim(std::string str);
+
     /**
      * Checks whether a string ends with a another string.
      * @param value - A string which is required to be checked.

@@ -1,0 +1,21 @@
+1000	PROG12	START 	1000    	                              
+1000	P     	JSUB  	COMPU   	                              
+1003	FIN2  	J     	FIN2    	                              
+1006	COMPU 	LDX   	ZERO    	                              
+1009	LOOP  	TD    	INPUT   	                              
+100C	      	JEQ   	LOOP    	                              
+100F	      	RD    	INPUT   	                              
+1012	      	COMP  	FOUR    	                              
+1015	      	JEQ   	FIN     	                              
+1018	      	STCH  	BUFFER,X	                              
+101B	      	TIX   	HUND    	                              
+101E	      	JLT   	LOOP    	                              
+1021	FIN   	STX   	LENGTH  	                              
+1024	      	RSUB  	        	                              
+1027	ZERO  	WORD  	0       	                              
+102A	FOUR  	WORD  	4       	                              
+102D	HUND  	WORD  	100     	                              
+1030	INPUT 	BYTE  	X'F3'   	                              
+1031	BUFFER	RESB  	100     	                              
+1095	LENGTH	RESW  	1       	                              
+1098	      	END   	1000    	                              

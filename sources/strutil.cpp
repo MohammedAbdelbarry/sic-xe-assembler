@@ -13,6 +13,9 @@
 const std::string HEX_BASE_NUMBERS = "0123456789ABCDEF";
 const int HEX_BASE = 16;
 const int NIBBLE = 4;
+const std::regex leftTrimReg("^\\s+");
+const std::regex rightTrimReg("\\s+$");
+
 std::string concatenateLine(std::sregex_token_iterator &iterator, std::sregex_token_iterator &end) {
     std::stringstream stringStream;
     //TODO check for this fishy conditioning in the if-statement in the while loop;
@@ -103,4 +106,11 @@ std::string fileutil::removeExtension(std::string str) {
         return str.substr(0, lastIndex);
     }
     return str;
+}
+
+
+std::string strutil::trim(std::string str) {
+    const std::string none = "";
+    std::string trimmed = std::regex_replace(str, leftTrimReg, none);
+    return std::regex_replace(trimmed, rightTrimReg, none);
 }
