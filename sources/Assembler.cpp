@@ -124,16 +124,16 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
     if (numutil::Hexadecimal::isHexLiteral(literalString)) {
         literalInfo.literal = literalString;
         literalString = numutil::Hexadecimal::parseHexadecimalLiteral(literalString);
-        literalInfo.literalType = LiteralType::HEXADECIMAL;
+        literalInfo.literalDirective = LiteralDirective::BYTE;
     } else if (strutil::isCharLiteral(literalString)) {
         literalInfo.literal = literalString;
         literalString = strutil::parseCharLiteral(literalString);
-        literalInfo.literalType = LiteralType::CHARACTER;
+        literalInfo.literalDirective = LiteralDirective::BYTE;
         literalString = strutil::toHex(literalString);
     } else {
         literalString = numutil::Decimal::parseDecimalLiteral(literalString);
         literalInfo.literal = literalString;
-        literalInfo.literalType = LiteralType::DECIMAL;
+        literalInfo.literalDirective = LiteralDirective::WORD;
         literalString = numutil::Decimal::toHex(std::stoi(literalString));
     }
     if(!literalTable.contains(literalString)) {
@@ -143,6 +143,31 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
         literalLabelCounter++;
     } else {
         operand = literalTable.getInfo(literalString).label;
+    }
+}
+
+void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &locCtr,
+                     std::string &intermediateFile, SymbolTable &symbolTable) {
+    LiteralInfo literalInfo;
+    Line line;
+    for (std::map<std::string, LiteralInfo>::iterator iterator = literalTable.getMap().begin();
+            iterator != literalTable.getMap().end() ; iterator++) {
+        if (!iterator->second.resolved) {
+            iterator->second.resolved = true;
+            literalInfo = iterator->second;
+            if (literalInfo.literalDirective == LiteralDirective::BYTE) {
+                line = Line(literalInfo.label, "BYTE", literalInfo.literal, "");
+            } else {
+                line = Line(literalInfo.label, "WORD", literalInfo.literal, "");
+            }
+            line.locCtr = locCtr;
+            symbolTable.push(line.label, locCtr);
+            DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line);
+            lines.push_back(line);
+            appendToIntermediateFile(intermediateFile, line);
+        } else {
+            continue;
+        }
     }
 }
 /**
@@ -232,6 +257,13 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     appendToIntermediateFile(intermediateFile, line);
                     lines.push_back(line);
                     break;
+                } else if (strutil::toUpper(line.operation) == "LTORG") {
+                    line.locCtr = locCtr;
+                    DirectiveTable::getInstance()->getInfo("LTORG").execute(locCtr, line);
+                    appendToIntermediateFile(intermediateFile, line);
+                    lines.push_back(line);
+                    resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
+                    continue;
                 } else {
                     line.locCtr = locCtr;
                     DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line, symbolTable);
@@ -266,6 +298,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         appendToIntermediateFile(intermediateFile, line);
         lines.push_back(line);
     }
+    resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
     return intermediateFile;
 }
 /**
