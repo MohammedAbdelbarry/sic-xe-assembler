@@ -178,7 +178,6 @@ void DirectiveTable::initDirTable() {
             if(prevLocCtr != -1) {
                 locCtr = prevLocCtr;
             } else {
-                //TODO: throw some exception.
             }
             return;
         }
@@ -230,7 +229,6 @@ DirectiveInfo DirectiveTable::getInfo(std::string directive) {
 
 int evaluate(std::string operand, SymbolTable &symTab, int locCtr) {
     std::vector<std::string> ops;
-    std::cout << "\n" << std::regex_replace(operand, addSubRegex, " $& ") << '\n';
     operand = std::regex_replace(operand, addSubRegex, " $& ");
     for (std::string x : strutil::split(operand, whiteSpaceRegex, 2))
         ops.push_back(strutil::trim(x));
