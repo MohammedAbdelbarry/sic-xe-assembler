@@ -67,6 +67,29 @@ Line constructLine(std::vector<std::string> lineVector) {
         return line;
     }
 }
+
+/**
+ * Checks whether a line is valid or not. doesn't throw an error if all these cases are met:
+ * <ul>
+ * <li> line's label is valid.</li>
+ * <li> line's operation is valid.</li>
+ * <li> line's operand is valid.</li>
+ * <li> line's comment is valid.</li>
+ * </ul>
+ * @param line - line to be checked passed in the form of string
+ */
+void validateLine(Line &line) {
+    if (!validator::isValidLabel(line.label)) {
+        throw new Error(ErrorType::INVALID_LABEL, line.label);
+    } else if (!validator::isValidOperation(line.operation)) {
+        throw new Error(ErrorType::UNSUPPORTED_OPERATION, line.operation);
+    } else if (line.operation != "EQU" && line.operation != "ORG" && !validator::isValidOperand(line.operand)) {
+        throw new Error(ErrorType::INVALID_OPERAND, line.operand);
+    } else if (!validator::isValidComment(line.comment)) {
+        throw new Error(ErrorType::LONG_COMMENT, std::to_string(line.comment.size()));
+    }
+}
+
 /**
  * Appends a line to the intermediate file.
  * @param intermediateFile A string containing the intermediate file.
@@ -204,7 +227,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
         }
         if (strutil::toUpper(firstLine.operation) == "START") {
             try {
-                validator::validateLine(firstLine);
+                validateLine(firstLine);
                 DirectiveTable::getInstance()->getInfo("START").execute(locCtr, firstLine, symbolTable);
                 firstLine.locCtr = locCtr;
                 firstExecutableAddress = programStart = locCtr;
@@ -236,7 +259,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                 symbolTable.push(line.label, locCtr);
         }
         try {
-            validator::validateLine(line);
+            validateLine(line);
             if (DirectiveTable::getInstance()->contains(line.operation)) { //Directive line.
                 line.mnemonicType = MnemonicType::DIRECTIVE;
                 if (strutil::toUpper(line.operation) == "START") {
