@@ -31,6 +31,10 @@ public:
     int getAddress(std::string label);
 
 private:
+    /**
+     * A map containing the internal representation of the
+     * symbol table.
+     */
     std::map<std::string, int> symTab;
 };
 
