@@ -24,7 +24,7 @@ public:
     bool contains(std::string label);
 
     /**
-     * A getter "accessor" for the address of a this passed label.
+     * A getter "accessor" for the address of a passed label.
      * @param label - A label which is required to get its address.
      * @return the address of the passed label.
      */

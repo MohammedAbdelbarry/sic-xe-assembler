@@ -48,7 +48,9 @@ enum LineType {
     ASSEMBLY_STATEMENT,
     COMMENT
 };
-
+/**
+ * An enum representing the type of the directive used in literal resolving.
+ */
 enum LiteralDirective {
     BYTE,
     WORD

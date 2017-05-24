@@ -39,7 +39,7 @@ private:
     static OperationTable *instance;
 
     /**
-     * A map which stores the operations as keys and its informationInfo objects as values.
+     * A map which stores the operations as keys and its InstructionInfo class objects as values.
      */
     std::map<std::string, InstructionInfo> opTable;
 

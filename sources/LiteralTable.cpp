@@ -1,3 +1,7 @@
+/**
+ * @file LiteralTable.cpp
+ * The file containing the literal table class implementation.
+ */
 #include <string>
 #include <vector>
 #include <regex>

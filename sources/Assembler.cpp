@@ -139,7 +139,13 @@ void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, s
     stream << "T";
     strutil::addHex(stream, initLocCtr, 6);
 }
-
+/**
+ * Adds a literal to the literal table and configure its LiteralInfo class object.
+ * @param operand A string which represents the literal.
+ * @param literalTable A table that will have all the literals and their respective info.
+ * @param literalLabelCounter An integer which represents a counter for the
+ * auto-generated labels used in literal resolving.
+ */
 void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLabelCounter) {
     LiteralInfo literalInfo;
     std::string literalString = operand;
@@ -168,7 +174,15 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
         operand = literalTable.getInfo(literalString).label;
     }
 }
-
+/**
+ * Resolves all previous an resolved literals and generate their corresponding lines.
+ * @param literalTable A table that will have all the literals and their respective info.
+ * @param lines A vector that will have all the lines in the source code added to it.
+ * @param locCtr An int representing the location counter.
+ * @param intermediateFile A string containing the intermediate file.
+ * @param symbolTable A table that will have all the symbols and their respective
+ * addresses added to it.
+ */
 void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &locCtr,
                      std::string &intermediateFile, SymbolTable &symbolTable) {
     LiteralInfo literalInfo;
