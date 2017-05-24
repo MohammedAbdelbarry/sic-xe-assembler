@@ -360,17 +360,23 @@ void addEndRecord(std::ostringstream &stream, int firstExecutableAddress) {
     stream << "E";
     strutil::addHex(stream, firstExecutableAddress, 6);
 }
+
+
 /**
  * Writes a string to a file.
  * @param filePath The path of the file.
  * @param data The string to be written.
  */
-
 void writeFile(std::string filePath, std::string data) {
     std::ofstream fileStream(filePath);
     fileStream << data;
 }
 
+/**
+ * Writes the given lines to the listing file.
+ * @param filePath The path of the file
+ * @param lines The lines to be written
+ */
 void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
     std::cout << "\n\nListing File:\n";
     std::ostringstream stream;
@@ -381,6 +387,7 @@ void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
     std::cout << listingFile << std::endl;
     writeFile(fileutil::removeExtension(filePath) + " - list.txt", listingFile);
 }
+
 /**
  * Executes pass 2 of the assembly process and returns the object code.
  * @param intermediateFileName The name of the intermediate file.
