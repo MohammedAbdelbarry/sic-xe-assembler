@@ -227,6 +227,16 @@ DirectiveInfo DirectiveTable::getInfo(std::string directive) {
     return dirTable[strutil::toUpper(directive)];
 }
 
+/**
+ * Evaluates an expression and returns the equivalent address for this expression.<br>
+ * (i.e: X is a symbol that has address <i>5E</i>, evaluating <i>X + 1</i> returns an address
+ * of <i>5F</i>.
+ * @param operand Operand of this statement, can be a simple operand (hexadecimal number, symbol, location counter '*')
+ * or an expression combining the previously mentioned types (i.e: X + 1000, * + Y).
+ * @param symTab Symbol table that binds between symbols in the assembly program and each symbol's equivalent address.
+ * @param locCtr Current value of the location counter.
+ * @return Equivalent address to the operand.
+ */
 int evaluate(std::string operand, SymbolTable &symTab, int locCtr) {
     std::vector<std::string> ops;
     operand = std::regex_replace(operand, addSubRegex, " $& ");
