@@ -104,7 +104,7 @@ void validator::validateFormat(Line &line) {
             break;
         case TWO:
             //Register-to-register operations... Not implemented
-            //since their are no supported register-to-register operations in SIC.
+            //since there are no supported register-to-register operations in SIC.
             break;
         case THREE:
             if (line.operand == "")

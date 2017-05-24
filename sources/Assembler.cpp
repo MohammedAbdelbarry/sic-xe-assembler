@@ -265,6 +265,17 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     lines.push_back(line);
                     resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
                     continue;
+                } else if (strutil::toUpper(line.operation) == "ORG" || strutil::toUpper(line.operation) == "EQU") {
+                    line.locCtr = locCtr;
+                    std::string operation = strutil::toUpper(line.operation);
+                    if (!line.comment.empty()) {
+                        line.operand += " " + line.comment;
+                        line.comment = "";
+                    }
+                    DirectiveTable::getInstance()->getInfo(operation).execute(locCtr, line, symbolTable);
+                    appendToIntermediateFile(intermediateFile, line);
+                    lines.push_back(line);
+                    continue;
                 } else {
                     line.locCtr = locCtr;
                     DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line, symbolTable);
@@ -404,8 +415,14 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
                             initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, locCtr);
                             lineObjectCode.str("");
                         }
-                        lineObjectCode << std::hex << std::setfill('0');
-                        lineObjectCode << std::setw(numHalfBytes) << std::right << std::uppercase << seg;
+                        try {
+                            int num = std::stoi(seg, 0, 16);
+                            strutil::addHex(lineObjectCode, num, numHalfBytes);
+                        } catch (...) {
+                            errors << "ERROR: Operand \"" << line.operand;
+                            errors << "\" is not a valid operand. At line: " << i + 1 << std::endl;
+                            break;
+                        }
                     }
                 } else if (strutil::isCharLiteral(line.operand)) {
                     std::string charLiteral = strutil::parseCharLiteral(line.operand);
