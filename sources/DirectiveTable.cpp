@@ -41,7 +41,7 @@ DirectiveTable* DirectiveTable::getInstance() {
 
 std::regex whiteSpaceRegex("\\s+");
 std::regex addSubRegex("[+-]");
-int evaluate(std::string operand, SymbolTable &symTab);
+int evaluate(std::string operand, SymbolTable &symTab, int locCtr);
 
 /**
  * Initializes directive table (lists all supported directives):
@@ -147,7 +147,7 @@ void DirectiveTable::initDirTable() {
         std::string label = strutil::trim(line.label);
         if (label == "" || label == "*")
             throw new Error(ErrorType::INVALID_LABEL, line.label);
-        int address = evaluate(line.operand, symTab);
+        int address = evaluate(line.operand, symTab, locCtr);
         if (address < 0 || address >= SIC_MAX_MEMORY)
             throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         symTab.push(line.label, address);
@@ -183,7 +183,7 @@ void DirectiveTable::initDirTable() {
             return;
         }
         prevLocCtr = locCtr;
-        int address = evaluate(line.operand, symTab);
+        int address = evaluate(line.operand, symTab, locCtr);
         if (address < 0 || address >= SIC_MAX_MEMORY)
             throw new Error(ErrorType::INVALID_OPERAND, line.operand);
         locCtr = address;
@@ -228,7 +228,7 @@ DirectiveInfo DirectiveTable::getInfo(std::string directive) {
     return dirTable[strutil::toUpper(directive)];
 }
 
-int evaluate(std::string operand, SymbolTable &symTab) {
+int evaluate(std::string operand, SymbolTable &symTab, int locCtr) {
     std::vector<std::string> ops;
     std::cout << "\n" << std::regex_replace(operand, addSubRegex, " $& ") << '\n';
     operand = std::regex_replace(operand, addSubRegex, " $& ");
@@ -236,13 +236,15 @@ int evaluate(std::string operand, SymbolTable &symTab) {
         ops.push_back(strutil::trim(x));
     if (!(ops.size() == 1 || ops.size() == 3))
         throw new Error(ErrorType::INVALID_OPERAND, operand);
-    std::function<int(std::string)> f = [operand, &symTab](std::string splitOperand) {
+    std::function<int(std::string)> f = [operand, &symTab, locCtr](std::string splitOperand) {
         int res = 0;
         try {
             if (strutil::isValidInteger(splitOperand)) {
                 res = std::stoi(splitOperand);
             } else if (strutil::isValidHexadecimal(splitOperand)) {
                 res = std::stoi(splitOperand, 0, 16);
+            } else if (splitOperand == "*") {
+                res = locCtr;
             } else {
                 if (!symTab.contains(splitOperand))
                     throw new Error(ErrorType::INVALID_OPERAND, operand);

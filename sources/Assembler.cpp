@@ -264,6 +264,17 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     lines.push_back(line);
                     resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
                     continue;
+                } else if (strutil::toUpper(line.operation) == "ORG" || strutil::toUpper(line.operation) == "EQU") {
+                    line.locCtr = locCtr;
+                    std::string operation = strutil::toUpper(line.operation);
+                    if (!line.comment.empty()) {
+                        line.operand += " " + line.comment;
+                        line.comment = "";
+                    }
+                    DirectiveTable::getInstance()->getInfo(operation).execute(locCtr, line, symbolTable);
+                    appendToIntermediateFile(intermediateFile, line);
+                    lines.push_back(line);
+                    continue;
                 } else {
                     line.locCtr = locCtr;
                     DirectiveTable::getInstance()->getInfo(line.operation).execute(locCtr, line, symbolTable);
