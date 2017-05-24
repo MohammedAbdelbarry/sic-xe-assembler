@@ -46,7 +46,7 @@ Line constructLine(std::vector<std::string> lineVector) {
     if (lineVector.size() > 1) {
         if (OperationTable::getInstance()->contains(lineVector[1])
             && OperationTable::getInstance()->getInfo(lineVector[1]).supportedFormats[0]
-               == InstructionFormat::ONE) {
+               == InstructionFormat::ONE || lineVector[1] == "LTORG") {
             if(lineVector.size() > 3) {
                 lineVector[2].append(lineVector[3]);
                 lineVector[3] = lineVector[2];
@@ -195,6 +195,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     std::regex regex("\\s+(?=(?:[^']*'[^']*')*[^']*$)");
     std::streampos firstLinePos = fileStream.tellg();
     int instructionSize[4] = {3, 3, 3, 4};
+
     //Read first line
     while (std::getline(fileStream, lineString)) {
         Line firstLine = constructLine(strutil::split(lineString, regex));

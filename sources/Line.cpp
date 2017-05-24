@@ -38,9 +38,9 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
         if (line.isIndexed) {
             std::string indexedOperand = line.operand;
             indexedOperand.append(",X");
-            stream << std::setw(8) << std::left << indexedOperand;
+            stream << std::setw(16) << std::left << indexedOperand;
         } else {
-            stream << std::setw(8) << std::left << line.operand;
+            stream << std::setw(16) << std::left << line.operand;
         }
         stream << "\t" << std::setw(30) << std::left << line.comment;
         stream << "\t" << line.objCode;
