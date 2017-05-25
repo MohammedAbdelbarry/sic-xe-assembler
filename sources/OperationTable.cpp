@@ -2,10 +2,6 @@
  * @file OperationTable.cpp
  * The file containing the operation table class implementation.
  */
-#include <string>
-#include <map>
-#include <vector>
-#include <regex>
 #include "../headers/InstructionInfo.h"
 #include "../headers/OperationTable.h"
 #include "../headers/strutil.h"

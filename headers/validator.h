@@ -4,6 +4,10 @@
  */
 #ifndef SIC_XE_ASSEMBLER_VALIDATOR_H
 #define SIC_XE_ASSEMBLER_VALIDATOR_H
+
+#include "Line.h"
+#include <string>
+
 /*!
 *  \addtogroup Validator
 *  @{

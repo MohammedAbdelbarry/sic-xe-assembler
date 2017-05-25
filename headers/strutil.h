@@ -4,6 +4,9 @@
  */
 #ifndef SIC_XE_ASSEMBLER_STRUTIL_H
 #define SIC_XE_ASSEMBLER_STRUTIL_H
+#include <vector>
+#include <regex>
+#include <string>
 /*!
 *  \addtogroup Utilities\String Utilities
 *  @{

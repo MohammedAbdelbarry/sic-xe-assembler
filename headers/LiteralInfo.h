@@ -5,8 +5,8 @@
 #ifndef SIC_XE_ASSEMBLER_LITERALINFO_H
 #define SIC_XE_ASSEMBLER_LITERALINFO_H
 
-#include <string>
 #include "enums.h"
+#include <string>
 /**
  * A class containing some information about the literal.
  */

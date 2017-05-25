@@ -4,7 +4,10 @@
  */
 #ifndef SIC_XE_ASSEMBLER_LINE_H
 #define SIC_XE_ASSEMBLER_LINE_H
-class Error;
+
+#include "../headers/enums.h"
+#include "../headers/Error.h"
+#include <string>
 /**
  * The line class.
  */

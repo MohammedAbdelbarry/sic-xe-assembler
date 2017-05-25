@@ -4,6 +4,10 @@
  */
 #ifndef SIC_XE_ASSEMBLER_ASSEMBLER_H
 #define SIC_XE_ASSEMBLER_ASSEMBLER_H
+
+#include <string>
+#include <map>
+
 /**
  * The assembler singleton class.
  */

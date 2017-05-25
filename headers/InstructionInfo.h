@@ -5,8 +5,8 @@
 #ifndef PROJECT_INSTRUCTION_INFO_H
 #define PROJECT_INSTRUCTION_INFO_H
 
-#include <vector>
 #include "enums.h"
+#include <vector>
 
 /**
  * A class containing some information about the instruction.

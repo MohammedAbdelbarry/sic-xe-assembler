@@ -2,12 +2,9 @@
  * @file Line.cpp
  * The file containing the line class implementation.
  */
-#include <string>
+#include "../headers/Line.h"
 #include <iostream>
 #include <iomanip>
-#include "../headers/enums.h"
-#include "../headers/Error.h"
-#include "../headers/Line.h"
 
 Line::Line() {
 

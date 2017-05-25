@@ -2,13 +2,9 @@
  * @file strutil.cpp
  * The file containing the string utilities namespace implementation.
  */
-#include <algorithm>
-#include <regex>
+#include "../headers/strutil.h"
 #include <iomanip>
 #include <iostream>
-#include "../headers/strutil.h"
-#include "../headers/InstructionInfo.h"
-#include "../headers/OperationTable.h"
 
 const std::string HEX_BASE_NUMBERS = "0123456789ABCDEF";
 const int HEX_BASE = 16;

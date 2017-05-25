@@ -2,12 +2,8 @@
  * @file SymbolTable.cpp
  * The file containing the symbol table class implementation.
  */
-#include <string>
-#include <map>
-#include <vector>
-#include <regex>
-#include "../headers/SymbolTable.h"
 #include "../headers/strutil.h"
+#include "../headers/SymbolTable.h"
 
 void SymbolTable::push(std::string label, int address) {
     SymbolTable::symTab[strutil::toUpper(label)] = address;

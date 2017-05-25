@@ -2,12 +2,8 @@
  * @file numutil.cpp
  * The file containing the numerical utilities namespace implementation.
  */
-#include <sstream>
-#include <bitset>
-#include <algorithm>
-#include <regex>
-#include "../headers/strutil.h"
 #include "../headers/numutil.h"
+#include "../headers/strutil.h"
 
 const int HEX_BASE = 16;
 const int BIN_BASE = 2;

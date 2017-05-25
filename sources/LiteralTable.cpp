@@ -2,9 +2,6 @@
  * @file LiteralTable.cpp
  * The file containing the literal table class implementation.
  */
-#include <string>
-#include <vector>
-#include <regex>
 #include "../headers/LiteralInfo.h"
 #include "../headers/LiteralTable.h"
 #include "../headers/strutil.h"

@@ -5,8 +5,9 @@
 
 #ifndef SIC_XE_ASSEMBLER_ERROR_H
 #define SIC_XE_ASSEMBLER_ERROR_H
-
-#include <iosfwd>
+#include "enums.h"
+#include <iostream>
+#include <string>
 /**
  * The error class.
  */
@@ -21,7 +22,7 @@ public:
      * @param errorType The type of the error.
      * @param errorCase The cause of the error.
      */
-    Error(ErrorType errorType, std::string errorCase);
+    Error(ErrorType errorType, const std::string &errorCase);
     /**
      * Destructs an Error.
      */

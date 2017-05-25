@@ -3,19 +3,10 @@
  * Directive table implementation.
  */
 
-#include <functional>
-#include <iostream>
-#include <map>
-#include <vector>
-#include <regex>
-#include "../headers/enums.h"
-#include "../headers/Error.h"
-#include "../headers/numutil.h"
-#include "../headers/strutil.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
-#include "../headers/SymbolTable.h"
-#include <regex>
+#include "../headers/numutil.h"
+#include "../headers/strutil.h"
 
 /**
  * Singleton instance.

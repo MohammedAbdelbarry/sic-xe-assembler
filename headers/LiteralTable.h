@@ -4,8 +4,9 @@
  */
 #ifndef SIC_XE_ASSEMBLER_LITERALTABLE_H
 #define SIC_XE_ASSEMBLER_LITERALTABLE_H
-
+#include "LiteralInfo.h"
 #include <unordered_map>
+#include <vector>
 /**
  * The literal table class.
  */

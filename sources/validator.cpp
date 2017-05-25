@@ -2,17 +2,10 @@
  * @file validator.cpp
  * The file containing the validator namespace implementation.
  */
-#include <string>
-#include <regex>
-#include "../headers/enums.h"
-#include "../headers/Error.h"
-#include "../headers/Line.h"
-#include "../headers/validator.h"
-#include "../headers/strutil.h"
-#include "../headers/InstructionInfo.h"
-#include "../headers/DirectiveInfo.h"
-#include "../headers/OperationTable.h"
 #include "../headers/DirectiveTable.h"
+#include "../headers/OperationTable.h"
+#include "../headers/strutil.h"
+#include "../headers/validator.h"
 
 const std::regex labelRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}$");
 const std::regex operandRegex("^[a-zA-Z]{1}[a-zA-Z0-9]{0,5}(?:,X)?$");

@@ -2,9 +2,8 @@
  * @file Error.cpp
  * The file containing the implementation of the Error class.
  */
-#include <iomanip>
-#include "../headers/enums.h"
 #include "../headers/Error.h"
+#include <iomanip>
 /**
  * A static array containing the error message
  * corresponding to the type of the error.
@@ -20,7 +19,7 @@ Error::Error() {
 
 }
 
-Error::Error(ErrorType errorType, std::string errorCause) {
+Error::Error(ErrorType errorType, const std::string &errorCause) {
     this->errorType = errorType;
     this->errorCause = errorCause;
 }

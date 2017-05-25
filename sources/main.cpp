@@ -1,14 +1,5 @@
-#include <string>
-#include <iostream>
-#include <map>
-#include <regex>
-#include "../headers/enums.h"
-#include "../headers/Error.h"
-#include "../headers/DirectiveInfo.h"
-#include "../headers/DirectiveTable.h"
-#include "../headers/numutil.h"
 #include "../headers/Assembler.h"
-#include "../headers/strutil.h"
+#include <iostream>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {

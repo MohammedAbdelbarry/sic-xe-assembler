@@ -3,25 +3,19 @@
  * The file containing the assembler class implementation.
  */
 
-#include <vector>
-#include <fstream>
-#include <regex>
-#include <iomanip>
-#include <iostream>
-#include "../headers/enums.h"
-#include "../headers/Line.h"
-#include "../headers/Error.h"
-#include "../headers/strutil.h"
 #include "../headers/Assembler.h"
-#include "../headers/SymbolTable.h"
-#include "../headers/InstructionInfo.h"
-#include "../headers/OperationTable.h"
-#include "../headers/validator.h"
 #include "../headers/DirectiveInfo.h"
 #include "../headers/DirectiveTable.h"
-#include "../headers/numutil.h"
+#include "../headers/InstructionInfo.h"
 #include "../headers/LiteralInfo.h"
 #include "../headers/LiteralTable.h"
+#include "../headers/numutil.h"
+#include "../headers/OperationTable.h"
+#include "../headers/strutil.h"
+#include "../headers/validator.h"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 Assembler *Assembler::instance = nullptr;
 

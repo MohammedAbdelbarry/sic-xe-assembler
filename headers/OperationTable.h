@@ -4,6 +4,9 @@
  */
 #ifndef SIC_XE_ASSEMBLER_OPERATION_TABLE_H
 #define SIC_XE_ASSEMBLER_OPERATION_TABLE_H
+#include "InstructionInfo.h"
+#include <string>
+#include <map>
 /**
  * The operation table singleton class.
  */
