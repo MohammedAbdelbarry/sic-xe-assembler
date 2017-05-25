@@ -13,12 +13,17 @@
 class DirectiveTable {
 public:
     static DirectiveTable *getInstance();
+
     bool contains(std::string directive);
+
     DirectiveInfo getInfo(std::string directive);
+
 private:
     static DirectiveTable *instance;
     std::map<std::string, DirectiveInfo> dirTable;
+
     DirectiveTable();
+
     void initDirTable();
 };
 

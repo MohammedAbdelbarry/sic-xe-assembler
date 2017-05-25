@@ -1,7 +1,7 @@
 #include "../headers/Assembler.h"
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     if (argc != 2) {
         std::cout << "Invalid Number of Parameters" << std::endl;
         return 1;

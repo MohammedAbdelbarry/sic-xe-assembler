@@ -8,6 +8,7 @@
 #include "../headers/enums.h"
 #include "../headers/Error.h"
 #include <string>
+
 /**
  * The line class.
  */
@@ -108,7 +109,7 @@ private:
      * @param line - A line object which is required to be appended to a stream.
      * @return A stream object after appending the required line's information to it.
      */
-    friend std::ostream& operator<<(std::ostream& stream, const Line& line);
+    friend std::ostream &operator<<(std::ostream &stream, const Line &line);
 
     /**
      * A LineType enum to store the type of a line whether it is an assembly statement or a comment line.

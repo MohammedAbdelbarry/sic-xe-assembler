@@ -19,6 +19,7 @@ public:
      * @return The assembler singleton instance.
      */
     static Assembler *getInstance();
+
     /**
      * Attempts to assemble a file and writes
      * the object code if the file was assembled successfully.
@@ -32,6 +33,7 @@ private:
      * Constructs a new Assembler instance.
      */
     Assembler();
+
     /**
      * The assembler singleton instance.
      */

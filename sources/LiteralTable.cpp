@@ -15,10 +15,10 @@ bool LiteralTable::contains(std::string literal) {
     return LiteralTable::litTab.find(strutil::toUpper(literal)) != LiteralTable::litTab.end();
 }
 
-LiteralInfo& LiteralTable::getInfo(std::string literal) {
+LiteralInfo &LiteralTable::getInfo(std::string literal) {
     return LiteralTable::litTab[strutil::toUpper(literal)];
 }
 
-std::vector<std::string>& LiteralTable::getKeySet() {
+std::vector<std::string> &LiteralTable::getKeySet() {
     return LiteralTable::keySet;
 }

@@ -13,7 +13,6 @@
 #include "../headers/OperationTable.h"
 #include "../headers/strutil.h"
 #include "../headers/validator.h"
-#include <iostream>
 #include <fstream>
 #include <iomanip>
 
@@ -21,8 +20,7 @@ Assembler *Assembler::instance = nullptr;
 
 Assembler *Assembler::getInstance() {
 
-    if (instance == nullptr)
-    {
+    if (instance == nullptr) {
         instance = new Assembler();
     }
     return instance;
@@ -31,6 +29,7 @@ Assembler *Assembler::getInstance() {
 Assembler::Assembler() {
     //TODO check if we want to add any functionality
 }
+
 /**
  * Constructs and returns a new line.
  * @param lineVector A vector containing the split source code lines.
@@ -41,7 +40,7 @@ Line constructLine(std::vector<std::string> lineVector) {
         if (OperationTable::getInstance()->contains(lineVector[1])
             && OperationTable::getInstance()->getInfo(lineVector[1]).supportedFormats[0]
                == InstructionFormat::ONE || lineVector[1] == "LTORG") {
-            if(lineVector.size() > 3) {
+            if (lineVector.size() > 3) {
                 lineVector[2].append(lineVector[3]);
                 lineVector[3] = lineVector[2];
                 lineVector[2] = "";
@@ -100,6 +99,7 @@ void appendToIntermediateFile(std::string &intermediateFile, Line line) {
     intermediateStream << "\n";
     intermediateFile.append(intermediateStream.str());
 }
+
 /**
  * Adds all the characters in the strings as bytes to the output stream
  * in hex.
@@ -116,6 +116,7 @@ void addHexBytes(std::ostringstream &stream, std::string &bytes, int numBytes) {
         strutil::addHex(stream, 0, 2);
     }
 }
+
 /**
  * Initializes a new record in the object code.
  * @param stream The output stream containing the object code.
@@ -133,6 +134,7 @@ void initRecord(std::ostringstream &stream, int &initLocCtr, int recordLength, s
     stream << "T";
     strutil::addHex(stream, initLocCtr, 6);
 }
+
 /**
  * Adds a literal to the literal table and configure its LiteralInfo class object.
  * @param operand A string which represents the literal.
@@ -159,7 +161,7 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
         literalInfo.literalDirective = LiteralDirective::WORD;
         literalString = numutil::Decimal::toHex(std::stoi(literalString));
     }
-    if(!literalTable.contains(literalString)) {
+    if (!literalTable.contains(literalString)) {
         operand = "$" + std::to_string(literalLabelCounter);
         literalInfo.label = operand;
         literalTable.push(strutil::toUpper(literalString), literalInfo);
@@ -168,6 +170,7 @@ void addLiteral(std::string &operand, LiteralTable &literalTable, int &literalLa
         operand = literalTable.getInfo(literalString).label;
     }
 }
+
 /**
  * Resolves all previous an resolved literals and generate their corresponding lines.
  * @param literalTable A table that will have all the literals and their respective info.
@@ -182,7 +185,7 @@ void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &
     LiteralInfo literalInfo;
     Line line;
     for (std::vector<std::string>::iterator iterator = literalTable.getKeySet().begin();
-            iterator != literalTable.getKeySet().end() ; iterator++) {
+         iterator != literalTable.getKeySet().end(); iterator++) {
         if (!literalTable.getInfo(*iterator).resolved) {
             literalInfo = literalTable.getInfo(*iterator);
             literalTable.getInfo(*iterator).resolved = true;
@@ -201,6 +204,7 @@ void resolveLiterals(LiteralTable &literalTable, std::vector<Line> &lines, int &
         }
     }
 }
+
 /**
  * Executes pass one on the object code and returns the intermediate file.
  * @param fileName The name of the file to be assembled.
@@ -244,7 +248,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                     programName = firstLine.label;
                     symbolTable.push(firstLine.label, firstLine.locCtr);
                 }
-            } catch (Error* error) {
+            } catch (Error *error) {
                 firstLine.error = error;
             }
             lines.push_back(firstLine);
@@ -280,7 +284,8 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
                         if (symbolTable.contains(line.operand))
                             firstExecutableAddress = symbolTable.getAddress(line.operand);
                         else
-                            DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line, symbolTable);
+                            DirectiveTable::getInstance()->getInfo("END").execute(firstExecutableAddress, line,
+                                                                                  symbolTable);
                     }
                     //Invalid label for END operation.
                     if (!line.label.empty()) {
@@ -344,6 +349,7 @@ std::string executePass1(std::string fileName, std::map<std::string, std::string
     resolveLiterals(literalTable, lines, locCtr, intermediateFile, symbolTable);
     return intermediateFile;
 }
+
 /**
  * Initializes the header record and appends it to the object code
  * output stream.
@@ -360,6 +366,7 @@ void initHeader(std::ostringstream &stream, std::string programName, int initLoc
     strutil::addHex(stream, programLength, 6);
     stream << "\n";
 }
+
 /**
  * Adds the end record to the object code stream.
  * @param stream The object code stream.
@@ -389,7 +396,7 @@ void writeFile(std::string filePath, std::string data) {
 void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
     std::cout << "\n\nListing File:\n";
     std::ostringstream stream;
-    for(Line line : lines) {
+    for (Line line : lines) {
         stream << line << std::endl;
     }
     std::string listingFile = stream.str();
@@ -409,7 +416,7 @@ void writeListingFile(std::string &filePath, std::vector<Line> &lines) {
  * @return The object file.
  */
 std::string executePass2(std::string filePath, std::vector<Line> &lines, std::string programName,
-                  int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
+                         int programStart, int locCtr, SymbolTable symbolTable, int firstExecutableAddress) {
     const int MAX_LINE_LENGTH = 30;
     std::ostringstream objCodeStream;
     int initLocCtr = programStart;
@@ -419,7 +426,7 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
     objCodeStream << "T";
     strutil::addHex(objCodeStream, initLocCtr, 6);
     std::ostringstream errors;
-    for (int i = 1 ; i < lines.size() ; i++) {
+    for (int i = 1; i < lines.size(); i++) {
         Line line = lines[i];
         if (line.error) {
             errors << *line.error;
@@ -428,7 +435,7 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
         }
         std::ostringstream lineObjectCode;
         if (!OperationTable::getInstance()->contains(line.operation)) {
-            if(strutil::toUpper(line.operation) == "WORD" || strutil::toUpper(line.operation) == "BYTE") {
+            if (strutil::toUpper(line.operation) == "WORD" || strutil::toUpper(line.operation) == "BYTE") {
                 if (line.locCtr >= initLocCtr + MAX_LINE_LENGTH || startNewLine) {
                     startNewLine = false;
                     initRecord(objCodeStream, initLocCtr, curRecord.length() / 2, curRecord, line.locCtr);
@@ -508,14 +515,14 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
             }
             int opCode = OperationTable::getInstance()->getInfo(line.operation).opCode;
             strutil::addHex(lineObjectCode, opCode, 2);
-            switch(line.lineFormat) {
+            switch (line.lineFormat) {
                 case ONE:
                     strutil::addHex(lineObjectCode, 0, 4);
                     break;
                 case TWO:
                     break;
                 case THREE:
-                    if(symbolTable.contains(line.operand)) {
+                    if (symbolTable.contains(line.operand)) {
                         int address = symbolTable.getAddress(line.operand) | (line.isIndexed << 15);
                         strutil::addHex(lineObjectCode, address, 4);
                     } else {
@@ -550,6 +557,7 @@ std::string executePass2(std::string filePath, std::vector<Line> &lines, std::st
         throw std::invalid_argument(errors.str());
     }
 }
+
 /**
  * Takes an assembly file and generates its object code.
  * @param filePath The path of the assembly file.
@@ -564,7 +572,7 @@ void Assembler::execute(std::string filePath, std::map<std::string, std::string>
     SymbolTable symbolTable;
     LiteralTable literalTable;
     std::string intermediateFile = executePass1(filePath, options, lines, programName, programStart,
-                                                locCtr, literalTable ,symbolTable, firstExecutableAddress,
+                                                locCtr, literalTable, symbolTable, firstExecutableAddress,
                                                 literalLabelCounter);
     std::cout << "Intermediate File:" << std::endl;
     std::cout << intermediateFile;

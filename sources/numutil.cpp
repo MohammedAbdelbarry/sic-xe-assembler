@@ -19,7 +19,7 @@ std::string numutil::Hexadecimal::toBin(std::string number) {
 }
 
 int numutil::Hexadecimal::toDec(std::string number) {
-    return (int)std::strtol(number.c_str(), nullptr, HEX_BASE);
+    return (int) std::strtol(number.c_str(), nullptr, HEX_BASE);
 }
 
 std::string numutil::Decimal::toBin(int number) {
@@ -57,7 +57,7 @@ std::string numutil::Binary::toHex(std::string number) {
 }
 
 int numutil::Binary::toDec(std::string number) {
-    return (int)std::strtol(number.c_str(), nullptr, BIN_BASE);
+    return (int) std::strtol(number.c_str(), nullptr, BIN_BASE);
 }
 
 std::string numutil::Hexadecimal::parseHexadecimalLiteral(std::string hexLiteral) {
@@ -70,15 +70,15 @@ bool numutil::Hexadecimal::isHexLiteral(std::string hexLiteral) {
 }
 
 //TODO search for an alternative using stringStream lib
-std::string numutil::Hexadecimal::toString(std::string hexString){
+std::string numutil::Hexadecimal::toString(std::string hexString) {
     std::string characterString;
     if (hexString.size() & 1) {
         throw std::invalid_argument("Hexadecimal string of odd length");
     }
     int decimalValue;
     std::string character;
-    for (int i = 0 ; i < hexString.size() ; i+=2) {
-        decimalValue = numutil::Hexadecimal::toDec(hexString.substr(i,2));
+    for (int i = 0; i < hexString.size(); i += 2) {
+        decimalValue = numutil::Hexadecimal::toDec(hexString.substr(i, 2));
         characterString.push_back(char(decimalValue));
     }
     return characterString;

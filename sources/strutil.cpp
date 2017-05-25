@@ -42,7 +42,7 @@ std::vector<std::string> strutil::split(std::string str, std::regex &regex, int 
         ret.push_back(cur);
         iter++;
         splittingCounter++;
-        if(splittingCounter == splitsNumber) {
+        if (splittingCounter == splitsNumber) {
             ret.push_back(concatenateLine(iter, end));
             break;
         }
@@ -55,24 +55,22 @@ bool strutil::matches(std::string str, std::regex regex) {
 }
 
 bool strutil::endsWith(std::string const &value, std::string const &ending) {
-    if (ending.size() > value.size())
-        return false;
-    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+    return ending.size() <= value.size() && std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }
 
 bool ::strutil::beginWith(std::string const &value, std::string const &beginning) {
-    if (beginning.size() > value.size())
-        return false;
-    return std::equal(beginning.begin(), beginning.end(), value.begin());
+    return beginning.size() <= value.size() && std::equal(beginning.begin(), beginning.end(), value.begin());
 }
 
 std::string strutil::parseCharLiteral(std::string charLiteral) {
     return charLiteral.substr(2, charLiteral.length() - 3);
 }
-void strutil::addHex(std::ostringstream& stringStream, int decimalNumber, int numChars) {
+
+void strutil::addHex(std::ostringstream &stringStream, int decimalNumber, int numChars) {
     stringStream << std::hex << std::setfill('0') << std::setw(numChars)
                  << std::right << std::uppercase << decimalNumber;
 }
+
 bool strutil::isCharLiteral(std::string charLiteral) {
     static const std::regex charLiteralRegex("^[Cc]'[^']+?'$");
     return matches(charLiteral, charLiteralRegex);
@@ -84,10 +82,10 @@ std::string strutil::toUpper(std::string str) {
 }
 
 //TODO search for an alternative using stringStream lib
-std::string strutil::toHex(std::string str){
+std::string strutil::toHex(std::string str) {
     std::string hexadecimalString;
     int characterDecimalValue;
-    for (int i=0 ; i < str.size() ; i++) {
+    for (int i = 0; i < str.size(); i++) {
         characterDecimalValue = str[i];
         hexadecimalString.push_back(HEX_BASE_NUMBERS[characterDecimalValue >> NIBBLE]);
         //alternative for taking the modulo due to its performance issues.

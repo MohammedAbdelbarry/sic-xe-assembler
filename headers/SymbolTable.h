@@ -4,7 +4,9 @@
  */
 #ifndef SIC_XE_ASSEMBLER_SYMBOLTABLE_H
 #define SIC_XE_ASSEMBLER_SYMBOLTABLE_H
+
 #include <map>
+
 /**
  * The symbol table class.
  */

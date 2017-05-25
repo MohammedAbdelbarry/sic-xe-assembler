@@ -3,7 +3,6 @@
  * The file containing the line class implementation.
  */
 #include "../headers/Line.h"
-#include <iostream>
 #include <iomanip>
 
 Line::Line() {
@@ -27,7 +26,7 @@ Line::Line(std::string comment) {
     this->isIndexed = false;
 }
 
-std::ostream& operator<<(std::ostream& stream, const Line& line) {
+std::ostream &operator<<(std::ostream &stream, const Line &line) {
     if (line.getLineType() == LineType::ASSEMBLY_STATEMENT) {
         stream << std::hex << std::uppercase << std::setw(4) << std::left << line.locCtr << "\t";
         stream << std::setw(6) << std::left << line.label << "\t";
@@ -44,6 +43,7 @@ std::ostream& operator<<(std::ostream& stream, const Line& line) {
     } else {
         stream << line.comment;
     }
+    return stream;
 }
 
 Line::~Line() {

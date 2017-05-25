@@ -28,4 +28,5 @@ public:
      */
     std::vector<InstructionFormat> supportedFormats;
 };
+
 #endif //PROJECT_INSTRUCTION_INFO_H

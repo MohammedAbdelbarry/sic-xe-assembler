@@ -19,7 +19,8 @@ const int COMMENT_LINE_LENGTH = 30;
 
 bool validator::isValidLabel(std::string label) {
     return (label.empty() || strutil::matches(label, labelRegex)) && !(OperationTable::getInstance()->contains(label)
-            || DirectiveTable::getInstance()->contains(label));
+                                                                       ||
+                                                                       DirectiveTable::getInstance()->contains(label));
 }
 
 bool validator::isValidOperation(std::string operation) {
@@ -30,9 +31,9 @@ bool validator::isValidOperation(std::string operation) {
 
 bool validator::isValidOperand(std::string operand) {
     return (operand.empty() || strutil::matches(operand, operandRegex) || strutil::matches(operand, hexLiteralRegex)
-           || strutil::matches(operand, charLiteralRegex) || strutil::matches(operand, decLiteralRegex))
-            && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand))
-            || strutil::isValidInteger(operand) || strutil::isValidHexadecimal(operand);
+            || strutil::matches(operand, charLiteralRegex) || strutil::matches(operand, decLiteralRegex))
+           && !(OperationTable::getInstance()->contains(operand) || DirectiveTable::getInstance()->contains(operand))
+           || strutil::isValidInteger(operand) || strutil::isValidHexadecimal(operand);
 }
 
 bool validator::isValidComment(std::string comment) {

@@ -12,8 +12,8 @@ OperationTable::OperationTable() {
     initOpTable();
 }
 
-OperationTable* OperationTable::getInstance() {
-    if(instance == nullptr)
+OperationTable *OperationTable::getInstance() {
+    if (instance == nullptr)
         instance = new OperationTable;
     return instance;
 }

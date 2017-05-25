@@ -4,6 +4,7 @@
  */
 #ifndef SIC_XE_ASSEMBLER_STRUTIL_H
 #define SIC_XE_ASSEMBLER_STRUTIL_H
+
 #include <vector>
 #include <regex>
 #include <string>
@@ -60,7 +61,7 @@ namespace strutil {
      * its equivalent in hexadecimal system and appended to the string stream.
      * @param numChars - An integer which represents the width of the required field in a string stream.
      */
-    void addHex(std::ostringstream& stringStream, int decimalNumber, int numChars);
+    void addHex(std::ostringstream &stringStream, int decimalNumber, int numChars);
 
     /**
      * Parses the given character literal to a string contains the actual value of the literal.
@@ -92,6 +93,7 @@ namespace strutil {
      * @return A string which represents the encoded equivalent of the character string.
      */
     std::string toHex(std::string str);
+
     /**
      * Takes a string and checks whether or not it represents
      * a valid integer.

@@ -7,6 +7,7 @@
 
 #include "enums.h"
 #include <string>
+
 /**
  * A class containing some information about the literal.
  */
@@ -32,4 +33,5 @@ public:
      */
     std::string label;
 };
+
 #endif //SIC_XE_ASSEMBLER_LITERALINFO_H
